@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import uuid
+import re
 from pathlib import Path
 from css_parser import parseStyle
 
@@ -10,7 +11,7 @@ def create_zip(terms, index, tags=[]):
     build_directory = str(uuid.uuid4())
     os.mkdir(build_directory)
 
-    terms_per_file = 500
+    terms_per_file = 1000
     max_i = int(len(terms) / terms_per_file) + 1
     for i in range(max_i):
         term_file = os.path.join(build_directory, f"term_bank_{i+1}.json")
@@ -30,21 +31,41 @@ def create_zip(terms, index, tags=[]):
 
     zip_filename = index["title"]
     zip_file = f"{zip_filename}.zip"
-    if Path(zip_file).is_file():
-        os.remove(zip_file)
     shutil.make_archive(zip_filename, "zip", build_directory)
-    if not Path("output").is_dir():
-        os.mkdir("output")
-    shutil.move(zip_file, "output")
+    out_dir = "output"
+    out_file = os.path.join(out_dir, zip_file)
+    if not Path(out_dir).is_dir():
+        os.mkdir(out_dir)
+    elif Path(out_file).is_file():
+        os.remove(out_file)
+    shutil.move(zip_file, out_dir)
     shutil.rmtree(build_directory)
 
 
 def soup_to_gloss(soup):
+    __sanitize_soup(soup)
     structured_content = __get_markup_structure(soup)
     return {
         "type": "structured-content",
         "content": structured_content
     }
+
+
+def __sanitize_soup(soup):
+    patterns = [
+        r"^(.+)（[ぁ-ヿ]+）$",
+        r"^(.+)（[ぁ-ヿ]+（[ぁ-ヿ]）[ぁ-ヿ]+）$"
+    ]
+    for a in soup.find_all("a"):
+        for pattern in patterns:
+            m = re.search(pattern, a.text)
+            if m:
+                a['href'] = f"?query={m.group(1)}&wildcards=off"
+                break
+    for p in soup.find_all("p"):
+        p.name = "span"
+    for th in soup.find_all("th"):
+        th['style'] = "vertical-align: middle; text-align: center;"
 
 
 def __get_markup_structure(soup):
@@ -62,11 +83,6 @@ def __get_markup_structure(soup):
     attributes = __get_attributes(soup.attrs)
     for key, val in attributes.items():
         node[key] = val
-
-    if node["tag"] == "th":
-        node["style"] = {"verticalAlign": "middle", "textAlign": "center"}
-    elif node["tag"] == "p":
-        node["tag"] = "span"
 
     if len(content) == 0:
         pass
@@ -94,16 +110,18 @@ def __get_attributes(attrs):
 def __get_style(inline_style_string):
     style = {}
     parsedStyle = parseStyle(inline_style_string)
-    if parsedStyle.fontSize != "":
-        style["fontSize"] = parsedStyle.fontSize
-    if parsedStyle.verticalAlign != "":
-        style["verticalAlign"] = parsedStyle.verticalAlign
-    if parsedStyle.textDecoration != "":
-        style["textDecorationLine"] = parsedStyle.textDecoration
-    if parsedStyle.listStyleType != "":
-        style["listStyleType"] = parsedStyle.listStyleType
     if parsedStyle.fontStyle != "":
         style["fontStyle"] = parsedStyle.fontStyle
     if parsedStyle.fontWeight != "":
         style["fontWeight"] = parsedStyle.fontWeight
+    if parsedStyle.fontSize != "":
+        style["fontSize"] = parsedStyle.fontSize
+    if parsedStyle.textDecoration != "":
+        style["textDecorationLine"] = parsedStyle.textDecoration
+    if parsedStyle.verticalAlign != "":
+        style["verticalAlign"] = parsedStyle.verticalAlign
+    if parsedStyle.textAlign != "":
+        style["textAlign"] = parsedStyle.textAlign
+    if parsedStyle.listStyleType != "":
+        style["listStyleType"] = parsedStyle.listStyleType
     return style

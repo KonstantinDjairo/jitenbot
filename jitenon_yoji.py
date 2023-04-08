@@ -1,4 +1,6 @@
 import re
+from datetime import datetime, date
+from bs4 import BeautifulSoup
 
 import yomichan as Yomichan
 import util as Util
@@ -19,10 +21,15 @@ class JitenonYoji:
     def __init__(self, sequence):
         self.sequence = sequence
         self.yomichan_glossary = [""]
+        self.modified_date = date(1970, 1, 1)
+        self.attribution = ""
         for column in self.columns.values():
             setattr(self, column[0], column[1])
 
-    def add_soup(self, yoji_soup):
+    def add_document(self, html):
+        yoji_soup = BeautifulSoup(html, features="html5lib")
+        self.__set_modified_date(html)
+        self.attribution = yoji_soup.find(class_="copyright").text
         table = yoji_soup.find(class_="kanjirighttb")
         rows = table.find("tbody").find_all("tr")
         colname = ""
@@ -48,6 +55,13 @@ class JitenonYoji:
             ]
             terms.append(term)
         return terms
+
+    def __set_modified_date(self, html):
+        m = re.search(r"\"dateModified\": \"(\d{4}-\d{2}-\d{2})", html)
+        if not m:
+            return
+        date = datetime.strptime(m.group(1), '%Y-%m-%d').date()
+        self.modified_date = date
 
     def __set_column(self, colname, colval):
         attr_name = self.columns[colname][0]
