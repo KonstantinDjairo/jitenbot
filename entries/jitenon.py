@@ -24,9 +24,10 @@ class Jitenon:
         colname = ""
         for row in rows:
             colname = row.th.text if row.th is not None else colname
-            colval = row.td.text
+            colval = self.__clean(row.td.text)
             self.__set_column(colname, colval)
-        gloss = YomichanSoup.make_gloss(table)  # note: modifies table
+        self.__prepare_yomichan_soup(table)
+        gloss = YomichanSoup.make_gloss(table)
         self.yomichan_glossary = [gloss]
 
     def __set_modified_date(self, html):
@@ -36,10 +37,16 @@ class Jitenon:
         date = datetime.strptime(m.group(1), '%Y-%m-%d').date()
         self.modified_date = date
 
+    def __clean(self, text):
+        text = text.replace("\n", "")
+        text = text.replace(",", "、")
+        text = text.replace(" ", "")
+        text = text.strip()
+        return text
+
     def __set_column(self, colname, colval):
         attr_name = self.columns[colname][0]
         attr_value = getattr(self, attr_name)
-        colval = colval.replace("\n", "").replace(",", "、").strip()
         if isinstance(attr_value, str):
             setattr(self, attr_name, colval)
         elif isinstance(attr_value, list):
@@ -47,7 +54,23 @@ class Jitenon:
                 setattr(self, attr_name, [colval])
             else:
                 attr_value.append(colval)
-                setattr(self, attr_name, attr_value)
+                # setattr(self, attr_name, attr_value)
+
+    def __prepare_yomichan_soup(self, soup):
+        patterns = [
+            r"^(.+)（[ぁ-ヿ、\s]+）$",
+            r"^(.+)（[ぁ-ヿ、\s]+（[ぁ-ヿ、\s]）[ぁ-ヿ、\s]+）$"
+        ]
+        for a in soup.find_all("a"):
+            for pattern in patterns:
+                m = re.search(pattern, a.text)
+                if m:
+                    a['href'] = f"?query={m.group(1)}&wildcards=off"
+                    break
+        for p in soup.find_all("p"):
+            p.name = "span"
+        for th in soup.find_all("th"):
+            th['style'] = "vertical-align: middle; text-align: center;"
 
     def _headwords(self):
         words = []
@@ -63,7 +86,7 @@ class Jitenon:
         return words
 
     def __yomikatas(self):
-        yomikata = self.yomikata.replace(" ", "")
+        yomikata = self.yomikata
         m = re.search(r"^[ぁ-ヿ、]+$", yomikata)
         if m:
             return [yomikata]
@@ -81,12 +104,11 @@ class Jitenon:
                 yomikatas.append(alt.strip())
             return yomikatas
         print(f"Invalid 読み方 format: {self.yomikata}\n{self}\n")
-        return ""
+        return [""]
 
     def __ikei_headwords(self):
         ikei_headwords = []
         for val in self.ikei:
-            val = val.replace(" ", "")
             m = re.search(r"^([^（]+)（([ぁ-ヿ、]+)）$", val)
             if m:
                 headword = [m.group(1), m.group(2)]

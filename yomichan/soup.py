@@ -1,9 +1,7 @@
-import re
 from css_parser import parseStyle
 
 
 def make_gloss(soup):
-    __preprocess_soup(soup)
     structured_content = __get_markup_structure(soup)
     return {
         "type": "structured-content",
@@ -11,35 +9,17 @@ def make_gloss(soup):
     }
 
 
-def __preprocess_soup(soup):
-    patterns = [
-        r"^(.+)（[ぁ-ヿ、\s]+）$",
-        r"^(.+)（[ぁ-ヿ、\s]+（[ぁ-ヿ、\s]）[ぁ-ヿ、\s]+）$"
-    ]
-    for a in soup.find_all("a"):
-        for pattern in patterns:
-            m = re.search(pattern, a.text)
-            if m:
-                a['href'] = f"?query={m.group(1)}&wildcards=off"
-                break
-    for p in soup.find_all("p"):
-        p.name = "span"
-    for th in soup.find_all("th"):
-        th['style'] = "vertical-align: middle; text-align: center;"
-
-
 def __get_markup_structure(soup):
-    node = {}
+    node = {"tag": soup.name}
     content = []
     for child in soup.children:
         if child.name is None:
-            text = child.text.strip()
+            text = child.text.replace("\n", "")
             if text != "":
                 content.append(text)
         else:
             content.append(__get_markup_structure(child))
 
-    node["tag"] = soup.name
     attributes = __get_attributes(soup.attrs)
     for key, val in attributes.items():
         node[key] = val
