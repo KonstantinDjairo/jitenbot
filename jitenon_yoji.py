@@ -8,7 +8,7 @@ import util as Util
 
 class JitenonYoji:
     columns = {
-        "四字熟語": ["yojijukugo", ""],
+        "四字熟語": ["expression", ""],
         "読み方":   ["yomikata", ""],
         "意味":     ["imi", ""],
         "出典":     ["shutten", ""],
@@ -79,7 +79,7 @@ class JitenonYoji:
     def __headwords(self):
         words = []
         for yomikata in self.__yomikatas():
-            headword = [self.yojijukugo, yomikata]
+            headword = [self.expression, yomikata]
             if headword in words:
                 words.remove(headword)
             words.append(headword)
@@ -90,16 +90,17 @@ class JitenonYoji:
         return words
 
     def __yomikatas(self):
-        m = re.search(r"^[ぁ-ヿ]+$", self.yomikata)
+        yomikata = self.yomikata.replace(" ", "")
+        m = re.search(r"^[ぁ-ヿ]+$", yomikata)
         if m:
-            return [self.yomikata]
-        m = re.search(r"^([ぁ-ヿ]+)<br/>", self.yomikata)
+            return [yomikata]
+        m = re.search(r"^([ぁ-ヿ]+)<br/>", yomikata)
         if m:
             return [m.group(1)]
-        m = re.search(r"^[ぁ-ヿ]+（[ぁ-ヿ]）[ぁ-ヿ]+$", self.yomikata)
+        m = re.search(r"^[ぁ-ヿ]+（[ぁ-ヿ]）[ぁ-ヿ]+$", yomikata)
         if m:
-            return Util.expand_shouryaku(self.yomikata)
-        m = re.search(r"^([ぁ-ヿ]+)（([ぁ-ヿ/\s]+)）$", self.yomikata)
+            return Util.expand_shouryaku(yomikata)
+        m = re.search(r"^([ぁ-ヿ]+)（([ぁ-ヿ/\s]+)）$", yomikata)
         if m:
             yomikatas = [m.group(1)]
             alts = m.group(2).split("/")

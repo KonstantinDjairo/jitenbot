@@ -14,8 +14,8 @@ from datetime import datetime
 
 class Scraper():
     def __init__(self):
-        self.netloc_re = \
-            re.compile(r"^(?:([A-Za-z0-9.\-]+)\.)?" + self.domain + r"$")
+        pattern = r"^(?:([A-Za-z0-9.\-]+)\.)?" + self.domain + r"$"
+        self.netloc_re = re.compile(pattern)
         self.__set_session()
 
     def scrape(self, urlstring):
@@ -80,20 +80,20 @@ class Scraper():
             file_contents = None
         return file_contents
 
-    def __get(self, url):
+    def __get(self, urlstring):
         delay = 10
         time.sleep(delay)
         now = datetime.now().strftime("%H:%M:%S")
-        print(f"{now} scraping {url.geturl()} ...", end='')
+        print(f"{now} scraping {urlstring} ...", end='')
         try:
-            response = self.session.get(url, timeout=10)
+            response = self.session.get(urlstring, timeout=10)
             print("OK")
             return response.text
         except Exception:
             print("failed")
             print("resetting session and trying again")
             self.__set_session()
-            response = self.session.get(url, timeout=10)
+            response = self.session.get(urlstring, timeout=10)
             return response.text
 
 
