@@ -2,22 +2,11 @@ import re
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
-import yomichan as Yomichan
+import yomichan.soup as YomichanSoup
 import util as Util
 
 
-class JitenonYoji:
-    columns = {
-        "四字熟語": ["expression", ""],
-        "読み方":   ["yomikata", ""],
-        "意味":     ["imi", ""],
-        "出典":     ["shutten", ""],
-        "漢検級":   ["kankenkyuu", ""],
-        "場面用途": ["bamenyouto", ""],
-        "異形":     ["ikei", []],
-        "類義語":   ["ruigigo", []],
-    }
-
+class Jitenon:
     def __init__(self, sequence):
         self.sequence = sequence
         self.yomichan_glossary = [""]
@@ -35,26 +24,10 @@ class JitenonYoji:
         colname = ""
         for row in rows:
             colname = row.th.text if row.th is not None else colname
-            colval = row.td.decode_contents()
+            colval = row.td.text
             self.__set_column(colname, colval)
-        self.yomichan_glossary = [Yomichan.soup_to_gloss(table)]
-
-    def yomichan_terms(self):
-        terms = []
-        for idx, headword in enumerate(self.__headwords()):
-            (yoji, reading) = headword
-            definition_tags = None
-            inflection_rules = ""
-            score = -idx
-            glossary = self.yomichan_glossary
-            sequence = self.sequence
-            term_tags = ""
-            term = [
-                yoji, reading, definition_tags, inflection_rules,
-                score, glossary, sequence, term_tags
-            ]
-            terms.append(term)
-        return terms
+        gloss = YomichanSoup.make_gloss(table)  # note: modifies table
+        self.yomichan_glossary = [gloss]
 
     def __set_modified_date(self, html):
         m = re.search(r"\"dateModified\": \"(\d{4}-\d{2}-\d{2})", html)
@@ -76,7 +49,7 @@ class JitenonYoji:
                 attr_value.append(colval)
                 setattr(self, attr_name, attr_value)
 
-    def __headwords(self):
+    def _headwords(self):
         words = []
         for yomikata in self.__yomikatas():
             headword = [self.expression, yomikata]
@@ -91,33 +64,35 @@ class JitenonYoji:
 
     def __yomikatas(self):
         yomikata = self.yomikata.replace(" ", "")
-        m = re.search(r"^[ぁ-ヿ]+$", yomikata)
+        m = re.search(r"^[ぁ-ヿ、]+$", yomikata)
         if m:
             return [yomikata]
-        m = re.search(r"^([ぁ-ヿ]+)<br/>", yomikata)
+        m = re.search(r"^([ぁ-ヿ、]+)※", yomikata)
         if m:
             return [m.group(1)]
-        m = re.search(r"^[ぁ-ヿ]+（[ぁ-ヿ]）[ぁ-ヿ]+$", yomikata)
+        m = re.search(r"^[ぁ-ヿ、]+（[ぁ-ヿ、]）[ぁ-ヿ、]+$", yomikata)
         if m:
             return Util.expand_shouryaku(yomikata)
-        m = re.search(r"^([ぁ-ヿ]+)（([ぁ-ヿ/\s]+)）$", yomikata)
+        m = re.search(r"^([ぁ-ヿ、]+)（([ぁ-ヿ/\s、]+)）$", yomikata)
         if m:
             yomikatas = [m.group(1)]
             alts = m.group(2).split("/")
             for alt in alts:
                 yomikatas.append(alt.strip())
             return yomikatas
-        raise Exception(f"Invalid 読み方 format: {self.yomikata}\n{self}")
+        print(f"Invalid 読み方 format: {self.yomikata}\n{self}\n")
+        return ""
 
     def __ikei_headwords(self):
         ikei_headwords = []
         for val in self.ikei:
-            m = re.search(r"^([^（]+)（([ぁ-ヿ]+)）$", val)
+            val = val.replace(" ", "")
+            m = re.search(r"^([^（]+)（([ぁ-ヿ、]+)）$", val)
             if m:
                 headword = [m.group(1), m.group(2)]
                 ikei_headwords.append(headword)
             else:
-                raise Exception(f"Invalid 異形 format: {val}\n{self}")
+                print(f"Invalid 異形 format: {val}\n{self}\n")
         return ikei_headwords
 
     def __str__(self):
