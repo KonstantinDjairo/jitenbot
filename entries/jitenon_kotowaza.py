@@ -32,3 +32,10 @@ class JitenonKotowaza(Jitenon):
             ]
             terms.append(term)
         return terms
+
+    def _headwords(self):
+        if self.expression == "金棒引き・鉄棒引き":
+            return [["金棒引き", "かなぼうひき"],
+                    ["鉄棒引き", "かなぼうひき"]]
+        else:
+            return Jitenon._headwords(self)

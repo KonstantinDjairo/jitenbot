@@ -73,9 +73,6 @@ class Jitenon:
 
     def _headwords(self):
         words = []
-        if self.expression == "金棒引き・鉄棒引き":
-            # special case
-            return [["金棒引き", "かなぼうひき"], ["金棒引き", "かなぼうひき"]]
         for yomikata in self.__yomikatas():
             headword = [self.expression, yomikata]
             if headword in words:
