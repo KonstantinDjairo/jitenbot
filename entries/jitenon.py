@@ -2,7 +2,7 @@ import re
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
-import yomichan.soup as YomichanSoup
+import yomichan.html_gloss as YomichanGloss
 import util as Util
 
 
@@ -27,7 +27,7 @@ class Jitenon:
             colval = self.__clean(row.td.text)
             self.__set_column(colname, colval)
         self.__prepare_yomichan_soup(table)
-        gloss = YomichanSoup.make_gloss(table)
+        gloss = YomichanGloss.make_gloss(table)
         self.yomichan_glossary = [gloss]
 
     def __set_modified_date(self, html):
@@ -54,7 +54,6 @@ class Jitenon:
                 setattr(self, attr_name, [colval])
             else:
                 attr_value.append(colval)
-                # setattr(self, attr_name, attr_value)
 
     def __prepare_yomichan_soup(self, soup):
         patterns = [
@@ -74,6 +73,9 @@ class Jitenon:
 
     def _headwords(self):
         words = []
+        if self.expression == "金棒引き・鉄棒引き":
+            # special case
+            return [["金棒引き", "かなぼうひき"], ["金棒引き", "かなぼうひき"]]
         for yomikata in self.__yomikatas():
             headword = [self.expression, yomikata]
             if headword in words:
