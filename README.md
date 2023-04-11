@@ -26,7 +26,7 @@ options:
   -h, --help            show this help message and exit
 ```
 
-Scraped webpages are written to a `webcache` directory. Each page may be as large as a megabyte,
+Scraped webpages are written to a `webcache` directory. Each page may be as large as 100 KiB,
 and a single dictionary may include thousands of pages. Ensure that adequate disk space is available.
 
 Jitenbot will pause for at least 10 seconds between each web request. Depending upon the size of
