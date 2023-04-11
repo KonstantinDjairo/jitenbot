@@ -14,7 +14,7 @@ def __get_markup_structure(soup):
     content = []
     for child in soup.children:
         if child.name is None:
-            text = child.text.replace("\n", "")
+            text = __clean(child.text)
             if text != "":
                 content.append(text)
         else:
@@ -32,6 +32,12 @@ def __get_markup_structure(soup):
         node["content"] = content
 
     return node
+
+
+def __clean(text):
+    text = text.replace("/", "／")
+    text = text.strip()
+    return text
 
 
 def __get_attributes(attrs):
