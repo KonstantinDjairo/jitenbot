@@ -1,4 +1,4 @@
-from entries.jitenon import Jitenon
+from bot.entries.jitenon import Jitenon
 
 
 class JitenonYoji(Jitenon):

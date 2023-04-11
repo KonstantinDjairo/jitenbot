@@ -1,10 +1,10 @@
 import re
 from bs4 import BeautifulSoup
 
-import scraper as Scraper
-import yomichan.export as YomichanExport
-from entries.jitenon_kotowaza import JitenonKotowaza
-from entries.jitenon_yoji import JitenonYoji
+import bot.scraper as Scraper
+import bot.yomichan.export as YomichanExport
+from bot.entries.jitenon_kotowaza import JitenonKotowaza
+from bot.entries.jitenon_yoji import JitenonYoji
 
 
 def run_all():

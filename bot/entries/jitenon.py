@@ -2,8 +2,8 @@ import re
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
-import yomichan.html_gloss as YomichanGloss
-import util as Util
+import bot.yomichan.html_gloss as YomichanGloss
+import bot.util as Util
 
 
 class Jitenon:

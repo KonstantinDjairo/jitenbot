@@ -1,5 +1,5 @@
-from entries.jitenon import Jitenon
-import yomichan.grammar as Grammar
+from bot.entries.jitenon import Jitenon
+import bot.yomichan.grammar as Grammar
 
 
 class JitenonKotowaza(Jitenon):
