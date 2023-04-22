@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 import bot.scraper as Scraper
 import bot.yomichan.export as YomichanExport
+
 from bot.entries.jitenon_kotowaza import JitenonKotowaza
 from bot.entries.jitenon_yoji import JitenonYoji
 

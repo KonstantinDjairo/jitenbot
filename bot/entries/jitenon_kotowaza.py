@@ -21,7 +21,7 @@ class JitenonKotowaza(Jitenon):
         for idx, headword in enumerate(self._headwords()):
             (expression, reading) = headword
             definition_tags = None
-            inflection_rules = Grammar.sudachi_rules(expression, reading)
+            inflection_rules = Grammar.sudachi_rules(expression)
             score = -idx
             glossary = self.yomichan_glossary
             sequence = self.sequence
