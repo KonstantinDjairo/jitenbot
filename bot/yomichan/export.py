@@ -3,6 +3,9 @@ import os
 import shutil
 import uuid
 from pathlib import Path
+from datetime import datetime
+
+from platformdirs import user_documents_dir, user_cache_dir
 
 
 def jitenon_yoji(entries):
@@ -54,8 +57,12 @@ def __terms(entries):
 
 
 def __create_zip(terms, index, tags=[]):
-    build_directory = str(uuid.uuid4())
-    os.mkdir(build_directory)
+    cache_dir = user_cache_dir("jitenbot")
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    build_directory = os.path.join(cache_dir, f"build_{timestamp}")
+    if Path(build_directory).is_dir():
+        shutil.rmtree(build_directory)
+    os.makedirs(build_directory)
 
     terms_per_file = 1000
     max_i = int(len(terms) / terms_per_file) + 1
@@ -78,7 +85,8 @@ def __create_zip(terms, index, tags=[]):
     zip_filename = index["title"]
     zip_file = f"{zip_filename}.zip"
     shutil.make_archive(zip_filename, "zip", build_directory)
-    out_dir = "output"
+
+    out_dir = os.path.join(user_documents_dir(), "jitenbot")
     out_file = os.path.join(out_dir, zip_file)
     if not Path(out_dir).is_dir():
         os.mkdir(out_dir)

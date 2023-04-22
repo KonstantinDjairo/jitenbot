@@ -2,18 +2,24 @@ import time
 import requests
 import re
 import os
-import json
 import hashlib
-
+from datetime import datetime
 from pathlib import Path
+
+from platformdirs import user_cache_dir
 from urllib.parse import urlparse
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-from datetime import datetime
+
+import bot.data as Data
 
 
 class Scraper():
+    __CONFIG = None
+
     def __init__(self):
+        if self.__CONFIG is None:
+            self.__CONFIG = Data.config()
         pattern = r"^(?:([A-Za-z0-9.\-]+)\.)?" + self.domain + r"$"
         self.netloc_re = re.compile(pattern)
         self.__set_session()
@@ -38,9 +44,7 @@ class Scraper():
             allowed_methods=["HEAD", "GET", "OPTIONS"]
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
-        with open("config.json", "r") as f:
-            config = json.load(f)
-        headers = config["http-request-headers"]
+        headers = self.__CONFIG["http-request-headers"]
         self.session = requests.Session()
         self.session.mount("https://", adapter)
         self.session.headers.update(headers)
@@ -54,7 +58,9 @@ class Scraper():
             raise Exception(f"Invalid URL: {url.geturl()}")
 
     def __cache_path(self, url):
-        cache_dir = os.path.join("webcache", self.__class__.__name__.lower())
+        class_name = self.__class__.__name__.lower()
+        cache_dir = user_cache_dir("jitenbot")
+        cache_dir = os.path.join(cache_dir, class_name)
         netloc_match = self.netloc_re.match(url.netloc)
         if netloc_match.group(1) is not None:
             subdomain = netloc_match.group(1)
