@@ -1,7 +1,7 @@
-from bot.entries.jitenon import Jitenon
+from bot.entries.jitenon import JitenonEntry
 
 
-class JitenonYoji(Jitenon):
+class JitenonYojiEntry(JitenonEntry):
     columns = {
         "四字熟語": ["expression", ""],
         "読み方":   ["yomikata", ""],
@@ -14,7 +14,7 @@ class JitenonYoji(Jitenon):
     }
 
     def __init__(self, sequence):
-        Jitenon.__init__(self, sequence)
+        super().__init__(sequence)
 
     def yomichan_terms(self):
         terms = []

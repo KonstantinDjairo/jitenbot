@@ -1,8 +1,8 @@
-from bot.entries.jitenon import Jitenon
+from bot.entries.jitenon import JitenonEntry
 import bot.yomichan.grammar as Grammar
 
 
-class JitenonKotowaza(Jitenon):
+class JitenonKotowazaEntry(JitenonEntry):
     columns = {
         "言葉":   ["expression", ""],
         "読み方": ["yomikata", ""],
@@ -14,7 +14,7 @@ class JitenonKotowaza(Jitenon):
     }
 
     def __init__(self, sequence):
-        Jitenon.__init__(self, sequence)
+        super().__init__(sequence)
 
     def yomichan_terms(self):
         terms = []
@@ -38,4 +38,4 @@ class JitenonKotowaza(Jitenon):
             return [["金棒引き", "かなぼうひき"],
                     ["鉄棒引き", "かなぼうひき"]]
         else:
-            return Jitenon._headwords(self)
+            return super()._headwords()

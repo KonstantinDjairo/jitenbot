@@ -6,7 +6,7 @@ import bot.yomichan.html_gloss as YomichanGloss
 import bot.util as Util
 
 
-class Jitenon:
+class JitenonEntry:
     def __init__(self, sequence):
         self.sequence = sequence
         self.yomichan_glossary = [""]

@@ -17,32 +17,35 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import argparse
-import bot.crawlers as Crawlers
+from bot.crawlers import JitenonYojiCrawler
+from bot.crawlers import JitenonKotowazaCrawler
 
 
-choices = {
-    'all': Crawlers.run_all,
-    'jitenon-yoji': Crawlers.jitenon_yoji,
-    'jitenon-kotowaza': Crawlers.jitenon_kotowaza,
+crawlers = {
+    'jitenon-yoji': JitenonYojiCrawler,
+    'jitenon-kotowaza': JitenonKotowazaCrawler,
 }
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         prog='jitenbot',
-        description='Crawl and convert Japanese web dictionaries.')
+        description='Convert Japanese dictionary files to new formats.')
     parser.add_argument(
         'target',
-        choices=choices.keys(),
-        help='website to crawl')
+        choices=crawlers.keys(),
+        help='Dictionary to convert.')
     args = parser.parse_args()
     return args
 
 
 def main():
     args = parse_args()
-    crawler = choices[args.target]
-    crawler()
+    crawler_class = crawlers[args.target]
+    crawler = crawler_class()
+    crawler.crawl()
+    crawler.make_entries()
+    crawler.make_yomichan_dictionary()
 
 
 if __name__ == "__main__":
