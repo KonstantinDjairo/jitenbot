@@ -15,7 +15,9 @@ class Jitenon:
         for column in self.columns.values():
             setattr(self, column[0], column[1])
 
-    def add_document(self, html):
+    def add_document(self, path):
+        with open(path, "r") as f:
+            html = f.read()
         yoji_soup = BeautifulSoup(html, features="html5lib")
         self.__set_modified_date(html)
         self.attribution = yoji_soup.find(class_="copyright").text

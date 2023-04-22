@@ -28,13 +28,14 @@ class Scraper():
         url = urlparse(urlstring, scheme='https://', allow_fragments=True)
         self.__validate_url(url)
         cache_path = self.__cache_path(url)
-        cache_contents = self.__read_cache(cache_path)
-        if cache_contents is not None:
-            return cache_contents
-        html = self.__get(urlstring)
-        with open(cache_path, "w") as f:
-            f.write(html)
-        return html
+        html = self.__read_cache(cache_path)
+        if html is None:
+            html = self.__get(urlstring)
+            with open(cache_path, "w") as f:
+                f.write(html)
+        else:
+            print("Discovering cached files...", end='\r', flush=True)
+        return html, cache_path
 
     def __set_session(self):
         retry_strategy = Retry(
@@ -106,4 +107,4 @@ class Scraper():
 class Jitenon(Scraper):
     def __init__(self):
         self.domain = r"jitenon\.jp"
-        Scraper.__init__(self)
+        super().__init__()
