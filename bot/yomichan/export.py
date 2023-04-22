@@ -46,7 +46,7 @@ class Exporter:
         return terms
 
     def __make_dictionary(self, terms, index, tags):
-        print(f"Exporting {len(terms)} Yomichan terms to zip file...")
+        print(f"Exporting {len(terms)} Yomichan terms...")
         self.__write_term_banks(terms)
         self.__write_index(index)
         self.__write_tag_bank(tags)
@@ -89,7 +89,7 @@ class Exporter:
         base_filename = os.path.join(out_dir, filename)
         build_dir = self._get_build_dir()
         shutil.make_archive(base_filename, archive_format, build_dir)
-        print(f"Dictionary file exported to {out_filepath}")
+        print(f"Dictionary file saved to {out_filepath}")
 
     def __rm_build_dir(self):
         build_dir = self._get_build_dir()
