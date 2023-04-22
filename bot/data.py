@@ -27,6 +27,12 @@ def yomichan_inflection_categories():
     return data
 
 
+def yomichan_metadata():
+    file_name = "yomichan_metadata.json"
+    data = __load_json(file_name)
+    return data
+
+
 def __default_config():
     file_name = "default_config.json"
     data = __load_json(file_name)

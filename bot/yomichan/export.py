@@ -1,46 +1,31 @@
 import json
 import os
 import shutil
-import uuid
 from pathlib import Path
 from datetime import datetime
-
 from platformdirs import user_documents_dir, user_cache_dir
+
+import bot.data as Data
 
 
 def jitenon_yoji(entries):
-    terms, modified_date, attribution = __terms(entries)
-    index = {
-        "title": "四字熟語辞典オンライン",
-        "revision": f"jitenon-yoji.{modified_date}",
-        "sequenced": True,
-        "format": 3,
-        "url": "https://yoji.jitenon.jp/",
-        "attribution": attribution,
-    }
-    tags = [
-        ["１級", "frequent", 0, "漢字検定（漢検）１級の四字熟語", 0],
-        ["準１級", "frequent", 0, "漢字検定（漢検）準１級の四字熟語", 0],
-        ["２級", "frequent", 0, "漢字検定（漢検）２級の四字熟語", 0],
-        ["準２級", "frequent", 0, "漢字検定（漢検）準２級の四字熟語", 0],
-        ["３級", "frequent", 0, "漢字検定（漢検）３級の四字熟語", 0],
-        ["４級", "frequent", 0, "漢字検定（漢検）４級の四字熟語", 0],
-        ["５級", "frequent", 0, "漢字検定（漢検）５級の四字熟語", 0],
-    ]
-    __create_zip(terms, index, tags)
+    __jitenon(entries, "jitenon-yoji")
 
 
 def jitenon_kotowaza(entries):
+    __jitenon(entries, "jitenon-kotowaza")
+
+
+def __jitenon(entries, name):
     terms, modified_date, attribution = __terms(entries)
-    index = {
-        "title": "故事・ことわざ・慣用句オンライン",
-        "revision": f"jitenon-kotowaza.{modified_date}",
-        "sequenced": True,
-        "format": 3,
-        "url": "https://kotowaza.jitenon.jp/",
-        "attribution": attribution,
-    }
-    __create_zip(terms, index)
+    meta = Data.yomichan_metadata()
+
+    index = meta[name]["index"]
+    index["revision"] = f"{name}.{modified_date}"
+    index["attribution"] = attribution
+    tags = meta[name]["tags"]
+
+    __create_zip(terms, index, tags)
 
 
 def __terms(entries):
@@ -56,7 +41,7 @@ def __terms(entries):
     return terms, modified_date, attribution
 
 
-def __create_zip(terms, index, tags=[]):
+def __create_zip(terms, index, tags):
     cache_dir = user_cache_dir("jitenbot")
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     build_directory = os.path.join(cache_dir, f"build_{timestamp}")
