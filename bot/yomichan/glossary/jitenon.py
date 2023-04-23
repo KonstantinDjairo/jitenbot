@@ -20,6 +20,6 @@ def make_glossary(entry):
         p.name = "span"
     for th in soup.find_all("th"):
         th['style'] = "vertical-align: middle; text-align: center;"
-    gloss = make_gloss(soup.table)
+    gloss = make_gloss(soup.body)
     glossary = [gloss]
     return glossary
