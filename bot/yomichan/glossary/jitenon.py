@@ -88,7 +88,7 @@ def __insert_headword_line(soup, entry):
 def __do_display_yomikata_in_headword(entry):
     if not re.match(r"^[ぁ-ヿ、]+$", entry.yomikata):
         return False
-    elif len(entry.yomikata) > 15:
+    elif len(entry.yomikata) > 10:
         return False
     else:
         return True
