@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import csv
 from pathlib import Path
 
 from platformdirs import user_config_dir
@@ -33,6 +34,15 @@ def yomichan_metadata():
     return data
 
 
+def variant_kanji():
+    def loader(data, row):
+        data[row[0]] = row[1]
+    file_name = "variant_kanji.csv"
+    data = {}
+    __load_csv(file_name, loader, data)
+    return data
+
+
 def __default_config():
     file_name = "default_config.json"
     data = __load_json(file_name)
@@ -46,4 +56,16 @@ def __load_json(file_name):
         sys.exit(1)
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
+    return data
+
+
+def __load_csv(file_name, loader, data, delim=',', quote='"'):
+    file_path = os.path.join("data", file_name)
+    if not Path(file_path).is_file():
+        print(f"Missing data file: {file_path}")
+        sys.exit(1)
+    with open(file_path, "r", encoding="utf-8") as f:
+        reader = csv.reader(f, delimiter=delim, quotechar=quote)
+        for row in reader:
+            loader(data, row)
     return data

@@ -2,11 +2,16 @@ import re
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
+import bot.data as Data
 import bot.expressions as Expressions
 
 
 class JitenonEntry:
+    _VARIANT_KANJI = None
+
     def __init__(self, entry_id):
+        if self._VARIANT_KANJI is None:
+            self._VARIANT_KANJI = Data.variant_kanji()
         self.entry_id = entry_id
         self.markup = ""
         self.modified_date = date(1970, 1, 1)
@@ -34,6 +39,7 @@ class JitenonEntry:
         if self._headwords is not None:
             return self._headwords
         self._set_headwords()
+        self._set_variant_headwords()
         return self._headwords
 
     def get_first_expression(self):
@@ -148,6 +154,10 @@ class JitenonYojiEntry(JitenonEntry):
     def __init__(self, sequence):
         super().__init__(sequence)
 
+    def _set_variant_headwords(self):
+        for expressions in self._headwords.values():
+            Expressions.add_variant_kanji(expressions, self._VARIANT_KANJI)
+
 
 class JitenonKotowazaEntry(JitenonEntry):
     COLUMNS = {
@@ -170,3 +180,8 @@ class JitenonKotowazaEntry(JitenonEntry):
             }
         else:
             super()._set_headwords()
+
+    def _set_variant_headwords(self):
+        for expressions in self._headwords.values():
+            Expressions.add_variant_kanji(expressions, self._VARIANT_KANJI)
+            Expressions.add_fullwidth(expressions)
