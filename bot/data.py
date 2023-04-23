@@ -7,7 +7,7 @@ from pathlib import Path
 from platformdirs import user_config_dir
 
 
-def config():
+def load_config():
     config_dir = user_config_dir("jitenbot")
     if not Path(config_dir).is_dir():
         os.makedirs(config_dir)
@@ -16,25 +16,25 @@ def config():
         with open(config_file, "r") as f:
             config = json.load(f)
     else:
-        config = __default_config()
+        config = __load_default_config()
         with open(config_file, "w") as f:
             json.dump(config, f, indent=4)
     return config
 
 
-def yomichan_inflection_categories():
+def load_yomichan_inflection_categories():
     file_name = "yomichan_inflection_categories.json"
     data = __load_json(file_name)
     return data
 
 
-def yomichan_metadata():
+def load_yomichan_metadata():
     file_name = "yomichan_metadata.json"
     data = __load_json(file_name)
     return data
 
 
-def variant_kanji():
+def load_variant_kanji():
     def loader(data, row):
         data[row[0]] = row[1]
     file_name = "variant_kanji.csv"
@@ -43,7 +43,7 @@ def variant_kanji():
     return data
 
 
-def __default_config():
+def __load_default_config():
     file_name = "default_config.json"
     data = __load_json(file_name)
     return data

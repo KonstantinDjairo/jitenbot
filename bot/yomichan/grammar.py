@@ -1,7 +1,7 @@
 from sudachipy import tokenizer
 from sudachipy import dictionary
 
-import bot.data as Data
+from bot.data import load_yomichan_inflection_categories
 
 __U_KANA_LIST = ["う", "く", "す", "つ", "ぬ", "ふ", "む",
                  "ゆ", "る", "ぐ", "ず", "づ", "ぶ", "ぷ"]
@@ -16,7 +16,7 @@ def sudachi_rules(expression):
     if __SUDACHI_DICTIONARY is None:
         __SUDACHI_DICTIONARY = dictionary.Dictionary(dict="full").create()
     if __SUDACHI_INFLECTION_TYPES is None:
-        categories = Data.yomichan_inflection_categories()
+        categories = load_yomichan_inflection_categories()
         __SUDACHI_INFLECTION_TYPES = categories["sudachi"]
     splitmode = tokenizer.Tokenizer.SplitMode.A
     tokens = __SUDACHI_DICTIONARY.tokenize(expression, splitmode)

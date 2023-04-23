@@ -2,7 +2,7 @@ import re
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
-import bot.data as Data
+from bot.data import load_variant_kanji
 import bot.expressions as Expressions
 
 
@@ -11,12 +11,12 @@ class JitenonEntry:
 
     def __init__(self, entry_id):
         if self._VARIANT_KANJI is None:
-            self._VARIANT_KANJI = Data.variant_kanji()
+            self._VARIANT_KANJI = load_variant_kanji()
         self.entry_id = entry_id
         self.markup = ""
         self.modified_date = date(1970, 1, 1)
         self.attribution = ""
-        for column in self.COLUMNS.values():
+        for column in self._COLUMNS.values():
             setattr(self, column[0], column[1])
         self._headwords = None
 
@@ -74,7 +74,7 @@ class JitenonEntry:
         self.modified_date = date
 
     def __set_column(self, colname, colval):
-        attr_name = self.COLUMNS[colname][0]
+        attr_name = self._COLUMNS[colname][0]
         attr_value = getattr(self, attr_name)
         if isinstance(attr_value, str):
             setattr(self, attr_name, colval)
@@ -130,7 +130,7 @@ class JitenonEntry:
 
     def __str__(self):
         colvals = [str(self.entry_id)]
-        for attr in self.COLUMNS.values():
+        for attr in self._COLUMNS.values():
             attr_val = getattr(self, attr[0])
             if isinstance(attr_val, str):
                 colvals.append(attr_val)
@@ -140,7 +140,7 @@ class JitenonEntry:
 
 
 class JitenonYojiEntry(JitenonEntry):
-    COLUMNS = {
+    _COLUMNS = {
         "四字熟語": ["expression", ""],
         "読み方":   ["yomikata", ""],
         "意味":     ["imi", ""],
@@ -160,7 +160,7 @@ class JitenonYojiEntry(JitenonEntry):
 
 
 class JitenonKotowazaEntry(JitenonEntry):
-    COLUMNS = {
+    _COLUMNS = {
         "言葉":   ["expression", ""],
         "読み方": ["yomikata", ""],
         "意味":   ["imi", ""],

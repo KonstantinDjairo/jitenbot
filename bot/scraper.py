@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-import bot.data as Data
+from bot.data import load_config
 
 
 class Scraper():
@@ -19,7 +19,7 @@ class Scraper():
 
     def __init__(self):
         if self.__CONFIG is None:
-            self.__CONFIG = Data.config()
+            self.__CONFIG = load_config()
         pattern = r"^(?:([A-Za-z0-9.\-]+)\.)?" + self.domain + r"$"
         self.netloc_re = re.compile(pattern)
         self.__set_session()

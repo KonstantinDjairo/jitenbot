@@ -1,4 +1,4 @@
-import bot.yomichan.grammar as Grammar
+from bot.yomichan.grammar import sudachi_rules
 from bot.yomichan.terms.terminator import Terminator
 from bot.yomichan.glossary.jitenon import make_glossary
 
@@ -44,7 +44,7 @@ class JitenonKotowazaTerminator(JitenonTerminator):
         super().__init__()
 
     def _inflection_rules(self, entry, expression):
-        return Grammar.sudachi_rules(expression)
+        return sudachi_rules(expression)
 
     def _term_tags(self, entry):
         return ""

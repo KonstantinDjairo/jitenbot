@@ -5,7 +5,7 @@ from pathlib import Path
 from datetime import datetime
 from platformdirs import user_documents_dir, user_cache_dir
 
-from bot.data import yomichan_metadata
+from bot.data import load_yomichan_metadata
 
 from bot.yomichan.terms.jitenon import JitenonYojiTerminator
 from bot.yomichan.terms.jitenon import JitenonKotowazaTerminator
@@ -17,7 +17,7 @@ class Exporter:
         self._terms_per_file = 2000
 
     def export(self, entries):
-        meta = yomichan_metadata()
+        meta = load_yomichan_metadata()
         index = meta[self._name]["index"]
         index["revision"] = self._get_revision(entries)
         index["attribution"] = self._get_attribution(entries)
