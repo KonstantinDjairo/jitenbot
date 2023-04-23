@@ -1,6 +1,6 @@
 class Terminator:
     def __init__(self):
-        self.glossary_cache = {}
+        self._glossary_cache = {}
 
     def make_terms(self, entry):
         terms = []

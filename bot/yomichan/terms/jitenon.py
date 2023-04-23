@@ -11,10 +11,10 @@ class JitenonTerminator(Terminator):
         return None
 
     def _glossary(self, entry):
-        if entry.entry_id in self.glossary_cache:
-            return self.glossary_cache[entry.entry_id]
+        if entry.entry_id in self._glossary_cache:
+            return self._glossary_cache[entry.entry_id]
         glossary = make_glossary(entry)
-        self.glossary_cache[entry.entry_id] = glossary
+        self._glossary_cache[entry.entry_id] = glossary
         return glossary
 
     def _sequence(self, entry):
