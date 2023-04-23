@@ -44,7 +44,7 @@ def main():
     crawler_class = crawlers[args.target]
     crawler = crawler_class()
     crawler.crawl()
-    crawler.make_entries()
+    crawler.read_entries()
     crawler.make_yomichan_dictionary()
 
 

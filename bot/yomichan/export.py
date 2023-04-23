@@ -5,7 +5,10 @@ from pathlib import Path
 from datetime import datetime
 from platformdirs import user_documents_dir, user_cache_dir
 
-import bot.data as Data
+from bot.data import yomichan_metadata
+
+from bot.yomichan.terms.jitenon import JitenonYojiTerminator
+from bot.yomichan.terms.jitenon import JitenonKotowazaTerminator
 
 
 class Exporter:
@@ -14,7 +17,7 @@ class Exporter:
         self._terms_per_file = 2000
 
     def export(self, entries):
-        meta = Data.yomichan_metadata()
+        meta = yomichan_metadata()
         index = meta[self._name]["index"]
         index["revision"] = self._get_revision(entries)
         index["attribution"] = self._get_attribution(entries)
@@ -40,7 +43,8 @@ class Exporter:
         for idx, entry in enumerate(entries):
             update = f"Creating Yomichan terms for entry {idx+1}/{entries_len}"
             print(update, end='\r', flush=True)
-            for term in entry.yomichan_terms():
+            new_terms = self._terminator.make_terms(entry)
+            for term in new_terms:
                 terms.append(term)
         print()
         return terms
@@ -120,9 +124,11 @@ class JitenonYojiExporter(JitenonExporter):
     def __init__(self):
         super().__init__()
         self._name = "jitenon-yoji"
+        self._terminator = JitenonYojiTerminator()
 
 
 class JitenonKotowazaExporter(JitenonExporter):
     def __init__(self):
         super().__init__()
         self._name = "jitenon-kotowaza"
+        self._terminator = JitenonKotowazaTerminator()

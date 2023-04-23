@@ -3,10 +3,10 @@ from bs4 import BeautifulSoup
 
 import bot.scraper as Scraper
 
-from bot.entries.jitenon_kotowaza import JitenonKotowazaEntry
+from bot.entries.jitenon import JitenonKotowazaEntry
 from bot.yomichan.export import JitenonKotowazaExporter
 
-from bot.entries.jitenon_yoji import JitenonYojiEntry
+from bot.entries.jitenon import JitenonYojiEntry
 from bot.yomichan.export import JitenonYojiExporter
 
 
@@ -15,14 +15,14 @@ class Crawler():
         self._crawl_map = {}
         self.__entries = []
 
-    def make_entries(self):
+    def read_entries(self):
         entries_len = len(self._crawl_map)
         items = self._crawl_map.items()
         for idx, (entry_id, entry_path) in enumerate(items):
             update = f"Reading entry {idx+1}/{entries_len}"
             print(update, end='\r', flush=True)
             entry = self._entry_class(entry_id)
-            entry.add_document(entry_path)
+            entry.set_markup(entry_path)
             self.__entries.append(entry)
         print()
 
