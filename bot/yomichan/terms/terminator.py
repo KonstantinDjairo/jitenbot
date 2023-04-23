@@ -12,7 +12,7 @@ class Terminator:
                 score = -len(terms)
                 glossary = self._glossary(entry)
                 sequence = self._sequence(entry)
-                term_tags = ""
+                term_tags = self._term_tags(entry)
                 term = [
                     expression, reading, definition_tags, inflection_rules,
                     score, glossary, sequence, term_tags

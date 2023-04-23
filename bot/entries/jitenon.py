@@ -36,6 +36,17 @@ class JitenonEntry:
         self._set_headwords()
         return self._headwords
 
+    def get_first_expression(self):
+        headwords = self.get_headwords()
+        expressions = next(iter(headwords.values()))
+        expression = expressions[0]
+        return expression
+
+    def get_first_reading(self):
+        headwords = self.get_headwords()
+        reading = next(iter(headwords.keys()))
+        return reading
+
     def _set_headwords(self):
         headwords = {}
         for yomikata in self.__yomikatas():

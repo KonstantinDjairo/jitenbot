@@ -22,19 +22,31 @@ from bot.crawlers import JitenonKotowazaCrawler
 
 
 crawlers = {
-    'jitenon-yoji': JitenonYojiCrawler,
-    'jitenon-kotowaza': JitenonKotowazaCrawler,
+    "jitenon-yoji": JitenonYojiCrawler,
+    "jitenon-kotowaza": JitenonKotowazaCrawler,
 }
 
 
+def add_target_argument(parser):
+    target_argument_params = {
+        "choices": crawlers.keys(),
+        "help": "Dictionary to convert."
+    }
+    parser.add_argument("target", **target_argument_params)
+
+
+def make_parser():
+    argument_parser_params = {
+        "prog": "jitenbot",
+        "description": "Convert Japanese dictionary files to new formats.",
+    }
+    parser = argparse.ArgumentParser(**argument_parser_params)
+    return parser
+
+
 def parse_args():
-    parser = argparse.ArgumentParser(
-        prog='jitenbot',
-        description='Convert Japanese dictionary files to new formats.')
-    parser.add_argument(
-        'target',
-        choices=crawlers.keys(),
-        help='Dictionary to convert.')
+    parser = make_parser()
+    add_target_argument(parser)
     args = parser.parse_args()
     return args
 

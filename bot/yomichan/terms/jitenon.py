@@ -35,7 +35,7 @@ class JitenonYojiTerminator(JitenonTerminator):
         return ""
 
     def _term_tags(self, entry):
-        tags = entry.kankenkyuu.replace(" ", "").split("/")
+        tags = entry.kankenkyuu.split("/")
         return " ".join(tags)
 
 
