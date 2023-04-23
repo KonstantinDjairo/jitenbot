@@ -65,7 +65,7 @@ def __decompose_table_rows(soup, entry):
         elif tr.th.text in ["四字熟語", "言葉"]:
             tr.decompose()
         elif tr.th.text == "読み方":
-            if re.match(r"^[ぁ-ヿ、]+$", entry.yomikata):
+            if __do_display_yomikata_in_headword(entry):
                 tr.decompose()
         elif tr.th.text == "意味":
             imi = tr.td
@@ -78,5 +78,17 @@ def __decompose_table_rows(soup, entry):
 
 def __insert_headword_line(soup, entry):
     headword_line = soup.new_tag("span")
-    headword_line.string = f"{entry.get_first_reading()}【{entry.expression}】"
+    if __do_display_yomikata_in_headword(entry):
+        headword_line.string = f"{entry.yomikata}【{entry.expression}】"
+    else:
+        headword_line.string = f"【{entry.expression}】"
     soup.body.insert(0, headword_line)
+
+
+def __do_display_yomikata_in_headword(entry):
+    if not re.match(r"^[ぁ-ヿ、]+$", entry.yomikata):
+        return False
+    elif len(entry.yomikata) > 15:
+        return False
+    else:
+        return True
