@@ -1,3 +1,4 @@
+import re
 from css_parser import parseStyle
 
 

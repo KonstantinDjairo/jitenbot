@@ -2,7 +2,7 @@ import re
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
-import bot.util as Util
+import bot.expressions as Expressions
 
 
 class JitenonEntry:
@@ -77,7 +77,7 @@ class JitenonEntry:
             return [m.group(1)]
         m = re.search(r"^[ぁ-ヿ、]+（[ぁ-ヿ、]）[ぁ-ヿ、]+$", yomikata)
         if m:
-            return Util.expand_shouryaku(yomikata)
+            return Expressions.expand_shouryaku(yomikata)
         m = re.search(r"^([ぁ-ヿ、]+)（([ぁ-ヿ/\s、]+)）$", yomikata)
         if m:
             yomikatas = [m.group(1)]

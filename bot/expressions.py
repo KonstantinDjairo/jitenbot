@@ -4,10 +4,7 @@ import re
 def expand_shouryaku(shouryaku):
     """Return a list of words described by a 省略 notation.
     eg. "有（り）合（わ）せ" -> [
-        "有り合わせ",
-        "有合わせ",
-        "有り合せ",
-        "有合せ"
+        "有り合わせ", "有合わせ", "有り合せ", "有合せ"
     ]
     """
     groups = re.findall(r"([^（]*)(（([^（]+)）)?", shouryaku)
