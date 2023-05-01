@@ -50,7 +50,7 @@ def parse_args(targets):
     )
     parser.add_argument(
         "-i", "--image-dir",
-        help="path to directory containing image files (gaiji, etc.)",
+        help="path to directory containing image folders (gaiji, graphics, etc.)",
         type=directory
     )
     args = parser.parse_args()
