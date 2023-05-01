@@ -2,11 +2,24 @@ import os
 import sys
 import json
 import csv
+from functools import cache
 from pathlib import Path
 
 from platformdirs import user_config_dir
 
 
+@cache
+def get_adobe_glyph(code):
+    adobe_glyphs = __load_adobe_glyphs()
+    override_adobe_glyphs = __load_override_adobe_glyphs()
+    if code in override_adobe_glyphs:
+        return override_adobe_glyphs[code]
+    if len(adobe_glyphs[code]) > 1:
+        raise Exception(f"Multiple glyphs available for code {code}")
+    return adobe_glyphs[code][0]
+
+
+@cache
 def load_config():
     config_dir = user_config_dir("jitenbot")
     if not Path(config_dir).is_dir():
@@ -22,18 +35,21 @@ def load_config():
     return config
 
 
+@cache
 def load_yomichan_inflection_categories():
     file_name = "yomichan_inflection_categories.json"
     data = __load_json(file_name)
     return data
 
 
+@cache
 def load_yomichan_metadata():
     file_name = "yomichan_metadata.json"
     data = __load_json(file_name)
     return data
 
 
+@cache
 def load_variant_kanji():
     def loader(data, row):
         data[row[0]] = row[1]
@@ -43,9 +59,91 @@ def load_variant_kanji():
     return data
 
 
+@cache
+def load_smk8_phrase_readings():
+    def loader(data, row):
+        entry_id = (int(row[0]), int(row[1]))
+        reading = row[2]
+        data[entry_id] = reading
+    file_name = os.path.join("smk8", "phrase_readings.csv")
+    data = {}
+    __load_csv(file_name, loader, data)
+    return data
+
+
+@cache
+def load_daijirin2_phrase_readings():
+    def loader(data, row):
+        entry_id = (int(row[0]), int(row[1]))
+        reading = row[2]
+        data[entry_id] = reading
+    file_name = os.path.join("daijirin2", "phrase_readings.csv")
+    data = {}
+    __load_csv(file_name, loader, data)
+    return data
+
+
+@cache
+def load_daijirin2_kana_abbreviations():
+    def loader(data, row):
+        entry_id = (int(row[0]), int(row[1]))
+        abbreviations = []
+        for abbr in row[2:]:
+            if abbr.strip() != "":
+                abbreviations.append(abbr)
+        data[entry_id] = abbreviations
+    file_name = os.path.join("daijirin2", "kana_abbreviations.csv")
+    data = {}
+    __load_csv(file_name, loader, data)
+    return data
+
+
+@cache
+def load_smk8_yomichan_name_conversion():
+    file_name = os.path.join("smk8", "yomichan_name_conversion.json")
+    data = __load_json(file_name)
+    return data
+
+
+@cache
+def load_daijirin2_yomichan_name_conversion():
+    file_name = os.path.join("daijirin2", "yomichan_name_conversion.json")
+    data = __load_json(file_name)
+    return data
+
+
+@cache
 def __load_default_config():
     file_name = "default_config.json"
     data = __load_json(file_name)
+    return data
+
+
+@cache
+def __load_adobe_glyphs():
+    def loader(data, row):
+        if row[0].startswith("#"):
+            return
+        character = chr(int(row[0].split(" ")[0], 16))
+        code = int(row[2].removeprefix(" CID+"))
+        if code in data:
+            if character not in data[code]:
+                data[code].append(character)
+        else:
+            data[code] = [character]
+    file_name = os.path.join("adobe", "Adobe-Japan1_sequences.txt")
+    data = {}
+    __load_csv(file_name, loader, data, delim=';')
+    return data
+
+
+@cache
+def __load_override_adobe_glyphs():
+    file_name = os.path.join("adobe", "override_glyphs.json")
+    json_data = __load_json(file_name)
+    data = {}
+    for key, val in json_data.items():
+        data[int(key)] = val
     return data
 
 

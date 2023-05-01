@@ -16,47 +16,59 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """
 
+import os
 import argparse
 from bot.crawlers import JitenonYojiCrawler
 from bot.crawlers import JitenonKotowazaCrawler
+from bot.crawlers import Smk8Crawler
+from bot.crawlers import Daijirin2Crawler
 
 
-crawlers = {
-    "jitenon-yoji": JitenonYojiCrawler,
-    "jitenon-kotowaza": JitenonKotowazaCrawler,
-}
+def directory(d):
+    if not os.path.isdir(d):
+        raise argparse.ArgumentTypeError(f"`{d}` is not a valid directory")
+    elif not os.access(d, os.R_OK):
+        raise argparse.ArgumentTypeError(f"Cannot access directory `{d}`")
+    else:
+        return d
 
 
-def add_target_argument(parser):
-    target_argument_params = {
-        "choices": crawlers.keys(),
-        "help": "Dictionary to convert."
-    }
-    parser.add_argument("target", **target_argument_params)
-
-
-def make_parser():
-    argument_parser_params = {
-        "prog": "jitenbot",
-        "description": "Convert Japanese dictionary files to new formats.",
-    }
-    parser = argparse.ArgumentParser(**argument_parser_params)
-    return parser
-
-
-def parse_args():
-    parser = make_parser()
-    add_target_argument(parser)
+def parse_args(targets):
+    parser = argparse.ArgumentParser(
+        prog="jitenbot",
+        description="Convert Japanese dictionary files to new formats.",
+    )
+    parser.add_argument(
+        "target",
+        choices=targets,
+        help="name of dictionary to convert"
+    )
+    parser.add_argument(
+        "-p", "--page-dir",
+        help="path to directory containing XML page files",
+        type=directory
+    )
+    parser.add_argument(
+        "-i", "--image-dir",
+        help="path to directory containing image files (gaiji, etc.)",
+        type=directory
+    )
     args = parser.parse_args()
     return args
 
 
 def main():
-    args = parse_args()
+    crawlers = {
+        "jitenon-yoji": JitenonYojiCrawler,
+        "jitenon-kotowaza": JitenonKotowazaCrawler,
+        "smk8": Smk8Crawler,
+        "daijirin2": Daijirin2Crawler,
+    }
+    args = parse_args(crawlers.keys())
     crawler_class = crawlers[args.target]
-    crawler = crawler_class()
-    crawler.crawl()
-    crawler.read_entries()
+    crawler = crawler_class(args)
+    crawler.collect_pages()
+    crawler.read_pages()
     crawler.make_yomichan_dictionary()
 
 

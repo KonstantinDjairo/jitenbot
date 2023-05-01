@@ -3,14 +3,14 @@ from css_parser import parseStyle
 
 
 def make_gloss(soup):
-    node = __get_markup_structure(soup)
+    node = __get_page_structure(soup)
     return {
         "type": "structured-content",
         "content": node["content"],
     }
 
 
-def __get_markup_structure(soup):
+def __get_page_structure(soup):
     node = {"tag": soup.name}
     content = []
     for child in soup.children:
@@ -19,7 +19,7 @@ def __get_markup_structure(soup):
             if text != "":
                 content.append(text)
         else:
-            content.append(__get_markup_structure(child))
+            content.append(__get_page_structure(child))
 
     attributes = __get_attributes(soup.attrs)
     for key, val in attributes.items():

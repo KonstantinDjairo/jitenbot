@@ -1,0 +1,290 @@
+{
+    "a": {},
+    "br": {},
+    "img": {},
+    "div": {},
+    "span": {},
+    "ruby": {},
+    "rt": {},
+    "語構成": {
+        "name": "span",
+        "style": "margin-right: 0.5em;"
+    },
+    "熟語例G": {
+        "name": "div"
+    },
+    "漢字音G": {
+        "name": "ul"
+    },
+    "漢字音": {
+        "name": "li"
+    },
+    "sup": {
+        "name": "span",
+        "style": "font-size: 0.6em; vertical-align: super;"
+    },
+    "p": {
+        "name": "div",
+        "style": "margin-top: 0.5em; margin-bottom: 0.5em;"
+    },
+    "カット": {
+        "name": "div"
+    },
+    "中語義": {
+        "name": "div"
+    },
+    "副義": {
+        "name": "div"
+    },
+    "異字同訓解説": {
+        "name": "div"
+    },
+    "異字同訓語義G": {
+        "name": "div"
+    },
+    "細義": {
+        "name": "div"
+    },
+    "単位名": {
+        "name": "span",
+        "style": "font-size: 0.6em; vertical-align: super;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    },
+    "原籍": {
+        "name": "span",
+        "style": "font-size: 0.7em; vertical-align: super;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    },
+    "句仮名": {
+        "name": "span",
+        "style": "font-size: 0.6em; vertical-align: super;"
+    },
+    "品詞行": {
+        "name": "span",
+        "style": "font-size: 0.6em; vertical-align: super;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    },
+    "用例": {
+        "name": "div"
+    },
+    "季語G": {
+        "name": "div"
+    },
+    "補説G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_previous_sibling",
+                "parameters": {
+                    "name": "語義Gnum",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_previous_sibling",
+                "parameters": {
+                    "name": "アクセントG",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "語釈": {
+        "name": "span",
+        "procedures": [
+            {
+                "procedure_name": "has_previous_sibling",
+                "parameters": {
+                    "name": "補説G",
+                    "key": "name",
+                    "value": "div"
+                }
+            }
+        ]
+    },
+    "品詞用法": {
+        "name": "span",
+        "style": "font-size: 0.6em; vertical-align: super;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    },
+    "大語義": {
+        "name": "div"
+    },
+    "文語形": {
+        "name": "div"
+    },
+    "慣用G": {
+        "name": "div",
+        "style": "margin-top: 0.5em"
+    },
+    "歴史仮名": {
+        "name": "span",
+        "style": "font-size: 0.6em;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    },
+    "派生G": {
+        "name": "div",
+        "style": "margin-top: 0.5em"
+    },
+    "準大語義": {
+        "name": "div"
+    },
+    "見出部": {
+        "name": "span"
+    },
+    "解説部": {
+        "name": "div"
+    },
+    "語義G": {
+        "name": "div"
+    },
+    "語義区切": {
+        "name": "span",
+        "style": "font-size: 0.7em; vertical-align: super;"
+    },
+    "返り点": {
+        "name": "span",
+        "style": "font-size: 0.5em; font-weight: normal; vertical-align: super;",
+        "procedures": [
+            {
+                "procedure_name": "has_class",
+                "parameters": {
+                    "class_name": "熟語記号",
+                    "key": "style",
+                    "value": "vertical-align: baseline;"
+                }
+            }
+        ]
+    },
+    "生没年": {
+        "name": "span",
+        "style": "font-size: 0.7em;"
+    },
+    "用法": {
+        "name": "span",
+        "style": "font-size: 0.7em; vertical-align: super;"
+    },
+    "異字同訓": {
+        "name": "div",
+        "style": "margin-top: 0.5em;"
+    },
+    "異字同訓仮名": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "異字同訓漢字": {
+        "name": "span",
+        "style": "font-weight: normal;"
+    },
+    "異字同訓表記": {
+        "name": "span",
+        "style": "font-weight: normal;"
+    },
+    "見出仮名": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "見出相当部": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "カットG": {
+        "name": "div",
+        "style": "margin-top: 0.5em;"
+    },
+    "sm": {
+        "name": "span",
+        "style": "font-size: 0.7em;"
+    },
+    "small": {
+        "name": "span",
+        "style": "font-size: 0.7em;"
+    },
+    "sub": {
+        "name": "span",
+        "style": "font-size: 0.7em; vertical-align: sub;"
+    },
+    "付記": {
+        "name": "span",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "（",
+                    "r_wrap": "）"
+                }
+            }
+        ]
+    },
+    "アクセントG": {
+        "name": "span",
+        "style": "margin-left: 0.25em; margin-right: 0.25em; font-size: 0.7em; vertical-align: super;"
+    },
+    "i": {
+        "name": "span",
+        "style": "font-style: italic;"
+    },
+    "h1": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "読みG": {
+        "name": "span",
+        "style": "vertical-align: super; font-size: 0.6em;"
+    },
+    "ルビG": {
+        "name": "span",
+        "style": "vertical-align: super; font-size: 0.6em; font-weight: normal;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    }
+}

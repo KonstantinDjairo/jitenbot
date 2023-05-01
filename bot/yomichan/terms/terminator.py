@@ -1,6 +1,11 @@
 class Terminator:
-    def __init__(self):
+    def __init__(self, name):
+        self._name = name
         self._glossary_cache = {}
+        self._image_dir = None
+
+    def set_image_dir(self, image_dir):
+        self._image_dir = image_dir
 
     def make_terms(self, entry):
         terms = []

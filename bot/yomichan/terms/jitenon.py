@@ -4,8 +4,8 @@ from bot.yomichan.glossary.jitenon import make_glossary
 
 
 class JitenonTerminator(Terminator):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name):
+        super().__init__(name)
 
     def _definition_tags(self, entry):
         return None
@@ -28,8 +28,8 @@ class JitenonTerminator(Terminator):
 
 
 class JitenonYojiTerminator(JitenonTerminator):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name):
+        super().__init__(name)
 
     def _inflection_rules(self, entry, expression):
         return ""
@@ -40,8 +40,8 @@ class JitenonYojiTerminator(JitenonTerminator):
 
 
 class JitenonKotowazaTerminator(JitenonTerminator):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name):
+        super().__init__(name)
 
     def _inflection_rules(self, entry, expression):
         return sudachi_rules(expression)

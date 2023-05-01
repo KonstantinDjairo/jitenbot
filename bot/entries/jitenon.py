@@ -2,29 +2,21 @@ import re
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
-from bot.data import load_variant_kanji
+from bot.entries.entry import Entry
 import bot.expressions as Expressions
 
 
-class JitenonEntry:
-    _VARIANT_KANJI = None
-
+class _JitenonEntry(Entry):
     def __init__(self, entry_id):
-        if self._VARIANT_KANJI is None:
-            self._VARIANT_KANJI = load_variant_kanji()
-        self.entry_id = entry_id
-        self.markup = ""
+        super().__init__(entry_id)
         self.modified_date = date(1970, 1, 1)
         self.attribution = ""
         for column in self._COLUMNS.values():
             setattr(self, column[0], column[1])
-        self._headwords = None
 
-    def set_markup(self, path):
-        with open(path, "r") as f:
-            html = f.read()
-        soup = BeautifulSoup(html, features="html5lib")
-        self.__set_modified_date(html)
+    def set_page(self, page):
+        soup = BeautifulSoup(page, features="html5lib")
+        self.__set_modified_date(page)
         self.attribution = soup.find(class_="copyright").text
         table = soup.find(class_="kanjirighttb")
         rows = table.find("tbody").find_all("tr")
@@ -33,7 +25,11 @@ class JitenonEntry:
             colname = row.th.text if row.th is not None else colname
             colval = self.__clean_text(row.td.text)
             self.__set_column(colname, colval)
-        self.markup = table.decode()
+        self._page = table.decode()
+
+    def get_page_soup(self):
+        soup = BeautifulSoup(self._page, "html5lib")
+        return soup
 
     def get_headwords(self):
         if self._headwords is not None:
@@ -42,16 +38,9 @@ class JitenonEntry:
         self._set_variant_headwords()
         return self._headwords
 
-    def get_first_expression(self):
-        headwords = self.get_headwords()
-        expressions = next(iter(headwords.values()))
-        expression = expressions[0]
-        return expression
-
-    def get_first_reading(self):
-        headwords = self.get_headwords()
-        reading = next(iter(headwords.keys()))
-        return reading
+    def get_part_of_speech_tags(self):
+        # Jitenon doesn't have any
+        return []
 
     def _set_headwords(self):
         headwords = {}
@@ -66,8 +55,8 @@ class JitenonEntry:
                     headwords[reading].append(expression)
         self._headwords = headwords
 
-    def __set_modified_date(self, html):
-        m = re.search(r"\"dateModified\": \"(\d{4}-\d{2}-\d{2})", html)
+    def __set_modified_date(self, page):
+        m = re.search(r"\"dateModified\": \"(\d{4}-\d{2}-\d{2})", page)
         if not m:
             return
         date = datetime.strptime(m.group(1), '%Y-%m-%d').date()
@@ -94,7 +83,7 @@ class JitenonEntry:
             return [m.group(1)]
         m = re.search(r"^[ぁ-ヿ、]+（[ぁ-ヿ、]）[ぁ-ヿ、]+$", yomikata)
         if m:
-            return Expressions.expand_shouryaku(yomikata)
+            return Expressions.expand_abbreviation(yomikata)
         m = re.search(r"^([ぁ-ヿ、]+)（([ぁ-ヿ/\s、]+)）$", yomikata)
         if m:
             yomikatas = [m.group(1)]
@@ -139,7 +128,7 @@ class JitenonEntry:
         return ",".join(colvals)
 
 
-class JitenonYojiEntry(JitenonEntry):
+class JitenonYojiEntry(_JitenonEntry):
     _COLUMNS = {
         "四字熟語": ["expression", ""],
         "読み方":   ["yomikata", ""],
@@ -151,15 +140,15 @@ class JitenonYojiEntry(JitenonEntry):
         "類義語":   ["ruigigo", []],
     }
 
-    def __init__(self, sequence):
-        super().__init__(sequence)
+    def __init__(self, entry_id):
+        super().__init__(entry_id)
 
     def _set_variant_headwords(self):
         for expressions in self._headwords.values():
-            Expressions.add_variant_kanji(expressions, self._VARIANT_KANJI)
+            Expressions.add_variant_kanji(expressions, self._variant_kanji)
 
 
-class JitenonKotowazaEntry(JitenonEntry):
+class JitenonKotowazaEntry(_JitenonEntry):
     _COLUMNS = {
         "言葉":   ["expression", ""],
         "読み方": ["yomikata", ""],
@@ -170,8 +159,8 @@ class JitenonKotowazaEntry(JitenonEntry):
         "類句":   ["ruiku", []],
     }
 
-    def __init__(self, sequence):
-        super().__init__(sequence)
+    def __init__(self, entry_id):
+        super().__init__(entry_id)
 
     def _set_headwords(self):
         if self.expression == "金棒引き・鉄棒引き":
@@ -183,5 +172,5 @@ class JitenonKotowazaEntry(JitenonEntry):
 
     def _set_variant_headwords(self):
         for expressions in self._headwords.values():
-            Expressions.add_variant_kanji(expressions, self._VARIANT_KANJI)
+            Expressions.add_variant_kanji(expressions, self._variant_kanji)
             Expressions.add_fullwidth(expressions)

@@ -15,11 +15,8 @@ from bot.data import load_config
 
 
 class Scraper():
-    __CONFIG = None
-
     def __init__(self):
-        if self.__CONFIG is None:
-            self.__CONFIG = load_config()
+        self._config = load_config()
         pattern = r"^(?:([A-Za-z0-9.\-]+)\.)?" + self.domain + r"$"
         self.netloc_re = re.compile(pattern)
         self.__set_session()
@@ -45,7 +42,7 @@ class Scraper():
             allowed_methods=["HEAD", "GET", "OPTIONS"]
         )
         adapter = HTTPAdapter(max_retries=retry_strategy)
-        headers = self.__CONFIG["http-request-headers"]
+        headers = self._config["http-request-headers"]
         self.session = requests.Session()
         self.session.mount("https://", adapter)
         self.session.headers.update(headers)

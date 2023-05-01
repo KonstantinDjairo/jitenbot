@@ -24,5 +24,28 @@
             "url": "https://kotowaza.jitenon.jp/"
         },
         "tags": []
+    },
+    "smk8": {
+        "index": {
+            "title": "新明解国語辞典　第八版",
+            "sequenced": true,
+            "format": 3
+        },
+        "tags": [
+            ["子", "name", 0, "子項目", 0],
+            ["句", "expression", 0, "句項目", 0],
+            ["造", "popular", 0, "造語成分項目", 0]
+        ]
+    },
+    "daijirin2": {
+        "index": {
+            "title": "大辞林　第四版",
+            "sequenced": true,
+            "format": 3
+        },
+        "tags": [
+            ["子", "name", 0, "子項目", 0],
+            ["句", "expression", 0, "句項目", 0]
+        ]
     }
 }

@@ -1,11 +1,10 @@
 import re
-from bs4 import BeautifulSoup
 
 from bot.yomichan.glossary.gloss import make_gloss
 
 
 def make_glossary(entry):
-    soup = BeautifulSoup(entry.markup, "html5lib")
+    soup = entry.get_page_soup()
     __replace_punctuation(soup)
     __add_internal_links(soup)
     __convert_paragraphs(soup)
