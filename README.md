@@ -64,7 +64,7 @@ options:
 ### Online Targets
 Jitenbot will scrape the target website and save the pages to the [user cache directory](https://pypi.org/project/platformdirs/).
 As a courtesy to the website owners, jitenbot is configured to pause for 10 seconds between each page request. Consequently, 
-a complete crawl of a target website may take several hours.
+a complete crawl of a target website may take several days.
 
 HTTP request headers (user agent string, etc.) may be customized by editing the `config.json` file created in the
 [user config directory](https://pypi.org/project/platformdirs/).
