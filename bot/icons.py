@@ -27,7 +27,7 @@ def make_monochrome_fill_rectangle(path, text):
 
 
 def __calculate_svg_ratio(path):
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         xml = f.read()
     soup = BeautifulSoup(xml, "xml")
     svg = soup.svg

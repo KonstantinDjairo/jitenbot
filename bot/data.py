@@ -26,11 +26,11 @@ def load_config():
         os.makedirs(config_dir)
     config_file = os.path.join(config_dir, "config.json")
     if Path(config_file).is_file():
-        with open(config_file, "r") as f:
+        with open(config_file, "r", encoding="utf-8") as f:
             config = json.load(f)
     else:
         config = __load_default_config()
-        with open(config_file, "w") as f:
+        with open(config_file, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=4)
     return config
 

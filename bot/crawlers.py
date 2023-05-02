@@ -29,7 +29,7 @@ class _Crawler():
             update = f"Reading page {idx+1}/{pages_len}"
             print(update, end='\r', flush=True)
             entry = self._entry_class(page_id)
-            with open(page_path, "r") as f:
+            with open(page_path, "r", encoding="utf-8") as f:
                 page = f.read()
             entry.set_page(page)
             self._entries.append(entry)

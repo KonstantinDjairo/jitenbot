@@ -28,7 +28,7 @@ class Scraper():
         html = self.__read_cache(cache_path)
         if html is None:
             html = self.__get(urlstring)
-            with open(cache_path, "w") as f:
+            with open(cache_path, "w", encoding="utf-8") as f:
                 f.write(html)
         else:
             print("Discovering cached files...", end='\r', flush=True)
@@ -78,7 +78,7 @@ class Scraper():
 
     def __read_cache(self, cache_path):
         if Path(cache_path).is_file():
-            with open(cache_path, "r") as f:
+            with open(cache_path, "r", encoding="utf-8") as f:
                 file_contents = f.read()
         else:
             file_contents = None
