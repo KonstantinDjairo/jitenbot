@@ -1,6 +1,7 @@
 ### Todo
 
 - [ ] Add test suite
+- [ ] Add documentation (docstrings, etc.)
 - [ ] Validate JSON schema of Yomichan terms during export
 - [ ] Add factory classes to reduce the amount of class import statements
 - [ ] Add build scripts for producing program binaries
