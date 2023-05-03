@@ -34,7 +34,8 @@
         "name": "div"
     },
     "副義": {
-        "name": "div"
+        "name": "div",
+        "style": "margin-left: 1.0em;"
     },
     "異字同訓解説": {
         "name": "div"
