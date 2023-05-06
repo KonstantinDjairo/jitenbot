@@ -18,11 +18,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
 import argparse
-from bot.crawlers import JitenonKokugoCrawler
-from bot.crawlers import JitenonYojiCrawler
-from bot.crawlers import JitenonKotowazaCrawler
-from bot.crawlers import Smk8Crawler
-from bot.crawlers import Daijirin2Crawler
+from bot.targets import Targets
+from bot.crawlers.factory import new_crawler
 
 
 def directory(d):
@@ -34,14 +31,14 @@ def directory(d):
         return d
 
 
-def parse_args(targets):
+def parse_args(target_names):
     parser = argparse.ArgumentParser(
         prog="jitenbot",
         description="Convert Japanese dictionary files to new formats.",
     )
     parser.add_argument(
         "target",
-        choices=targets,
+        choices=target_names,
         help="name of dictionary to convert"
     )
     parser.add_argument(
@@ -59,16 +56,10 @@ def parse_args(targets):
 
 
 def main():
-    crawlers = {
-        "jitenon-kokugo": JitenonKokugoCrawler,
-        "jitenon-yoji": JitenonYojiCrawler,
-        "jitenon-kotowaza": JitenonKotowazaCrawler,
-        "smk8": Smk8Crawler,
-        "daijirin2": Daijirin2Crawler,
-    }
-    args = parse_args(crawlers.keys())
-    crawler_class = crawlers[args.target]
-    crawler = crawler_class(args)
+    target_names = [x.value for x in Targets]
+    args = parse_args(target_names)
+    selected_target = Targets(args.target)
+    crawler = new_crawler(selected_target, args)
     crawler.collect_pages()
     crawler.read_pages()
     crawler.make_yomichan_dictionary()
