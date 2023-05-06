@@ -77,27 +77,27 @@ def __get_attributes(attrs):
 
 def __get_style(inline_style_string):
     style = {}
-    parsedStyle = parseStyle(inline_style_string)
-    if parsedStyle.fontStyle != "":
-        style["fontStyle"] = parsedStyle.fontStyle
-    if parsedStyle.fontWeight != "":
-        style["fontWeight"] = parsedStyle.fontWeight
-    if parsedStyle.fontSize != "":
-        style["fontSize"] = parsedStyle.fontSize
-    if parsedStyle.textDecoration != "":
-        style["textDecorationLine"] = parsedStyle.textDecoration
-    if parsedStyle.verticalAlign != "":
-        style["verticalAlign"] = parsedStyle.verticalAlign
-    if parsedStyle.textAlign != "":
-        style["textAlign"] = parsedStyle.textAlign
-    if parsedStyle.listStyleType != "":
-        style["listStyleType"] = parsedStyle.listStyleType
+    parsed_style = parseStyle(inline_style_string)
+    if parsed_style.fontStyle != "":
+        style["fontStyle"] = parsed_style.fontStyle
+    if parsed_style.fontWeight != "":
+        style["fontWeight"] = parsed_style.fontWeight
+    if parsed_style.fontSize != "":
+        style["fontSize"] = parsed_style.fontSize
+    if parsed_style.textDecoration != "":
+        style["textDecorationLine"] = parsed_style.textDecoration
+    if parsed_style.verticalAlign != "":
+        style["verticalAlign"] = parsed_style.verticalAlign
+    if parsed_style.textAlign != "":
+        style["textAlign"] = parsed_style.textAlign
+    if parsed_style.listStyleType != "":
+        style["listStyleType"] = parsed_style.listStyleType
 
     margins = {
-        "marginTop":    parsedStyle.marginTop,
-        "marginRight":  parsedStyle.marginRight,
-        "marginBottom": parsedStyle.marginBottom,
-        "marginLeft":   parsedStyle.marginLeft,
+        "marginTop":    parsed_style.marginTop,
+        "marginRight":  parsed_style.marginRight,
+        "marginBottom": parsed_style.marginBottom,
+        "marginLeft":   parsed_style.marginLeft,
     }
     for key, val in margins.items():
         m = re.search(r"(\d+(\.\d*)?|\.\d+)em", val)
