@@ -7,6 +7,9 @@
         "kahen": ["カ行変格"],
         "sudachi": []
     },
+    "jitenon-kokugo": {},
+    "jitenon-yoji": {},
+    "jitenon-kotowaza": {},
     "smk8": {
         "sahen": ["サ", "サ変型"],
         "godan": ["上二", "下二", "四", "五", "上二型", "下二型", "四段型", "五型", "特殊型"],

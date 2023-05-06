@@ -7,8 +7,8 @@ from bot.yomichan.glossary.jitenon import JitenonKotowazaGlossary
 
 
 class JitenonTerminator(Terminator):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, target):
+        super().__init__(target)
 
     def _definition_tags(self, entry):
         return None
@@ -31,8 +31,8 @@ class JitenonTerminator(Terminator):
 
 
 class JitenonKokugoTerminator(JitenonTerminator):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, target):
+        super().__init__(target)
         self._glossary_maker = JitenonKokugoGlossary()
 
     def _inflection_rules(self, entry, expression):
@@ -43,8 +43,8 @@ class JitenonKokugoTerminator(JitenonTerminator):
 
 
 class JitenonYojiTerminator(JitenonTerminator):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, target):
+        super().__init__(target)
         self._glossary_maker = JitenonYojiGlossary()
 
     def _inflection_rules(self, entry, expression):
@@ -56,8 +56,8 @@ class JitenonYojiTerminator(JitenonTerminator):
 
 
 class JitenonKotowazaTerminator(JitenonTerminator):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, target):
+        super().__init__(target)
         self._glossary_maker = JitenonKotowazaGlossary()
 
     def _inflection_rules(self, entry, expression):

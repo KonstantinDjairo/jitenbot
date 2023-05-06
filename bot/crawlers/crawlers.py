@@ -1,28 +1,23 @@
 import os
 import re
+from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
 
 import bot.scraper as Scraper
-
-from bot.entries.jitenon import JitenonKokugoEntry
-from bot.entries.jitenon import JitenonKotowazaEntry
-from bot.entries.jitenon import JitenonYojiEntry
-from bot.entries.smk8 import Smk8Entry
-from bot.entries.daijirin2 import Daijirin2Entry
-
-from bot.yomichan.export import JitenonKokugoExporter
-from bot.yomichan.export import JitenonKotowazaExporter
-from bot.yomichan.export import JitenonYojiExporter
-from bot.yomichan.export import Smk8Exporter
-from bot.yomichan.export import Daijirin2Exporter
+from bot.entries.factory import new_entry
+from bot.yomichan.exporters.factory import new_exporter
 
 
-class _Crawler():
-    def __init__(self, args):
-        self._page_dir = args.page_dir
-        self._image_dir = args.image_dir
+class Crawler(ABC):
+    def __init__(self, target):
+        self._target = target
         self._page_map = {}
         self._entries = []
+        self._page_id_pattern = None
+
+    @abstractmethod
+    def collect_pages(self, page_dir):
+        pass
 
     def read_pages(self):
         pages_len = len(self._page_map)
@@ -30,19 +25,20 @@ class _Crawler():
         for idx, (page_id, page_path) in enumerate(items):
             update = f"Reading page {idx+1}/{pages_len}"
             print(update, end='\r', flush=True)
-            entry = self._entry_class(page_id)
+            entry = new_entry(self._target, page_id)
             with open(page_path, "r", encoding="utf-8") as f:
                 page = f.read()
             entry.set_page(page)
             self._entries.append(entry)
         print()
 
-    def make_yomichan_dictionary(self):
-        self._yomi_exporter.export(self._entries, self._image_dir)
+    def make_yomichan_dictionary(self, image_dir):
+        exporter = new_exporter(self._target)
+        exporter.export(self._entries, image_dir)
 
     def _parse_page_id(self, page_link):
         m = re.search(self._page_id_pattern, page_link)
-        if not m:
+        if m is None:
             return None
         page_id = int(m.group(1))
         if page_id in self._page_map:
@@ -50,15 +46,13 @@ class _Crawler():
         return page_id
 
 
-class JitenonKokugoCrawler(_Crawler):
-    def __init__(self, args):
-        super().__init__(args)
-        self._entry_class = JitenonKokugoEntry
-        self._yomi_exporter = JitenonKokugoExporter(args.target)
+class JitenonKokugoCrawler(Crawler):
+    def __init__(self, target):
+        super().__init__(target)
         self._gojuon_url = "https://kokugo.jitenon.jp/cat/gojuonindex.php"
         self._page_id_pattern = r"word/p([0-9]+)$"
 
-    def collect_pages(self):
+    def collect_pages(self, page_dir):
         jitenon = Scraper.Jitenon()
         gojuon_doc, _ = jitenon.scrape(self._gojuon_url)
         gojuon_soup = BeautifulSoup(gojuon_doc, features="html.parser")
@@ -85,11 +79,12 @@ class JitenonKokugoCrawler(_Crawler):
         print(f"Finished scraping {pages_len} pages")
 
 
-class _JitenonCrawler(_Crawler):
-    def __init__(self, args):
-        super().__init__(args)
+class _JitenonCrawler(Crawler):
+    def __init__(self, target):
+        super().__init__(target)
+        self._gojuon_url = None
 
-    def collect_pages(self):
+    def collect_pages(self, page_dir):
         print("Scraping jitenon.jp")
         jitenon = Scraper.Jitenon()
         gojuon_doc, _ = jitenon.scrape(self._gojuon_url)
@@ -110,49 +105,41 @@ class _JitenonCrawler(_Crawler):
 
 
 class JitenonYojiCrawler(_JitenonCrawler):
-    def __init__(self, args):
-        super().__init__(args)
-        self._entry_class = JitenonYojiEntry
-        self._yomi_exporter = JitenonYojiExporter(args.target)
+    def __init__(self, target):
+        super().__init__(target)
         self._gojuon_url = "https://yoji.jitenon.jp/cat/gojuon.html"
         self._page_id_pattern = r"([0-9]+)\.html$"
 
 
 class JitenonKotowazaCrawler(_JitenonCrawler):
-    def __init__(self, args):
-        super().__init__(args)
-        self._entry_class = JitenonKotowazaEntry
-        self._yomi_exporter = JitenonKotowazaExporter(args.target)
+    def __init__(self, target):
+        super().__init__(target)
         self._gojuon_url = "https://kotowaza.jitenon.jp/cat/gojuon.php"
         self._page_id_pattern = r"([0-9]+)\.php$"
 
 
-class _MonokakidoCrawler(_Crawler):
-    def __init__(self, args):
-        super().__init__(args)
+class _MonokakidoCrawler(Crawler):
+    def __init__(self, target):
+        super().__init__(target)
         self._page_id_pattern = r"^([0-9]+)\.xml$"
 
-    def collect_pages(self):
-        print(f"Searching for page files in `{self._page_dir}`")
-        for pagefile in os.listdir(self._page_dir):
+    def collect_pages(self, page_dir):
+        print(f"Searching for page files in `{page_dir}`")
+        for pagefile in os.listdir(page_dir):
             page_id = self._parse_page_id(pagefile)
             if page_id is None or page_id == 0:
                 continue
-            path = os.path.join(self._page_dir, pagefile)
+            path = os.path.join(page_dir, pagefile)
             self._page_map[page_id] = path
         pages_len = len(self._page_map)
         print(f"Found {pages_len} page files for processing")
 
 
 class Smk8Crawler(_MonokakidoCrawler):
-    def __init__(self, args):
-        super().__init__(args)
-        self._entry_class = Smk8Entry
-        self._yomi_exporter = Smk8Exporter(args.target)
+    def __init__(self, target):
+        super().__init__(target)
 
 
 class Daijirin2Crawler(_MonokakidoCrawler):
-    def __init__(self, args):
-        super().__init__(args)
-        self._entry_class = Daijirin2Entry
-        self._yomi_exporter = Daijirin2Exporter(args.target)
+    def __init__(self, target):
+        super().__init__(target)

@@ -59,10 +59,10 @@ def main():
     target_names = [x.value for x in Targets]
     args = parse_args(target_names)
     selected_target = Targets(args.target)
-    crawler = new_crawler(selected_target, args)
-    crawler.collect_pages()
+    crawler = new_crawler(selected_target)
+    crawler.collect_pages(args.page_dir)
     crawler.read_pages()
-    crawler.make_yomichan_dictionary()
+    crawler.make_yomichan_dictionary(args.image_dir)
 
 
 if __name__ == "__main__":

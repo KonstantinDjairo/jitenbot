@@ -1,5 +1,3 @@
-from bot.data import load_yomichan_inflection_categories
-
 from bot.entries.smk8 import Smk8KanjiEntry as KanjiEntry
 from bot.entries.smk8 import Smk8PhraseEntry as PhraseEntry
 
@@ -9,10 +7,8 @@ from bot.yomichan.grammar import sudachi_rules, tags_to_rules
 
 
 class Smk8Terminator(Terminator):
-    def __init__(self, name):
-        super().__init__(name)
-        categories = load_yomichan_inflection_categories()
-        self._inflection_categories = categories[name]
+    def __init__(self, target):
+        super().__init__(target)
 
     def _definition_tags(self, entry):
         if isinstance(entry, KanjiEntry):

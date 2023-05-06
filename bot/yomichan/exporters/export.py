@@ -6,27 +6,23 @@ from datetime import datetime
 from platformdirs import user_documents_dir, user_cache_dir
 
 from bot.data import load_yomichan_metadata
-
-from bot.yomichan.terms.jitenon import JitenonKokugoTerminator
-from bot.yomichan.terms.jitenon import JitenonYojiTerminator
-from bot.yomichan.terms.jitenon import JitenonKotowazaTerminator
-from bot.yomichan.terms.smk8 import Smk8Terminator
-from bot.yomichan.terms.daijirin2 import Daijirin2Terminator
+from bot.yomichan.terms.factory import new_terminator
 
 
 class Exporter:
-    def __init__(self, name):
-        self._name = name
+    def __init__(self, target):
+        self._target = target
+        self._terminator = new_terminator(target)
         self._build_dir = None
         self._terms_per_file = 2000
 
     def export(self, entries, image_dir):
         self.__init_build_image_dir(image_dir)
         meta = load_yomichan_metadata()
-        index = meta[self._name]["index"]
+        index = meta[self._target.value]["index"]
         index["revision"] = self._get_revision(entries)
         index["attribution"] = self._get_attribution(entries)
-        tags = meta[self._name]["tags"]
+        tags = meta[self._target.value]["tags"]
         terms = self.__get_terms(entries)
         self.__make_dictionary(terms, index, tags)
 
@@ -43,7 +39,7 @@ class Exporter:
 
     def __init_build_image_dir(self, image_dir):
         build_dir = self._get_build_dir()
-        build_img_dir = os.path.join(build_dir, self._name)
+        build_img_dir = os.path.join(build_dir, self._target.value)
         if image_dir is not None:
             print("Copying image files to build directory...")
             shutil.copytree(image_dir, build_img_dir)
@@ -115,15 +111,15 @@ class Exporter:
 
 
 class JitenonExporter(Exporter):
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, target):
+        super().__init__(target)
 
     def _get_revision(self, entries):
         modified_date = None
         for entry in entries:
             if modified_date is None or entry.modified_date > modified_date:
                 modified_date = entry.modified_date
-        revision = f"{self._name};{modified_date}"
+        revision = f"{self._target.value};{modified_date}"
         return revision
 
     def _get_attribution(self, entries):
@@ -135,44 +131,39 @@ class JitenonExporter(Exporter):
 
 
 class JitenonKokugoExporter(JitenonExporter):
-    def __init__(self, name):
-        super().__init__(name)
-        self._terminator = JitenonKokugoTerminator(name)
+    def __init__(self, target):
+        super().__init__(target)
 
 
 class JitenonYojiExporter(JitenonExporter):
-    def __init__(self, name):
-        super().__init__(name)
-        self._terminator = JitenonYojiTerminator(name)
+    def __init__(self, target):
+        super().__init__(target)
 
 
 class JitenonKotowazaExporter(JitenonExporter):
-    def __init__(self, name):
-        super().__init__(name)
-        self._terminator = JitenonKotowazaTerminator(name)
+    def __init__(self, target):
+        super().__init__(target)
 
 
 class Smk8Exporter(Exporter):
-    def __init__(self, name):
-        super().__init__(name)
-        self._terminator = Smk8Terminator(name)
+    def __init__(self, target):
+        super().__init__(target)
 
     def _get_revision(self, entries):
         timestamp = datetime.now().strftime("%Y-%m-%d")
-        return f"{self._name};{timestamp}"
+        return f"{self._target.value};{timestamp}"
 
     def _get_attribution(self, entries):
         return "© Sanseido Co., LTD. 2020"
 
 
 class Daijirin2Exporter(Exporter):
-    def __init__(self, name):
-        super().__init__(name)
-        self._terminator = Daijirin2Terminator(name)
+    def __init__(self, target):
+        super().__init__(target)
 
     def _get_revision(self, entries):
         timestamp = datetime.now().strftime("%Y-%m-%d")
-        return f"{self._name};{timestamp}"
+        return f"{self._target.value};{timestamp}"
 
     def _get_attribution(self, entries):
         return "© Sanseido Co., LTD. 2019"

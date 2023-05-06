@@ -7,7 +7,7 @@ from bot.crawlers.crawlers import Smk8Crawler
 from bot.crawlers.crawlers import Daijirin2Crawler
 
 
-def new_crawler(target, args):
+def new_crawler(target):
     crawler_map = {
         Targets.JITENON_KOKUGO:   JitenonKokugoCrawler,
         Targets.JITENON_YOJI:     JitenonYojiCrawler,
@@ -15,4 +15,4 @@ def new_crawler(target, args):
         Targets.SMK8:             Smk8Crawler,
         Targets.DAIJIRIN2:        Daijirin2Crawler,
     }
-    return crawler_map[target](args)
+    return crawler_map[target](target)

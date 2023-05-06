@@ -1,8 +1,13 @@
+from bot.data import load_yomichan_inflection_categories
+
+
 class Terminator:
-    def __init__(self, name):
-        self._name = name
+    def __init__(self, target):
+        self._target = target
         self._glossary_cache = {}
         self._image_dir = None
+        categories = load_yomichan_inflection_categories()
+        self._inflection_categories = categories[target.value]
 
     def set_image_dir(self, image_dir):
         self._image_dir = image_dir

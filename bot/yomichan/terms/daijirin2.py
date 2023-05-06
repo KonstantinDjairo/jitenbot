@@ -1,5 +1,3 @@
-from bot.data import load_yomichan_inflection_categories
-
 from bot.entries.daijirin2 import Daijirin2PhraseEntry as PhraseEntry
 
 from bot.yomichan.terms.terminator import Terminator
@@ -8,10 +6,8 @@ from bot.yomichan.grammar import sudachi_rules, tags_to_rules
 
 
 class Daijirin2Terminator(Terminator):
-    def __init__(self, name):
-        super().__init__(name)
-        categories = load_yomichan_inflection_categories()
-        self._inflection_categories = categories[name]
+    def __init__(self, target):
+        super().__init__(target)
 
     def _definition_tags(self, entry):
         return ""
