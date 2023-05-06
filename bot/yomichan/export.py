@@ -7,6 +7,7 @@ from platformdirs import user_documents_dir, user_cache_dir
 
 from bot.data import load_yomichan_metadata
 
+from bot.yomichan.terms.jitenon import JitenonKokugoTerminator
 from bot.yomichan.terms.jitenon import JitenonYojiTerminator
 from bot.yomichan.terms.jitenon import JitenonKotowazaTerminator
 from bot.yomichan.terms.smk8 import Smk8Terminator
@@ -20,8 +21,7 @@ class Exporter:
         self._terms_per_file = 2000
 
     def export(self, entries, image_dir):
-        if image_dir is not None:
-            self.__init_build_image_dir(image_dir)
+        self.__init_build_image_dir(image_dir)
         meta = load_yomichan_metadata()
         index = meta[self._name]["index"]
         index["revision"] = self._get_revision(entries)
@@ -42,10 +42,13 @@ class Exporter:
         return self._build_dir
 
     def __init_build_image_dir(self, image_dir):
-        print("Copying image files to build directory...")
         build_dir = self._get_build_dir()
         build_img_dir = os.path.join(build_dir, self._name)
-        shutil.copytree(image_dir, build_img_dir)
+        if image_dir is not None:
+            print("Copying image files to build directory...")
+            shutil.copytree(image_dir, build_img_dir)
+        else:
+            os.makedirs(build_img_dir)
         self._terminator.set_image_dir(build_img_dir)
 
     def __get_terms(self, entries):
@@ -129,6 +132,12 @@ class JitenonExporter(Exporter):
             if modified_date is None or entry.modified_date > modified_date:
                 attribution = entry.attribution
         return attribution
+
+
+class JitenonKokugoExporter(JitenonExporter):
+    def __init__(self, name):
+        super().__init__(name)
+        self._terminator = JitenonKokugoTerminator(name)
 
 
 class JitenonYojiExporter(JitenonExporter):

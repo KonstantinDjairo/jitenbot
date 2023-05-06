@@ -1,4 +1,13 @@
 {
+    "jitenon-kokugo": {
+        "index": {
+            "title": "国語辞典オンライン",
+            "sequenced": true,
+            "format": 3,
+            "url": "https://kokugo.jitenon.jp/"
+        },
+        "tags": []
+    },
     "jitenon-yoji": {
         "index": {
             "title": "四字熟語辞典オンライン",

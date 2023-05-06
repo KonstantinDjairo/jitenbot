@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
 import argparse
+from bot.crawlers import JitenonKokugoCrawler
 from bot.crawlers import JitenonYojiCrawler
 from bot.crawlers import JitenonKotowazaCrawler
 from bot.crawlers import Smk8Crawler
@@ -59,6 +60,7 @@ def parse_args(targets):
 
 def main():
     crawlers = {
+        "jitenon-kokugo": JitenonKokugoCrawler,
         "jitenon-yoji": JitenonYojiCrawler,
         "jitenon-kotowaza": JitenonKotowazaCrawler,
         "smk8": Smk8Crawler,

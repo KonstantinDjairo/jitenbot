@@ -1,6 +1,9 @@
 from bot.yomichan.grammar import sudachi_rules
 from bot.yomichan.terms.terminator import Terminator
-from bot.yomichan.glossary.jitenon import make_glossary
+
+from bot.yomichan.glossary.jitenon import JitenonKokugoGlossary
+from bot.yomichan.glossary.jitenon import JitenonYojiGlossary
+from bot.yomichan.glossary.jitenon import JitenonKotowazaGlossary
 
 
 class JitenonTerminator(Terminator):
@@ -13,7 +16,7 @@ class JitenonTerminator(Terminator):
     def _glossary(self, entry):
         if entry.entry_id in self._glossary_cache:
             return self._glossary_cache[entry.entry_id]
-        glossary = make_glossary(entry)
+        glossary = self._glossary_maker.make_glossary(entry, self._image_dir)
         self._glossary_cache[entry.entry_id] = glossary
         return glossary
 
@@ -27,9 +30,22 @@ class JitenonTerminator(Terminator):
         return []
 
 
+class JitenonKokugoTerminator(JitenonTerminator):
+    def __init__(self, name):
+        super().__init__(name)
+        self._glossary_maker = JitenonKokugoGlossary()
+
+    def _inflection_rules(self, entry, expression):
+        return sudachi_rules(expression)
+
+    def _term_tags(self, entry):
+        return ""
+
+
 class JitenonYojiTerminator(JitenonTerminator):
     def __init__(self, name):
         super().__init__(name)
+        self._glossary_maker = JitenonYojiGlossary()
 
     def _inflection_rules(self, entry, expression):
         return ""
@@ -42,6 +58,7 @@ class JitenonYojiTerminator(JitenonTerminator):
 class JitenonKotowazaTerminator(JitenonTerminator):
     def __init__(self, name):
         super().__init__(name)
+        self._glossary_maker = JitenonKotowazaGlossary()
 
     def _inflection_rules(self, entry, expression):
         return sudachi_rules(expression)

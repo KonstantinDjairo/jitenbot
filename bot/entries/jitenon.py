@@ -7,8 +7,14 @@ import bot.expressions as Expressions
 
 
 class _JitenonEntry(Entry):
+    ID_TO_ENTRY = {}
+
     def __init__(self, entry_id):
         super().__init__(entry_id)
+        if entry_id not in self.ID_TO_ENTRY:
+            self.ID_TO_ENTRY[entry_id] = self
+        else:
+            raise Exception(f"Duplicate entry ID: {entry_id}")
         self.modified_date = date(1970, 1, 1)
         self.attribution = ""
         for column in self._COLUMNS.values():
@@ -44,9 +50,9 @@ class _JitenonEntry(Entry):
 
     def _set_headwords(self):
         headwords = {}
-        for yomikata in self.__yomikatas():
+        for yomikata in self._yomikatas():
             headwords[yomikata] = [self.expression]
-        ikei_headwords = self.__ikei_headwords()
+        ikei_headwords = self._ikei_headwords()
         for reading, expressions in ikei_headwords.items():
             if reading not in headwords:
                 headwords[reading] = []
@@ -73,7 +79,7 @@ class _JitenonEntry(Entry):
             else:
                 attr_value.append(colval)
 
-    def __yomikatas(self):
+    def _yomikatas(self):
         yomikata = self.yomikata
         m = re.search(r"^[ぁ-ヿ、]+$", yomikata)
         if m:
@@ -94,7 +100,7 @@ class _JitenonEntry(Entry):
         print(f"Invalid 読み方 format: {self.yomikata}\n{self}\n")
         return [""]
 
-    def __ikei_headwords(self):
+    def _ikei_headwords(self):
         ikei_headwords = {}
         for val in self.ikei:
             m = re.search(r"^([^（]+)（([ぁ-ヿ、]+)）$", val)
@@ -174,3 +180,39 @@ class JitenonKotowazaEntry(_JitenonEntry):
         for expressions in self._headwords.values():
             Expressions.add_variant_kanji(expressions, self._variant_kanji)
             Expressions.add_fullwidth(expressions)
+
+
+class JitenonKokugoEntry(_JitenonEntry):
+    _COLUMNS = {
+        "言葉":   ["expression", ""],
+        "読み方": ["yomikata", ""],
+        "意味":   ["imi", ""],
+        "例文":   ["reibun", ""],
+        "別表記": ["betsuhyouki", ""],
+        "対義語": ["taigigo", ""],
+        "活用":   ["katsuyou", ""],
+        "用例":   ["yourei", ""],
+        "類語":   ["ruigo", ""],
+    }
+
+    def __init__(self, entry_id):
+        super().__init__(entry_id)
+
+    def _set_headwords(self):
+        headwords = {}
+        for reading in self.yomikata.split("・"):
+            if reading not in headwords:
+                headwords[reading] = []
+            for expression in self.expression.split("・"):
+                headwords[reading].append(expression)
+            if self.betsuhyouki.strip() != "":
+                for expression in self.betsuhyouki.split("・"):
+                    headwords[reading].append(expression)
+        self._headwords = headwords
+
+    def _set_variant_headwords(self):
+        for expressions in self._headwords.values():
+            Expressions.add_variant_kanji(expressions, self._variant_kanji)
+            Expressions.add_fullwidth(expressions)
+            Expressions.remove_iteration_mark(expressions)
+            Expressions.add_iteration_mark(expressions)
