@@ -4,6 +4,7 @@ compiling the scraped data into compact dictionary file formats.
 
 ### Supported Dictionaries
 * Online
+  * [国語辞典オンライン](https://kokugo.jitenon.jp/)
   * [四字熟語辞典オンライン](https://yoji.jitenon.jp/)
   * [故事・ことわざ・慣用句オンライン](https://kotowaza.jitenon.jp/)
 * Offline
@@ -15,6 +16,12 @@ compiling the scraped data into compact dictionary file formats.
 * [Yomichan](https://github.com/foosoft/yomichan)
 
 # Examples
+
+<details>
+  <summary>国語辞典オンライン (web | yomichan)</summary>
+  
+  ![jitenon_kokugo](https://user-images.githubusercontent.com/8003332/236656018-631aae07-55fa-4f27-ba53-18952cf01b90.png)
+</details>
 
 <details>
   <summary>四字熟語辞典オンライン (web | yomichan)</summary>
@@ -45,12 +52,12 @@ compiling the scraped data into compact dictionary file formats.
 # Usage
 ```
 usage: jitenbot [-h] [-p PAGE_DIR] [-i IMAGE_DIR]
-                {jitenon-yoji,jitenon-kotowaza,smk8,daijirin2}
+                {jitenon-kokugo,jitenon-yoji,jitenon-kotowaza,smk8,daijirin2}
 
 Convert Japanese dictionary files to new formats.
 
 positional arguments:
-  {jitenon-yoji,jitenon-kotowaza,smk8,daijirin2}
+  {jitenon-kokugo,jitenon-yoji,jitenon-kotowaza,smk8,daijirin2}
                         name of dictionary to convert
 
 options:
