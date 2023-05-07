@@ -28,7 +28,13 @@ class Crawler(ABC):
             entry = new_entry(self._target, page_id)
             with open(page_path, "r", encoding="utf-8") as f:
                 page = f.read()
-            entry.set_page(page)
+            try:
+                entry.set_page(page)
+            except ValueError as err:
+                print(err)
+                print("Try deleting and redownloading file:")
+                print(f"\t{page_path}\n")
+                continue
             self._entries.append(entry)
         print()
 

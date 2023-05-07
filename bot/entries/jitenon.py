@@ -23,8 +23,10 @@ class _JitenonEntry(Entry):
     def set_page(self, page):
         soup = BeautifulSoup(page, features="html5lib")
         self.__set_modified_date(page)
-        self.attribution = soup.find(class_="copyright").text
+        self.__set_attribution(soup)
         table = soup.find(class_="kanjirighttb")
+        if table is None:
+            raise ValueError("Error: table data not found in page.")
         rows = table.find("tbody").find_all("tr")
         colname = ""
         for row in rows:
@@ -63,10 +65,17 @@ class _JitenonEntry(Entry):
 
     def __set_modified_date(self, page):
         m = re.search(r"\"dateModified\": \"(\d{4}-\d{2}-\d{2})", page)
-        if not m:
+        if m is None:
             return
         date = datetime.strptime(m.group(1), '%Y-%m-%d').date()
         self.modified_date = date
+
+    def __set_attribution(self, soup):
+        attribution = soup.find(class_="copyright")
+        if attribution is not None:
+            self.attribution = soup.find(class_="copyright").text
+        else:
+            self.attribution = ""
 
     def __set_column(self, colname, colval):
         attr_name = self._COLUMNS[colname][0]
