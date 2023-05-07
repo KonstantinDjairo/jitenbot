@@ -3,7 +3,7 @@ from datetime import datetime, date
 from bs4 import BeautifulSoup
 
 from bot.entries.entry import Entry
-import bot.expressions as Expressions
+import bot.entries.expressions as Expressions
 
 
 class _JitenonEntry(Entry):
@@ -151,7 +151,7 @@ class JitenonYojiEntry(_JitenonEntry):
 
     def _set_variant_headwords(self):
         for expressions in self._headwords.values():
-            Expressions.add_variant_kanji(expressions, self._variant_kanji)
+            Expressions.add_variant_kanji(expressions)
 
 
 class JitenonKotowazaEntry(_JitenonEntry):
@@ -178,7 +178,7 @@ class JitenonKotowazaEntry(_JitenonEntry):
 
     def _set_variant_headwords(self):
         for expressions in self._headwords.values():
-            Expressions.add_variant_kanji(expressions, self._variant_kanji)
+            Expressions.add_variant_kanji(expressions)
             Expressions.add_fullwidth(expressions)
 
 
@@ -212,7 +212,7 @@ class JitenonKokugoEntry(_JitenonEntry):
 
     def _set_variant_headwords(self):
         for expressions in self._headwords.values():
-            Expressions.add_variant_kanji(expressions, self._variant_kanji)
+            Expressions.add_variant_kanji(expressions)
             Expressions.add_fullwidth(expressions)
             Expressions.remove_iteration_mark(expressions)
             Expressions.add_iteration_mark(expressions)

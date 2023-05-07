@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from bot.data import load_variant_kanji
 
 
 class Entry(ABC):
@@ -8,7 +7,6 @@ class Entry(ABC):
         self._page = None
         self._headwords = None
         self._part_of_speech_tags = None
-        self._variant_kanji = load_variant_kanji()
 
     @abstractmethod
     def set_page(self, page):

@@ -1,7 +1,7 @@
 import re
 from bs4 import BeautifulSoup
 
-import bot.expressions as Expressions
+import bot.entries.expressions as Expressions
 import bot.soup as Soup
 from bot.data import load_daijirin2_phrase_readings
 from bot.data import load_daijirin2_kana_abbreviations
@@ -82,7 +82,7 @@ class _BaseDaijirin2Entry(Entry):
 
     def _set_variant_headwords(self):
         for expressions in self._headwords.values():
-            Expressions.add_variant_kanji(expressions, self._variant_kanji)
+            Expressions.add_variant_kanji(expressions)
             Expressions.add_fullwidth(expressions)
             Expressions.remove_iteration_mark(expressions)
             Expressions.add_iteration_mark(expressions)
@@ -223,7 +223,7 @@ class Daijirin2PhraseEntry(_BaseDaijirin2Entry):
         self._delete_unused_nodes(soup)
         text = soup.find("句表記").text
         text = self._clean_expression(text)
-        alternatives = self.__expand_alternatives(text)
+        alternatives = Expressions.expand_daijirin_alternatives(text)
         expressions = []
         for alt in alternatives:
             for exp in Expressions.expand_abbreviation(alt):
@@ -232,41 +232,9 @@ class Daijirin2PhraseEntry(_BaseDaijirin2Entry):
 
     def _find_readings(self):
         text = self.__phrase_readings[self.entry_id]
-        alternatives = self.__expand_alternatives(text)
+        alternatives = Expressions.expand_daijirin_alternatives(text)
         readings = []
         for alt in alternatives:
             for reading in Expressions.expand_abbreviation(alt):
                 readings.append(reading)
         return readings
-
-    @staticmethod
-    def __expand_alternatives(expression):
-        """Return a list of strings described by ＝ notation.
-        eg. "同じ穴の＝狢（＝狐・狸）" -> [
-            "同じ穴の狢", "同じ穴の狐", "同じ穴の狸"
-        ]
-        eg. "聞くは＝一時（＝一旦）の恥、聞かぬは＝末代（＝一生）の恥" -> [
-            "聞くは一時の恥、聞かぬは末代の恥",
-            "聞くは一時の恥、聞かぬは一生の恥",
-            "聞くは一旦の恥、聞かぬは末代の恥",
-            "聞くは一旦の恥、聞かぬは一生の恥"
-        ]
-        """
-        group_pattern = r"([^＝]+)(＝([^（]+)（＝([^（]+)）)?"
-        groups = re.findall(group_pattern, expression)
-        expressions = [""]
-        for group in groups:
-            new_exps = []
-            for expression in expressions:
-                new_exps.append(expression + group[0])
-            expressions = new_exps.copy()
-            if group[1] == "":
-                continue
-            new_exps = []
-            for expression in expressions:
-                new_exps.append(expression + group[2])
-            for expression in expressions:
-                for alt in group[3].split("・"):
-                    new_exps.append(expression + alt)
-            expressions = new_exps.copy()
-        return expressions

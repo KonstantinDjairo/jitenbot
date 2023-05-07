@@ -1,9 +1,11 @@
 import re
+from bot.data import load_variant_kanji
+
 
 __KATA_TO_HIRA_MAP = {
     i: i - 96 for i in [
-        *range(0x30A1, 0x30F6),
-        *range(0x30FD, 0x30FE),
+        *range(0x30A1, 0x30F7),
+        *range(0x30FD, 0x30FF),
     ]
 }
 
@@ -27,7 +29,8 @@ def add_fullwidth(expressions):
             expressions.append(new_exp)
 
 
-def add_variant_kanji(expressions, variant_kanji):
+def add_variant_kanji(expressions):
+    variant_kanji = load_variant_kanji()
     for old_kanji, new_kanji in variant_kanji.items():
         new_exps = []
         for expression in expressions:
@@ -58,11 +61,7 @@ def add_iteration_mark(expressions):
 
 
 def expand_abbreviation(abbreviated_expression):
-    """Return a list of words described by a 省略 notation.
-    eg. "有（り）合（わ）せ" -> [
-        "有り合わせ", "有合わせ", "有り合せ", "有合せ"
-    ]
-    """
+    """Return a list of words described by a 省略 notation."""
     groups = re.findall(r"([^（]*)(（([^（]+)）)?", abbreviated_expression)
     expressions = [""]
     for group in groups:
@@ -86,3 +85,40 @@ def expand_abbreviation_list(expressions):
             if new_exp not in new_exps:
                 new_exps.append(new_exp)
     return new_exps
+
+
+def expand_smk_alternatives(text):
+    """Return a list of strings described by △ notation."""
+    m = re.search(r"△([^（]+)（([^（]+)）", text)
+    if m is None:
+        return [text]
+    alt_parts = [m.group(1)]
+    for alt_part in m.group(2).split("・"):
+        alt_parts.append(alt_part)
+    alts = []
+    for alt_part in alt_parts:
+        alt_exp = re.sub(r"△[^（]+（[^（]+）", alt_part, text)
+        alts.append(alt_exp)
+    return alts
+
+
+def expand_daijirin_alternatives(text):
+    """Return a list of strings described by ＝ notation."""
+    group_pattern = r"([^＝]+)(＝([^（]+)（＝([^（]+)）)?"
+    groups = re.findall(group_pattern, text)
+    expressions = [""]
+    for group in groups:
+        new_exps = []
+        for expression in expressions:
+            new_exps.append(expression + group[0])
+        expressions = new_exps.copy()
+        if group[1] == "":
+            continue
+        new_exps = []
+        for expression in expressions:
+            new_exps.append(expression + group[2])
+        for expression in expressions:
+            for alt in group[3].split("・"):
+                new_exps.append(expression + alt)
+        expressions = new_exps.copy()
+    return expressions

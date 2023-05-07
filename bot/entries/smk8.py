@@ -1,7 +1,7 @@
 import re
 from bs4 import BeautifulSoup
 
-import bot.expressions as Expressions
+import bot.entries.expressions as Expressions
 import bot.soup as Soup
 from bot.data import load_smk8_phrase_readings
 from bot.entries.entry import Entry
@@ -52,7 +52,7 @@ class _BaseSmk8Entry(Entry):
 
     def _set_variant_headwords(self):
         for expressions in self._headwords.values():
-            Expressions.add_variant_kanji(expressions, self._variant_kanji)
+            Expressions.add_variant_kanji(expressions)
             Expressions.add_fullwidth(expressions)
             Expressions.remove_iteration_mark(expressions)
             Expressions.add_iteration_mark(expressions)
@@ -188,7 +188,7 @@ class Smk8PhraseEntry(_BaseSmk8Entry):
         self._fill_alts(soup)
         text = soup.find("標準表記").text
         text = self._clean_expression(text)
-        alternatives = self.__expand_alternatives(text)
+        alternatives = Expressions.expand_smk_alternatives(text)
         expressions = []
         for alt in alternatives:
             for exp in Expressions.expand_abbreviation(alt):
@@ -197,31 +197,12 @@ class Smk8PhraseEntry(_BaseSmk8Entry):
 
     def _find_readings(self):
         text = self.__phrase_readings[self.entry_id]
-        alternatives = self.__expand_alternatives(text)
+        alternatives = Expressions.expand_smk_alternatives(text)
         readings = []
         for alt in alternatives:
             for reading in Expressions.expand_abbreviation(alt):
                 readings.append(reading)
         return readings
-
-    @staticmethod
-    def __expand_alternatives(expression):
-        """Return a list of strings described by △ notation
-        eg. "△金（時間・暇）に飽かして" -> [
-            "金に飽かして", "時間に飽かして", "暇に飽かして"
-        ]
-        """
-        m = re.search(r"△([^（]+)（([^（]+)）", expression)
-        if not m:
-            return [expression]
-        alt_parts = [m.group(1)]
-        for alt_part in m.group(2).split("・"):
-            alt_parts.append(alt_part)
-        alts = []
-        for alt_part in alt_parts:
-            alt_exp = re.sub(r"△[^（]+（[^（]+）", alt_part, expression)
-            alts.append(alt_exp)
-        return alts
 
 
 class Smk8KanjiEntry(_BaseSmk8Entry):
