@@ -4,12 +4,12 @@ compiling the scraped data into compact dictionary file formats.
 
 ### Supported Dictionaries
 * Online
-  * [国語辞典オンライン](https://kokugo.jitenon.jp/)
-  * [四字熟語辞典オンライン](https://yoji.jitenon.jp/)
-  * [故事・ことわざ・慣用句オンライン](https://kotowaza.jitenon.jp/)
+  * [国語辞典オンライン](https://kokugo.jitenon.jp/) (Jitenon Kokugo)
+  * [四字熟語辞典オンライン](https://yoji.jitenon.jp/) (Jitenon Yoji)
+  * [故事・ことわざ・慣用句オンライン](https://kotowaza.jitenon.jp/) (Jitenon Kotowaza)
 * Offline
-  * [新明解国語辞典 第八版](https://www.monokakido.jp/ja/dictionaries/smk8/index.html)
-  * [大辞林 第四版](https://www.monokakido.jp/ja/dictionaries/daijirin2/index.html)
+  * [新明解国語辞典 第八版](https://www.monokakido.jp/ja/dictionaries/smk8/index.html) (Shinmeikai 8e)
+  * [大辞林 第四版](https://www.monokakido.jp/ja/dictionaries/daijirin2/index.html) (Daijirin 4e)
 
 ### Supported Output Formats
 
@@ -18,33 +18,31 @@ compiling the scraped data into compact dictionary file formats.
 # Examples
 
 <details>
-  <summary>国語辞典オンライン (web | yomichan)</summary>
+  <summary>Jitenon Kokugo (web | yomichan)</summary>
   
   ![jitenon_kokugo](https://user-images.githubusercontent.com/8003332/236656018-631aae07-55fa-4f27-ba53-18952cf01b90.png)
 </details>
 
 <details>
-  <summary>四字熟語辞典オンライン (web | yomichan)</summary>
+  <summary>Jitenon Yoji (web | yomichan)</summary>
   
   ![yoji](https://user-images.githubusercontent.com/8003332/235578611-b89bf707-01a7-4887-a4d3-250346501361.png)
 </details>
 
 <details>
-  <summary>故事・ことわざ・慣用句オンライン (web | yomichan)</summary>
+  <summary>Jitenon Kotowaza (web | yomichan)</summary>
   
   ![kotowaza](https://user-images.githubusercontent.com/8003332/235578632-f33ea8fa-8d5f-49f9-bc78-6bff7b6bf9c9.png)
 </details>
 
-### 
 <details>
-  <summary>新明解国語辞典 第八版 (print | yomichan)</summary>
+  <summary>Shinmeikai 8e (print | yomichan)</summary>
   
   ![smk8](https://user-images.githubusercontent.com/8003332/235578664-906a31bb-ee75-4c25-becc-37968dc2eab6.png)
 </details>
 
-### 
 <details>
-  <summary>大辞林 第四版 (print | yomichan)</summary>
+  <summary>Daijirin 4e (print | yomichan)</summary>
   
   ![daijirin2](https://user-images.githubusercontent.com/8003332/235578700-9dbf4fb0-0154-48b5-817c-8fe75e442afc.png)
 </details>
