@@ -3,17 +3,18 @@ Jitenbot is a program for scraping Japanese dictionary websites and
 compiling the scraped data into compact dictionary file formats.
 
 ### Supported Dictionaries
-* Online
+* Web Dictionaries
   * [国語辞典オンライン](https://kokugo.jitenon.jp/) (Jitenon Kokugo)
   * [四字熟語辞典オンライン](https://yoji.jitenon.jp/) (Jitenon Yoji)
   * [故事・ことわざ・慣用句オンライン](https://kotowaza.jitenon.jp/) (Jitenon Kotowaza)
-* Offline
+* Monokakido (["辞書 by 物書堂"](https://www.monokakido.jp/ja/dictionaries/app/))
   * [新明解国語辞典 第八版](https://www.monokakido.jp/ja/dictionaries/smk8/index.html) (Shinmeikai 8e)
   * [大辞林 第四版](https://www.monokakido.jp/ja/dictionaries/daijirin2/index.html) (Daijirin 4e)
 
 ### Supported Output Formats
 
 * [Yomichan](https://github.com/foosoft/yomichan)
+* MDict (.MDX & .MDD)
 
 # Examples
 
@@ -47,6 +48,12 @@ compiling the scraped data into compact dictionary file formats.
   ![daijirin2](https://user-images.githubusercontent.com/8003332/235578700-9dbf4fb0-0154-48b5-817c-8fe75e442afc.png)
 </details>
 
+<details>
+  <summary>Various (GoldenDict)</summary>
+  
+  ![various](https://github.com/stephenmk/jitenbot/assets/8003332/b2519c2c-d4af-42a0-92aa-ef97ffef61ac)
+</details>
+
 # Usage
 ```
 usage: jitenbot [-h] [-p PAGE_DIR] [-m MEDIA_DIR] [-i MDICT_ICON]
@@ -73,7 +80,7 @@ options:
 
 See README.md for details regarding media directory structures
 ```
-### Online Targets
+### Web Targets
 Jitenbot will scrape the target website and save the pages to the [user cache directory](https://pypi.org/project/platformdirs/).
 As a courtesy to the website owners, jitenbot is configured to pause for 10 seconds between each page request. Consequently, 
 a complete crawl of a target website may take several days.
@@ -81,7 +88,7 @@ a complete crawl of a target website may take several days.
 HTTP request headers (user agent string, etc.) may be customized by editing the `config.json` file created in the
 [user config directory](https://pypi.org/project/platformdirs/).
 
-### Offline Targets
+### Monokakido Targets
 Page data and media data must be [procured by the user](https://github.com/golddranks/monokakido/)
 and passed to jitenbot via the appropriate command line flags.
 
