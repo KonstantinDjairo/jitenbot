@@ -1,9 +1,6 @@
-import re
-import os
-from bs4 import BeautifulSoup
+# pylint: disable=too-few-public-methods
 
-import bot.icons as Icons
-from bot.yomichan.glossary.gloss import make_gloss
+import re
 
 
 class JitenonGlossary():
@@ -29,24 +26,12 @@ class JitenonGlossary():
             if m is not None:
                 ref_entry_id = int(m.group(1))
                 ref_entry = entry.ID_TO_ENTRY[ref_entry_id]
-                expression = ref_entry.get_first_expression()
-                el.attrs["href"] = f"?query={expression}&wildcards=off"
+                gid = ref_entry.get_global_identifier()
+                el.attrs["href"] = f"entry://{gid}"
             elif re.match(r"^(?:https?:|\?)[\w\W]*", href):
                 pass
             else:
                 raise Exception(f"Invalid href format: {href}")
-
-    def _convert_paragraphs(self, soup):
-        for p in soup.find_all("p"):
-            p.name = "div"
-
-    def _style_table_headers(self, soup):
-        for th in soup.find_all("th"):
-            th['style'] = "vertical-align: middle; text-align: center;"
-
-    def _unwrap_table_body(self, soup):
-        if soup.find("tbody") is not None:
-            soup.tbody.unwrap()
 
     def _decompose_table_rows(self, soup, entry):
         for tr in soup.find_all("tr"):
@@ -60,17 +45,24 @@ class JitenonGlossary():
             elif tr.th.text == "意味":
                 definition = tr.td
                 definition.name = "div"
+                definition.attrs["class"] = "意味"
                 soup.body.insert(0, definition)
                 tr.decompose()
         if soup.find("tr") is None:
             soup.table.decompose()
 
     def _insert_headword_line(self, soup, entry):
-        headword_line = soup.new_tag("span")
+        headword_line = soup.new_tag("div")
+        headword_line.attrs["class"] = "見出し"
         if self._do_display_yomikata_in_headword(entry):
-            headword_line.string = f"{entry.yomikata}【{entry.expression}】"
-        else:
-            headword_line.string = f"【{entry.expression}】"
+            reading = soup.new_tag("span")
+            reading.attrs["class"] = "読み方"
+            reading.string = entry.yomikata
+            headword_line.append(reading)
+        expression = soup.new_tag("span")
+        expression.attrs["class"] = self._expression_header
+        expression.string = f"【{entry.expression}】"
+        headword_line.append(expression)
         soup.body.insert(0, headword_line)
 
     def _do_display_yomikata_in_headword(self, entry):
@@ -88,19 +80,15 @@ class JitenonKokugoGlossary(JitenonGlossary):
         self._expression_header = "言葉"
         self._id_pattern = r"kokugo.jitenon.jp/word/p([0-9]+)$"
 
-    def make_glossary(self, entry, image_dir):
+    def make_glossary(self, entry, media_dir):
         soup = entry.get_page_soup()
         self._remove_antonym_list_item(soup)
-        self._replace_number_icons(soup, image_dir)
+        self._replace_number_icons(soup, media_dir)
         self._replace_punctuation(soup)
         self._add_internal_links(soup, entry)
-        self._convert_paragraphs(soup)
-        self._style_table_headers(soup)
-        self._unwrap_table_body(soup)
         self._decompose_table_rows(soup, entry)
         self._insert_headword_line(soup, entry)
-        gloss = make_gloss(soup.body)
-        glossary = [gloss]
+        glossary = soup.body.prettify()
         return glossary
 
     def _remove_antonym_list_item(self, soup):
@@ -108,29 +96,14 @@ class JitenonKokugoGlossary(JitenonGlossary):
             if el.text == "対義語辞典":
                 el.decompose()
 
-    def _replace_number_icons(self, soup, image_dir):
+    def _replace_number_icons(self, soup, media_dir):
         for el in soup.find_all("img"):
             alt = el.attrs["alt"]
             text = re.search(r"[０-９]+", alt).group(0)
-            filename = f"{text}-fill.svg"
-            path = os.path.join(image_dir, filename)
-            Icons.make_monochrome_fill_rectangle(path, text)
-            ratio = Icons.calculate_ratio(path)
-            img = BeautifulSoup("<img/>", "xml").img
-            img.attrs = {
-                "height": 1.0 if ratio > 1.0 else ratio,
-                "width": ratio if ratio > 1.0 else 1.0,
-                "sizeUnits": "em",
-                "collapsible": False,
-                "collapsed": False,
-                "background": False,
-                "appearance": "monochrome",
-                "title": alt,
-                "path": f"{os.path.basename(image_dir)}/{filename}",
-            }
             el.name = "span"
-            el.append(img)
-            el.attrs["style"] = "margin-right: 0.25em;"
+            el.string = text
+            del el.attrs["src"]
+            del el.attrs["alt"]
 
     def _do_display_yomikata_in_headword(self, entry):
         return len(entry.yomikata) <= 10
@@ -142,17 +115,13 @@ class JitenonYojiGlossary(JitenonGlossary):
         self._expression_header = "四字熟語"
         self._id_pattern = r"yoji.jitenon.jp/yoji.?/([0-9]+)\.html$"
 
-    def make_glossary(self, entry, image_dir):
+    def make_glossary(self, entry, media_dir):
         soup = entry.get_page_soup()
         self._replace_punctuation(soup)
         self._add_internal_links(soup, entry)
-        self._convert_paragraphs(soup)
-        self._style_table_headers(soup)
-        self._unwrap_table_body(soup)
         self._decompose_table_rows(soup, entry)
         self._insert_headword_line(soup, entry)
-        gloss = make_gloss(soup.body)
-        glossary = [gloss]
+        glossary = soup.body.prettify()
         return glossary
 
 
@@ -162,15 +131,11 @@ class JitenonKotowazaGlossary(JitenonGlossary):
         self._expression_header = "言葉"
         self._id_pattern = r"kotowaza.jitenon.jp/kotowaza/([0-9]+)\.php$"
 
-    def make_glossary(self, entry, image_dir):
+    def make_glossary(self, entry, media_dir):
         soup = entry.get_page_soup()
         self._replace_punctuation(soup)
         self._add_internal_links(soup, entry)
-        self._convert_paragraphs(soup)
-        self._style_table_headers(soup)
-        self._unwrap_table_body(soup)
         self._decompose_table_rows(soup, entry)
         self._insert_headword_line(soup, entry)
-        gloss = make_gloss(soup.body)
-        glossary = [gloss]
+        glossary = soup.body.prettify()
         return glossary

@@ -5,7 +5,8 @@ from bs4 import BeautifulSoup
 
 import bot.scraper as Scraper
 from bot.entries.factory import new_entry
-from bot.yomichan.exporters.factory import new_exporter
+from bot.yomichan.exporters.factory import new_yomi_exporter
+from bot.mdict.exporters.factory import new_mdict_exporter
 
 
 class Crawler(ABC):
@@ -38,9 +39,13 @@ class Crawler(ABC):
             self._entries.append(entry)
         print()
 
-    def make_yomichan_dictionary(self, image_dir):
-        exporter = new_exporter(self._target)
-        exporter.export(self._entries, image_dir)
+    def make_yomichan_dictionary(self, media_dir):
+        exporter = new_yomi_exporter(self._target)
+        exporter.export(self._entries, media_dir)
+
+    def make_mdict_dictionary(self, media_dir, icon_file):
+        exporter = new_mdict_exporter(self._target)
+        exporter.export(self._entries, media_dir, icon_file)
 
     def _parse_page_id(self, page_link):
         m = re.search(self._page_id_pattern, page_link)
@@ -142,10 +147,8 @@ class _MonokakidoCrawler(Crawler):
 
 
 class Smk8Crawler(_MonokakidoCrawler):
-    def __init__(self, target):
-        super().__init__(target)
+    pass
 
 
 class Daijirin2Crawler(_MonokakidoCrawler):
-    def __init__(self, target):
-        super().__init__(target)
+    pass

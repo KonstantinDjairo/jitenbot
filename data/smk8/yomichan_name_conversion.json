@@ -121,25 +121,31 @@
         "style": "font-weight: bold;"
     },
     "表外字": {
-        "name": "ruby",
+        "name": "ruby"
+    },
+    "表外字マーク": {
+        "name": "rt",
         "procedures": [
             {
-                "procedure_name": "add_ruby_text",
+                "procedure_name": "insert_span",
                 "parameters": {
-                    "mark": "︿",
-                    "style": "font-size: 2em;"
+                    "attr_name": "style",
+                    "attr_val": "font-size: 2em;"
                 }
             }
         ]
     },
     "表外音訓": {
-        "name": "ruby",
+        "name": "ruby"
+    },
+    "表外音訓マーク": {
+        "name": "rt",
         "procedures": [
             {
-                "procedure_name": "add_ruby_text",
+                "procedure_name": "insert_span",
                 "parameters": {
-                    "mark": "︽",
-                    "style": "font-size: 2em;"
+                    "attr_name": "style",
+                    "attr_val": "font-size: 2em;"
                 }
             }
         ]
@@ -148,23 +154,7 @@
         "name": "ruby"
     },
     "表音表記": {
-        "name": "rt",
-        "procedures": [
-            {
-                "procedure_name": "replace",
-                "parameters": {
-                    "old": "（",
-                    "new": ""
-                }
-            },
-            {
-                "procedure_name": "replace",
-                "parameters": {
-                    "old": "）",
-                    "new": ""
-                }
-            }
-        ]
+        "name": "rt"
     },
     "派生見出": {
         "name": "span",

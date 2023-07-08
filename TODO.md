@@ -1,11 +1,11 @@
 ### Todo
 
+- [x] Add factory classes to reduce the amount of class import statements
+- [x] Support exporting to MDict (.MDX) dictionary format
 - [ ] Add test suite
 - [ ] Add documentation (docstrings, etc.)
 - [ ] Validate JSON schema of Yomichan terms during export
-- [ ] Add factory classes to reduce the amount of class import statements
 - [ ] Add build scripts for producing program binaries
-- [ ] Support exporting to MDict (.MDX) dictionary format
 - [ ] Validate scraped webpages after downloading
 - [ ] Log non-fatal failures to a log file instead of raising exceptions
 - [ ] Support more dictionary websites

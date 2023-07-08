@@ -1,4 +1,3 @@
-import re
 from bs4 import BeautifulSoup
 
 import bot.entries.expressions as Expressions
@@ -9,18 +8,16 @@ from bot.entries.smk8_preprocess import preprocess_page
 
 
 class _BaseSmk8Entry(Entry):
-    ID_TO_ENTRY = {}
-    SUBENTRY_ID_TO_ENTRY_ID = {}
-
-    def __init__(self, entry_id):
-        super().__init__(entry_id)
-        if entry_id not in self.ID_TO_ENTRY:
-            self.ID_TO_ENTRY[entry_id] = self
-        else:
-            raise Exception(f"Duplicate entry ID: {entry_id}")
+    def __init__(self, target, entry_id):
+        super().__init__(target, entry_id)
         self.children = []
         self.phrases = []
         self.kanjis = []
+
+    def get_global_identifier(self):
+        parent_part = format(self.entry_id[0], '06')
+        child_part = hex(self.entry_id[1]).lstrip('0x').zfill(4).upper()
+        return f"@{self.target.value}-{parent_part}-{child_part}"
 
     def set_page(self, page):
         page = self.__decompose_subentries(page)
@@ -29,13 +26,6 @@ class _BaseSmk8Entry(Entry):
     def get_page_soup(self):
         soup = BeautifulSoup(self._page, "xml")
         return soup
-
-    def get_headwords(self):
-        if self._headwords is not None:
-            return self._headwords
-        self._set_headwords()
-        self._set_variant_headwords()
-        return self._headwords
 
     def get_part_of_speech_tags(self):
         if self._part_of_speech_tags is not None:
@@ -50,8 +40,8 @@ class _BaseSmk8Entry(Entry):
                 self._part_of_speech_tags.append(tag.text)
         return self._part_of_speech_tags
 
-    def _set_variant_headwords(self):
-        for expressions in self._headwords.values():
+    def _add_variant_expressions(self, headwords):
+        for expressions in headwords.values():
             Expressions.add_variant_kanji(expressions)
             Expressions.add_fullwidth(expressions)
             Expressions.remove_iteration_mark(expressions)
@@ -87,7 +77,7 @@ class _BaseSmk8Entry(Entry):
                     tag_soup.name = "項目"
                     subentry_id = self.id_string_to_entry_id(tag_soup.attrs["id"])
                     self.SUBENTRY_ID_TO_ENTRY_ID[subentry_id] = self.entry_id
-                    subentry = subentry_class(subentry_id)
+                    subentry = subentry_class(self.target, subentry_id)
                     page = tag_soup.decode()
                     subentry.set_page(page)
                     subentry_list.append(subentry)
@@ -107,6 +97,16 @@ class _BaseSmk8Entry(Entry):
             raise Exception(f"Invalid entry ID: {id_string}")
 
     @staticmethod
+    def _delete_unused_nodes(soup):
+        """Remove extra markup elements that appear in the entry
+        headword line which are not part of the entry headword"""
+        unused_nodes = [
+            "表音表記", "表外音訓マーク", "表外字マーク", "ルビG"
+        ]
+        for name in unused_nodes:
+            Soup.delete_soup_nodes(soup, name)
+
+    @staticmethod
     def _clean_expression(expression):
         for x in ["〈", "〉", "｛", "｝", "…", " "]:
             expression = expression.replace(x, "")
@@ -114,24 +114,24 @@ class _BaseSmk8Entry(Entry):
 
     @staticmethod
     def _fill_alts(soup):
-        for e in soup.find_all(["親見出仮名", "親見出表記"]):
-            e.string = e.attrs["alt"]
+        for el in soup.find_all(["親見出仮名", "親見出表記"]):
+            el.string = el.attrs["alt"]
         for gaiji in soup.find_all("外字"):
             gaiji.string = gaiji.img.attrs["alt"]
 
 
 class Smk8Entry(_BaseSmk8Entry):
-    def __init__(self, page_id):
+    def __init__(self, target, page_id):
         entry_id = (page_id, 0)
-        super().__init__(entry_id)
+        super().__init__(target, entry_id)
 
     def set_page(self, page):
         page = preprocess_page(page)
         super().set_page(page)
 
-    def _set_headwords(self):
+    def _get_headwords(self):
         soup = self.get_page_soup()
-        Soup.delete_soup_nodes(soup, "表音表記")
+        self._delete_unused_nodes(soup)
         self._fill_alts(soup)
         reading = self._find_reading(soup)
         expressions = []
@@ -140,16 +140,14 @@ class Smk8Entry(_BaseSmk8Entry):
         for expression in self._find_expressions(soup):
             if expression not in expressions:
                 expressions.append(expression)
-        self._headwords = {reading: expressions}
+        headwords = {reading: expressions}
+        return headwords
 
 
 class Smk8ChildEntry(_BaseSmk8Entry):
-    def __init__(self, entry_id):
-        super().__init__(entry_id)
-
-    def _set_headwords(self):
+    def _get_headwords(self):
         soup = self.get_page_soup()
-        Soup.delete_soup_nodes(soup, "表音表記")
+        self._delete_unused_nodes(soup)
         self._fill_alts(soup)
         reading = self._find_reading(soup)
         expressions = []
@@ -158,19 +156,20 @@ class Smk8ChildEntry(_BaseSmk8Entry):
         for expression in self._find_expressions(soup):
             if expression not in expressions:
                 expressions.append(expression)
-        self._headwords = {reading: expressions}
+        headwords = {reading: expressions}
+        return headwords
 
 
 class Smk8PhraseEntry(_BaseSmk8Entry):
-    def __init__(self, entry_id):
-        super().__init__(entry_id)
+    def __init__(self, target, entry_id):
+        super().__init__(target, entry_id)
         self.__phrase_readings = load_smk8_phrase_readings()
 
     def get_part_of_speech_tags(self):
         # phrases do not contain these tags
         return []
 
-    def _set_headwords(self):
+    def _get_headwords(self):
         soup = self.get_page_soup()
         headwords = {}
         expressions = self._find_expressions(soup)
@@ -181,10 +180,10 @@ class Smk8PhraseEntry(_BaseSmk8Entry):
                 headwords[reading].append(expression)
             else:
                 headwords[reading] = [expression]
-        self._headwords = headwords
+        return headwords
 
     def _find_expressions(self, soup):
-        Soup.delete_soup_nodes(soup, "ルビG")
+        self._delete_unused_nodes(soup)
         self._fill_alts(soup)
         text = soup.find("標準表記").text
         text = self._clean_expression(text)
@@ -206,15 +205,14 @@ class Smk8PhraseEntry(_BaseSmk8Entry):
 
 
 class Smk8KanjiEntry(_BaseSmk8Entry):
-    def __init__(self, entry_id):
-        super().__init__(entry_id)
-
-    def _set_headwords(self):
+    def _get_headwords(self):
         soup = self.get_page_soup()
+        self._delete_unused_nodes(soup)
         self._fill_alts(soup)
         reading = self.__get_parent_reading()
         expressions = self._find_expressions(soup)
-        self._headwords = {reading: expressions}
+        headwords = {reading: expressions}
+        return headwords
 
     def __get_parent_reading(self):
         parent_id = self.SUBENTRY_ID_TO_ENTRY_ID[self.entry_id]

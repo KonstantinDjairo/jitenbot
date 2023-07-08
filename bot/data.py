@@ -99,15 +99,15 @@ def load_daijirin2_kana_abbreviations():
 
 
 @cache
-def load_smk8_yomichan_name_conversion():
-    file_name = os.path.join("smk8", "yomichan_name_conversion.json")
+def load_yomichan_name_conversion(target):
+    file_name = os.path.join(target.value, "yomichan_name_conversion.json")
     data = __load_json(file_name)
     return data
 
 
 @cache
-def load_daijirin2_yomichan_name_conversion():
-    file_name = os.path.join("daijirin2", "yomichan_name_conversion.json")
+def load_mdict_name_conversion(target):
+    file_name = os.path.join(target.value, "mdict_name_conversion.json")
     data = __load_json(file_name)
     return data
 

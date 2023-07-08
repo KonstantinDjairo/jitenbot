@@ -15,4 +15,4 @@ def new_entry(target, page_id):
         Targets.SMK8:             Smk8Entry,
         Targets.DAIJIRIN2:        Daijirin2Entry,
     }
-    return entry_map[target](page_id)
+    return entry_map[target](target, page_id)

@@ -49,7 +49,8 @@ compiling the scraped data into compact dictionary file formats.
 
 # Usage
 ```
-usage: jitenbot [-h] [-p PAGE_DIR] [-i IMAGE_DIR]
+usage: jitenbot [-h] [-p PAGE_DIR] [-m MEDIA_DIR] [-i MDICT_ICON]
+                [--no-yomichan-export] [--no-mdict-export]
                 {jitenon-kokugo,jitenon-yoji,jitenon-kotowaza,smk8,daijirin2}
 
 Convert Japanese dictionary files to new formats.
@@ -62,9 +63,15 @@ options:
   -h, --help            show this help message and exit
   -p PAGE_DIR, --page-dir PAGE_DIR
                         path to directory containing XML page files
-  -i IMAGE_DIR, --image-dir IMAGE_DIR
-                        path to directory containing image folders (gaiji,
-                        graphics, etc.)
+  -m MEDIA_DIR, --media-dir MEDIA_DIR
+                        path to directory containing media folders (gaiji,
+                        graphics, audio, etc.)
+  -i MDICT_ICON, --mdict-icon MDICT_ICON
+                        path to icon file to be used with MDict
+  --no-yomichan-export  skip export of dictionary data to Yomichan format
+  --no-mdict-export     skip export of dictionary data to MDict format
+
+See README.md for details regarding media directory structures
 ```
 ### Online Targets
 Jitenbot will scrape the target website and save the pages to the [user cache directory](https://pypi.org/project/platformdirs/).
@@ -75,8 +82,55 @@ HTTP request headers (user agent string, etc.) may be customized by editing the 
 [user config directory](https://pypi.org/project/platformdirs/).
 
 ### Offline Targets
-Page data and image data must be procured by the user
+Page data and media data must be [procured by the user](https://github.com/golddranks/monokakido/)
 and passed to jitenbot via the appropriate command line flags.
+
+<details>
+  <summary>smk8 media directory</summary>
+
+Since Yomichan does not support audio files from imported
+dictionaries, the `audio/` directory may be omitted to save filesize
+space in the output ZIP file if desired.
+
+```
+media
+├── Audio.png
+├── audio
+│   ├── 00001.aac
+│   ├── 00002.aac
+│   ├── 00003.aac
+│   │   ...
+│   └── 82682.aac
+└── gaiji
+    ├── 1d110.svg
+    ├── 1d15d.svg
+    ├── 1d15e.svg
+    │   ...
+    └── xbunnoa.svg
+```
+</details>
+
+<details>
+  <summary>daijirin2 media directory</summary>
+
+The `graphics/` directory may be omitted to save space if desired.
+
+```
+media
+├── gaiji
+│   ├── 1D10B.svg
+│   ├── 1D110.svg
+│   ├── 1D12A.svg
+│   │   ...
+│   └── vectorOB.svg
+└── graphics
+    ├── 3djr_0002.png
+    ├── 3djr_0004.png
+    ├── 3djr_0005.png
+    │   ...
+    └── 4djr_yahazu.png
+```
+</details>
 
 # Attribution
 `Adobe-Japan1_sequences.txt` is provided by [The Adobe-Japan1-7 Character Collection](https://github.com/adobe-type-tools/Adobe-Japan1).

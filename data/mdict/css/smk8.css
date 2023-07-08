@@ -1,0 +1,449 @@
+
+body {
+	margin: 1em 44px 1em 1.5em;
+	line-height: 1.5em;
+	font-family: serif;
+	font-size: 1.2em;
+	color: black;
+}
+
+span[data-name="項目"] {
+	display: block;
+}
+
+span[data-name="見出部"] {
+	display: block;
+}
+
+span[data-name="見出部"].pri {
+	margin-left: -0.4em;
+}
+
+span[data-name="見出仮名"] {
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+rt[data-name="表音表記"] {
+	font-size: 0.65em;
+}
+
+rt[data-name="表外音訓マーク"] {
+    font-size: 0.65em;
+}
+
+rt[data-name="表外字マーク"] {
+    font-size: 0.65em;
+}
+
+span[data-name="解説部"] {
+	display: block;
+	margin-left: 1em;
+}
+
+span[data-name="大語義"] {
+	display: block;
+}
+
+span[data-name="語義"] {
+	display: block;
+}
+
+span[data-name="副義"] {
+	display: block;
+}
+
+span[data-name="用例G"] {
+	display: block;
+}
+
+span[data-name="注記"] span[data-name="用例G"] {
+	display: inline;
+}
+
+span[data-name="用例"] {
+	display: block;
+}
+
+span[data-name="注記"] span[data-name="用例"] {
+	display: inline;
+}
+
+span[data-name="見出語省略"] {
+	margin-left: 0.125em;
+	margin-right: 0.125em;
+}
+
+span[data-name="教育漢字"] {
+	color: green;
+}
+
+span[data-name="ルビ"] {
+	font-size: 0.7em;
+	vertical-align: 0.5em;
+}
+
+span[data-name="ルビ区切"] {
+	font-size: 0.7em;
+	vertical-align: 0.65em;
+}
+
+span[data-name="名詞形G"] {
+	display: block;
+}
+
+span[data-name="可能形G"] {
+	display: block;
+}
+
+span[data-name="参照G"] {
+	display: block;
+}
+
+span[data-name="参照"] {
+	color: blue;
+}
+
+span[data-name="子項目"],
+span[data-name="句項目"] {
+	display: block;
+	margin-bottom: 0.5em;
+}
+
+span[data-name="子項目F"],
+span[data-name="句項目F"] {
+	display: block;
+	margin-bottom: 0.5em;
+	margin-top: 0.5em;
+}
+
+span[data-name="子見出部"] {
+	display: block;
+}
+
+span[data-name="子解説部"] {
+	display: block;
+	margin-left: 1em;
+}
+
+span[data-name="句見出部"] {
+	display: block;
+}
+
+span[data-name="句解説部"] {
+	display: block;
+	margin-left: 1em;
+}
+
+span[data-name="運用解説"] {
+	display: block;
+}
+
+span[data-name="表記解説"] {
+	display: block;
+}
+
+span[data-name="文法解説"] {
+	display: block;
+}
+
+span[data-name="かぞえ方解説"] {
+	display: block;
+}
+
+span[data-name="派生"] {
+	display: block;
+	margin-left: 1.25em;
+}
+
+span[data-name="派生SubGF"] {
+	display: block;
+	text-indent: -1.25em;
+}
+
+span[data-name="派生SubG"] {
+	display: block;
+}
+
+span[data-name="派生SubGF"] span[data-name="用例G"] {
+	text-indent: 0;
+}
+
+span[data-name="派生見出"] {
+	font-weight: bold;
+}
+
+span[data-name="派生見出"].normal {
+	font-weight: normal
+}
+
+span[data-name="造語成分項目"] {
+	display: block;
+	margin-top: 1em;
+}
+
+span[data-name="造語成分見出"] {
+	font-size:1.4em;
+}
+
+span[data-name="EM"] {
+	font-weight: bold;
+}
+
+span[data-name="アクセント"] {
+    font-size: 0.7em;
+    vertical-align: super;
+}
+
+span[data-name="アクセント組M"] {
+	vertical-align: 0.1em;
+}
+
+
+span[data-name="反意語M"],
+span[data-name="同意語M"] {
+	vertical-align: 0.15em;
+}
+
+span[data-name="B"] {
+	font-weight: bold;
+}
+
+span[data-name="IT"] {
+	font-family: "Times New Roman";
+	font-style: italic;
+}
+
+span[data-name="EXCLAMATION"] {
+	font-family: "Times New Roman";
+	font-style: italic;
+	font-size: 1.2em;
+}
+
+span[data-name="歴史仮名"] {
+	font-family: serif;
+	font-size: 0.7em;
+	font-weight: normal;
+	vertical-align: 0.35em;
+	-webkit-user-select: nocopy;
+}
+
+span[data-name="出現形"] {
+	font-weight: bold;
+}
+
+span[data-name="品詞用法"] {
+	font-size: 0.7em;
+}
+
+span[data-name="品詞用法"] span[data-name="品詞G"] {
+	font-size: 1.2em;
+}
+
+span[data-name="基本構文型"] {
+	font-size: 0.8em;
+}
+
+span[data-name="基本構文em"] {
+	font-weight: bold;
+}
+
+span[data-name="ウ濁音参照"] {
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+span[data-name="rect"] {
+	padding: 0.1em;
+	font-family: sans-serif;
+	font-size: 0.8em;
+	border-width: 0.05em;
+	border-style: solid;
+	border-color: black;
+	word-break: keep-all;
+	-webkit-border-radius: 0.1em;
+}
+
+span[data-name="rect"].fill {
+	color: white;
+	border-style: none;
+	background-color: gray;
+}
+
+span[data-name="rect"].red {
+	color: red;
+	border-color: red;
+}
+
+span[data-name="rect"].redfill {
+	color: white;
+	border-style: none;
+	background-color: red;
+}
+
+span[data-name="red"] {
+	color: red;
+}
+
+span[data-name="大語義番号"],
+span[data-name="語義番号"],
+span[data-name="副義番号"] {
+	margin-right: 0.25em;
+	font-family: sans-serif;
+}
+
+span[data-name="ref"] span[data-name="大語義番号"],
+span[data-name="ref"] span[data-name="語義番号"],
+span[data-name="ref"] span[data-name="副義番号"] {
+	font-size: 0.8em;
+	margin-right: 0;
+}
+
+span[data-name="表外字マーク"] {
+	vertical-align: 0.5em;
+}
+
+span[data-name="表外音訓マーク"] {
+	font-size: 0.5em;
+	vertical-align: 0.5em;
+}
+
+span[data-name="言換M"] {
+	font-size: 0.5em;
+}
+
+span[data-name="字音語参照項目"] {
+	display: block;
+}
+
+span[data-name="本文項目M"] {
+	font-size: 0.7em;
+}
+
+span[data-name="運用解説M"],
+span[data-name="表記解説M"],
+span[data-name="文法解説M"],
+span[data-name="かぞえ方解説M"],
+span[data-name="派生M"] {
+	margin-right: 0.25em;
+	font-family: sans-serif;
+}
+
+span[data-name="派生ロゴ"] {
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+}
+
+span[data-name="文字"] {
+	margin: 0 0.2em;
+}
+
+span[data-name="二分"] {
+	font-size: 0.5em;
+}
+
+span[data-name="四分"] {
+	font-size: 0.25em;
+}
+
+span[data-name="ref"] {
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+}
+
+span[data-name="ref-small"] {
+	font-size: 0.7em;
+}
+
+span[data-name="sup"] {
+	font-size: 0.6em;
+}
+
+span[data-name="外字"] img {
+	height: 1em;
+}
+
+img.audio {
+	height: 1em;
+	margin: 0 0.25em;
+}
+
+img.外字 {
+	height: 1em;
+}
+
+img.外字欧 {
+	height: 1em;
+}
+
+span[data-name="レ点M"] {
+	font-size: 0.6em;
+	vertical-align: -0.7em;
+}
+
+a {
+	text-decoration: none;
+}
+
+span[data-name="audio"] a {
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+span[data-name="アクセント"] a,
+span[data-name="古語M"] a,
+span[data-name="雅語M"] a,
+span[data-name="派生M"] a,
+span[data-name="原籍M"] a,
+span[data-name="品詞M"] a {
+	color: black;
+	border-bottom-style: none;
+}
+
+
+span[data-name="歴史仮名"]:before,
+span[data-name="ルビ"]:before {
+    content: "(";
+}
+
+span[data-name="歴史仮名"]:after,
+span[data-name="ルビ"]:after {
+    content: ")";
+}
+
+div[data-child-links] {
+    padding-top: 1em;
+}
+
+div[data-child-links] ul {
+    margin: 0;
+    padding-left: 2em;
+}
+
+div[data-child-links] span {
+    padding: 0.1em;
+	font-family: sans-serif;
+	font-size: 0.8em;
+	color: white;
+	border-width: 0.05em;
+	border-style: none;
+	border-color: black;
+	word-break: keep-all;
+	-webkit-border-radius: 0.2em;
+}
+
+div[data-child-links="子項目"] span {
+	background-color: rgb(153, 42, 103);
+}
+
+div[data-child-links="句項目"] span {
+	background-color: rgb(176, 127, 57);
+}
+
+span.pri > span.外字 {
+    font-size: 0.65em;
+    vertical-align: super;
+}
+
+
+

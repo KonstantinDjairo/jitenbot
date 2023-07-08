@@ -1,4 +1,3 @@
-import re
 from bs4 import BeautifulSoup
 
 import bot.entries.expressions as Expressions
@@ -10,18 +9,16 @@ from bot.entries.daijirin2_preprocess import preprocess_page
 
 
 class _BaseDaijirin2Entry(Entry):
-    ID_TO_ENTRY = {}
-    SUBENTRY_ID_TO_ENTRY_ID = {}
-
-    def __init__(self, entry_id):
-        super().__init__(entry_id)
-        if entry_id not in self.ID_TO_ENTRY:
-            self.ID_TO_ENTRY[entry_id] = self
-        else:
-            raise Exception(f"Duplicate entry ID: {entry_id}")
+    def __init__(self, target, entry_id):
+        super().__init__(target, entry_id)
         self.children = []
         self.phrases = []
         self._kana_abbreviations = load_daijirin2_kana_abbreviations()
+
+    def get_global_identifier(self):
+        parent_part = format(self.entry_id[0], '06')
+        child_part = hex(self.entry_id[1]).lstrip('0x').zfill(4).upper()
+        return f"@{self.target.value}-{parent_part}-{child_part}"
 
     def set_page(self, page):
         page = self.__decompose_subentries(page)
@@ -57,14 +54,7 @@ class _BaseDaijirin2Entry(Entry):
             else:
                 self._part_of_speech_tags.append(pos)
 
-    def get_headwords(self):
-        if self._headwords is not None:
-            return self._headwords
-        self._set_headwords()
-        self._set_variant_headwords()
-        return self._headwords
-
-    def _set_regular_headwords(self, soup):
+    def _get_regular_headwords(self, soup):
         self._fill_alts(soup)
         reading = soup.find("見出仮名").text
         expressions = []
@@ -78,10 +68,11 @@ class _BaseDaijirin2Entry(Entry):
         expressions = Expressions.expand_abbreviation_list(expressions)
         if len(expressions) == 0:
             expressions.append(reading)
-        self._headwords = {reading: expressions}
+        headwords = {reading: expressions}
+        return headwords
 
-    def _set_variant_headwords(self):
-        for expressions in self._headwords.values():
+    def _add_variant_expressions(self, headwords):
+        for expressions in headwords.values():
             Expressions.add_variant_kanji(expressions)
             Expressions.add_fullwidth(expressions)
             Expressions.remove_iteration_mark(expressions)
@@ -101,7 +92,7 @@ class _BaseDaijirin2Entry(Entry):
                     tag_soup.name = "項目"
                     subentry_id = self.id_string_to_entry_id(tag_soup.attrs["id"])
                     self.SUBENTRY_ID_TO_ENTRY_ID[subentry_id] = self.entry_id
-                    subentry = subentry_class(subentry_id)
+                    subentry = subentry_class(self.target, subentry_id)
                     page = tag_soup.decode()
                     subentry.set_page(page)
                     subentry_list.append(subentry)
@@ -122,6 +113,8 @@ class _BaseDaijirin2Entry(Entry):
 
     @staticmethod
     def _delete_unused_nodes(soup):
+        """Remove extra markup elements that appear in the entry
+        headword line which are not part of the entry headword"""
         unused_nodes = [
             "漢字音logo", "活用分節", "連語句活用分節", "語構成",
             "表外字マーク", "表外字マーク", "ルビG"
@@ -144,25 +137,26 @@ class _BaseDaijirin2Entry(Entry):
 
 
 class Daijirin2Entry(_BaseDaijirin2Entry):
-    def __init__(self, page_id):
+    def __init__(self, target, page_id):
         entry_id = (page_id, 0)
-        super().__init__(entry_id)
+        super().__init__(target, entry_id)
 
     def set_page(self, page):
         page = preprocess_page(page)
         super().set_page(page)
 
-    def _set_headwords(self):
+    def _get_headwords(self):
         soup = self.get_page_soup()
         self._delete_unused_nodes(soup)
         if soup.find("漢字見出") is not None:
-            self._set_kanji_headwords(soup)
+            headwords = self._get_kanji_headwords(soup)
         elif soup.find("略語G") is not None:
-            self._set_acronym_headwords(soup)
+            headwords = self._get_acronym_headwords(soup)
         else:
-            self._set_regular_headwords(soup)
+            headwords = self._get_regular_headwords(soup)
+        return headwords
 
-    def _set_kanji_headwords(self, soup):
+    def _get_kanji_headwords(self, soup):
         readings = []
         for el in soup.find_all("漢字音"):
             hira = Expressions.kata_to_hira(el.text)
@@ -172,11 +166,12 @@ class Daijirin2Entry(_BaseDaijirin2Entry):
         expressions = []
         for el in soup.find_all("漢字見出"):
             expressions.append(el.text)
-        self._headwords = {}
+        headwords = {}
         for reading in readings:
-            self._headwords[reading] = expressions
+            headwords[reading] = expressions
+        return headwords
 
-    def _set_acronym_headwords(self, soup):
+    def _get_acronym_headwords(self, soup):
         expressions = []
         for el in soup.find_all("略語"):
             expression_parts = []
@@ -184,29 +179,24 @@ class Daijirin2Entry(_BaseDaijirin2Entry):
                 expression_parts.append(part.text)
             expression = "".join(expression_parts)
             expressions.append(expression)
-        self._headwords = {"": expressions}
+        headwords = {"": expressions}
+        return headwords
 
 
 class Daijirin2ChildEntry(_BaseDaijirin2Entry):
-    def __init__(self, entry_id):
-        super().__init__(entry_id)
-
-    def _set_headwords(self):
+    def _get_headwords(self):
         soup = self.get_page_soup()
         self._delete_unused_nodes(soup)
-        self._set_regular_headwords(soup)
+        headwords = self._get_regular_headwords(soup)
+        return headwords
 
 
 class Daijirin2PhraseEntry(_BaseDaijirin2Entry):
-    def __init__(self, entry_id):
-        super().__init__(entry_id)
-        self.__phrase_readings = load_daijirin2_phrase_readings()
-
     def get_part_of_speech_tags(self):
         # phrases do not contain these tags
         return []
 
-    def _set_headwords(self):
+    def _get_headwords(self):
         soup = self.get_page_soup()
         headwords = {}
         expressions = self._find_expressions(soup)
@@ -217,7 +207,7 @@ class Daijirin2PhraseEntry(_BaseDaijirin2Entry):
                 headwords[reading].append(expression)
             else:
                 headwords[reading] = [expression]
-        self._headwords = headwords
+        return headwords
 
     def _find_expressions(self, soup):
         self._delete_unused_nodes(soup)
@@ -231,7 +221,8 @@ class Daijirin2PhraseEntry(_BaseDaijirin2Entry):
         return expressions
 
     def _find_readings(self):
-        text = self.__phrase_readings[self.entry_id]
+        phrase_readings = load_daijirin2_phrase_readings()
+        text = phrase_readings[self.entry_id]
         alternatives = Expressions.expand_daijirin_alternatives(text)
         readings = []
         for alt in alternatives:

@@ -6,9 +6,9 @@ from pathlib import Path
 
 import bot.icons as Icons
 from bot.soup import delete_soup_nodes
-from bot.data import load_daijirin2_yomichan_name_conversion
+from bot.data import load_yomichan_name_conversion
 from bot.yomichan.glossary.gloss import make_gloss
-from bot.yomichan.glossary.name_conversion import convert_names
+from bot.name_conversion import convert_names
 
 
 def make_glossary(entry, image_dir):
@@ -26,7 +26,7 @@ def make_glossary(entry, image_dir):
     __convert_daigoginum(soup, image_dir)
     __convert_jundaigoginum(soup, image_dir)
 
-    name_conversion = load_daijirin2_yomichan_name_conversion()
+    name_conversion = load_yomichan_name_conversion(entry.target)
     convert_names(soup, name_conversion)
 
     gloss = make_gloss(soup.span)

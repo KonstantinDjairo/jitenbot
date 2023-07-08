@@ -1,0 +1,56 @@
+
+body {
+    font-family: serif;
+	margin: 1em 44px 1em 1.5em;
+	line-height: 1.5em;
+	font-size: 1.2em;
+	color: black;
+}
+
+table, th, td {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 0.5em;
+}
+
+th {
+    font-family: sans-serif;
+    color: black;
+    background-color: lightgray;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+a {
+	text-decoration: none;
+}
+
+td ul {
+    margin: -0.1em 0em -0.1em -1em;
+}
+
+.見出し {
+}
+
+.読み方 {
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.意味 {
+    margin-left: 1.0em;
+    margin-bottom: 0.5em;
+}
+
+.num_icon {
+    font-family: sans-serif;
+	padding-left: 0.25em;
+	margin-right: 0.5em;
+	font-size: 0.8em;
+	word-break: keep-all;
+    color: white;
+	background-color: gray;
+	border-style: none;
+	-webkit-border-radius: 0.1em;
+}
+

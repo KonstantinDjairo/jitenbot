@@ -1,15 +1,18 @@
+# pylint: disable=too-few-public-methods
+
 import json
 import os
 import shutil
 from pathlib import Path
 from datetime import datetime
+from abc import ABC, abstractmethod
 from platformdirs import user_documents_dir, user_cache_dir
 
 from bot.data import load_yomichan_metadata
 from bot.yomichan.terms.factory import new_terminator
 
 
-class Exporter:
+class Exporter(ABC):
     def __init__(self, target):
         self._target = target
         self._terminator = new_terminator(target)
@@ -26,6 +29,14 @@ class Exporter:
         terms = self.__get_terms(entries)
         self.__make_dictionary(terms, index, tags)
 
+    @abstractmethod
+    def _get_revision(self, entries):
+        pass
+
+    @abstractmethod
+    def _get_attribution(self, entries):
+        pass
+
     def _get_build_dir(self):
         if self._build_dir is not None:
             return self._build_dir
@@ -41,7 +52,7 @@ class Exporter:
         build_dir = self._get_build_dir()
         build_img_dir = os.path.join(build_dir, self._target.value)
         if image_dir is not None:
-            print("Copying image files to build directory...")
+            print("Copying media files to build directory...")
             shutil.copytree(image_dir, build_img_dir)
         else:
             os.makedirs(build_img_dir)
@@ -93,7 +104,7 @@ class Exporter:
 
     def __write_archive(self, filename):
         archive_format = "zip"
-        out_dir = os.path.join(user_documents_dir(), "jitenbot")
+        out_dir = os.path.join(user_documents_dir(), "jitenbot", "yomichan")
         if not Path(out_dir).is_dir():
             os.makedirs(out_dir)
         out_file = f"{filename}.{archive_format}"
@@ -110,10 +121,7 @@ class Exporter:
         shutil.rmtree(build_dir)
 
 
-class JitenonExporter(Exporter):
-    def __init__(self, target):
-        super().__init__(target)
-
+class _JitenonExporter(Exporter):
     def _get_revision(self, entries):
         modified_date = None
         for entry in entries:
@@ -130,25 +138,19 @@ class JitenonExporter(Exporter):
         return attribution
 
 
-class JitenonKokugoExporter(JitenonExporter):
-    def __init__(self, target):
-        super().__init__(target)
+class JitenonKokugoExporter(_JitenonExporter):
+    pass
 
 
-class JitenonYojiExporter(JitenonExporter):
-    def __init__(self, target):
-        super().__init__(target)
+class JitenonYojiExporter(_JitenonExporter):
+    pass
 
 
-class JitenonKotowazaExporter(JitenonExporter):
-    def __init__(self, target):
-        super().__init__(target)
+class JitenonKotowazaExporter(_JitenonExporter):
+    pass
 
 
 class Smk8Exporter(Exporter):
-    def __init__(self, target):
-        super().__init__(target)
-
     def _get_revision(self, entries):
         timestamp = datetime.now().strftime("%Y-%m-%d")
         return f"{self._target.value};{timestamp}"
@@ -158,9 +160,6 @@ class Smk8Exporter(Exporter):
 
 
 class Daijirin2Exporter(Exporter):
-    def __init__(self, target):
-        super().__init__(target)
-
     def _get_revision(self, entries):
         timestamp = datetime.now().strftime("%Y-%m-%d")
         return f"{self._target.value};{timestamp}"

@@ -30,7 +30,7 @@ def __apply_name_conversion_procedures(soup, procedures):
         "has_previous_sibling": __has_previous_sibling,
         "replace": __replace,
         "wrap": __wrap,
-        "add_ruby_text": __add_ruby_text,
+        "insert_span": __insert_span,
     }
     for procedure in procedures:
         function = functions[procedure["procedure_name"]]
@@ -92,10 +92,9 @@ def __wrap(soup, l_wrap, r_wrap):
         soup.string = f"{l_wrap}{soup.text}{r_wrap}"
 
 
-def __add_ruby_text(soup, mark, style):
-    if style.strip() != "":
-        markup = f"<rt><span style='{style}'>{mark}</span></rt>"
-    else:
-        markup = f"<rt>{mark}</rt>"
-    rt_soup = BeautifulSoup(markup, "xml")
-    soup.append(rt_soup.rt)
+def __insert_span(soup, attr_name, attr_val):
+    span_markup = f"<span {attr_name}='{attr_val}'></span>"
+    span_soup = BeautifulSoup(span_markup, "xml")
+    for content in reversed(soup.contents):
+        span_soup.span.insert(0, content.extract())
+    soup.append(span_soup.span)

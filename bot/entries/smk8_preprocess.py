@@ -15,6 +15,7 @@ def preprocess_page(page):
     page = __strip_page(page)
     page = __replace_glyph_codes(page)
     page = __format_hyougai_marks(page)
+    page = __remove_pronunciation_parentheses(page)
     return page
 
 
@@ -64,6 +65,7 @@ def __format_hyougai_marks(page):
     for x in ["\n", "\t", " "]:
         text = text.replace(x, "")
     text = re.sub(r"〈([^〈]+)〉", r"\1", text)
+
     page = re.sub(r"〈([^〈]+)〉", r"␂\1␃", page)
     for mark in re.findall(r"《.", text):
         if mark[1] == "〓":
@@ -79,13 +81,29 @@ def __format_hyougai_marks(page):
             page = re.sub(f"〈([^{mark[1]}]*)({mark[1]})",
                           r"\1<表外字>\2</表外字>",
                           page, count=1)
+
     page = page.replace("␂", "〈")
     page = page.replace("␃", "〉")
     soup = BeautifulSoup(page, features="xml")
+
     for el in soup.find_all("表外音訓"):
         if el.text == "":
             el.append(el.next_sibling)
+        mark_xml = "<表外音訓マーク>︽</表外音訓マーク>"
+        mark_soup = BeautifulSoup(mark_xml, "xml")
+        el.append(mark_soup.表外音訓マーク)
+
     for el in soup.find_all("表外字"):
         if el.text == "":
             el.append(el.next_sibling)
+        mark_xml = "<表外字マーク>︿</表外字マーク>"
+        mark_soup = BeautifulSoup(mark_xml, "xml")
+        el.append(mark_soup.表外字マーク)
+
     return soup.decode()
+
+
+def __remove_pronunciation_parentheses(page):
+    page = page.replace("<表音表記>（", "<表音表記>")
+    page = page.replace("）</表音表記>", "</表音表記>")
+    return page
