@@ -2,7 +2,7 @@ import re
 import os
 from bs4 import BeautifulSoup
 
-import bot.icons as Icons
+import bot.yomichan.glossary.icons as Icons
 from bot.soup import delete_soup_nodes
 from bot.data import load_yomichan_name_conversion
 from bot.yomichan.glossary.gloss import make_gloss

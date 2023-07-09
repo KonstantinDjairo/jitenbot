@@ -2,7 +2,7 @@ import re
 import os
 from bs4 import BeautifulSoup
 
-import bot.icons as Icons
+import bot.yomichan.glossary.icons as Icons
 from bot.yomichan.glossary.gloss import make_gloss
 
 
