@@ -1,10 +1,10 @@
 
 body {
     font-family: serif;
-	margin: 1em 44px 1em 1.5em;
-	line-height: 1.5em;
-	font-size: 1.2em;
-	color: black;
+    margin: 1em 44px 1em 1.5em;
+    line-height: 1.5em;
+    font-size: 1.2em;
+    color: black;
 }
 
 table, th, td {
@@ -22,7 +22,7 @@ th {
 }
 
 a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .見出し {

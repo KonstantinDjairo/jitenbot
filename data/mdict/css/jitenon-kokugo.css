@@ -1,10 +1,10 @@
 
 body {
     font-family: serif;
-	margin: 1em 44px 1em 1.5em;
-	line-height: 1.5em;
-	font-size: 1.2em;
-	color: black;
+    margin: 1em 44px 1em 1.5em;
+    line-height: 1.5em;
+    font-size: 1.2em;
+    color: black;
 }
 
 table, th, td {
@@ -22,7 +22,7 @@ th {
 }
 
 a {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 td ul {
@@ -44,13 +44,13 @@ td ul {
 
 .num_icon {
     font-family: sans-serif;
-	padding-left: 0.25em;
-	margin-right: 0.5em;
-	font-size: 0.8em;
-	word-break: keep-all;
+    padding-left: 0.25em;
+    margin-right: 0.5em;
+    font-size: 0.8em;
+    word-break: keep-all;
     color: white;
-	background-color: gray;
-	border-style: none;
-	-webkit-border-radius: 0.1em;
+    background-color: gray;
+    border-style: none;
+    -webkit-border-radius: 0.1em;
 }
 
