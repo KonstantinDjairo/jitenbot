@@ -138,6 +138,7 @@ span[data-name="ルビG"] {
     font-size: 0.7em;
     font-weight: normal;
     vertical-align: 0.35em;
+    -webkit-user-select: none;
 }
 
 .warichu span[data-name="ルビG"] {
@@ -145,6 +146,7 @@ span[data-name="ルビG"] {
     font-size: 0.5em;
     font-weight: normal;
     vertical-align: 0em;
+    -webkit-user-select: none;
 }
 
 span[data-name="中語義"] {
@@ -152,8 +154,8 @@ span[data-name="中語義"] {
 }
 
 span[data-name="付記"] {
-    font-size: 0.7em;
-    vertical-align: 0.35em;
+    /* font-size: 0.7em; */
+    /* vertical-align: 0.35em; */
 }
 
 span[data-name="副義"] {
@@ -226,6 +228,7 @@ span[data-name="欧字"] {
 span[data-name="歴史仮名"] {
     font-size: 0.7em;
     vertical-align: 0.35em;
+    -webkit-user-select: none;
 }
 
 span[data-name="派生G"] {
@@ -308,9 +311,8 @@ span[data-name="細義"] {
     display: block;
 }
 
-span[data-name="表外字マーク"] {
-    font-size: 0.5em;
-    vertical-align: 0.5em;
+rt {
+    -webkit-user-select: none;
 }
 
 span[data-name="見出仮名"] {

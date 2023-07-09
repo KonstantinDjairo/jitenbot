@@ -36,14 +36,17 @@ span[data-name="見出仮名"] {
 
 rt[data-name="表音表記"] {
     font-size: 0.5em;
+    -webkit-user-select: none;
 }
 
 rt[data-name="表外音訓マーク"] {
     font-size: 1em;
+    -webkit-user-select: none;
 }
 
 rt[data-name="表外字マーク"] {
     font-size: 1em;
+    -webkit-user-select: none;
 }
 
 span[data-name="解説部"] {
@@ -92,6 +95,7 @@ span[data-name="ルビ"] {
     font-family: jpgothic;
     font-size: 0.7em;
     vertical-align: 0.5em;
+    -webkit-user-select: none;
 }
 
 span[data-name="ルビ区切"] {
@@ -236,7 +240,7 @@ span[data-name="歴史仮名"] {
     font-size: 0.7em;
     font-weight: normal;
     vertical-align: 0.35em;
-    -webkit-user-select: nocopy;
+    -webkit-user-select: none;
 }
 
 span[data-name="出現形"] {
