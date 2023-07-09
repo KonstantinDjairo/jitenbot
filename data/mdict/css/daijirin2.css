@@ -64,6 +64,11 @@ span[data-name="sub"] {
     vertical-align: -0.35em;
 }
 
+span[data-name="sup"] {
+    font-size: 0.7em;
+    vertical-align: super;
+}
+
 span[data-name="ty2"] span[data-name="sub"] {
     vertical-align: 0em;
 }
