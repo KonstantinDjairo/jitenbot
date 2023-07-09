@@ -1,8 +1,18 @@
 
+@font-face {
+    font-family: jpgothic;
+    src: local("メイリオ"), local("ヒラギノ角ゴ Pro W3"), local("Hiragino Kaku Gothic Pro"), local("Meiryo"), local("Noto Sans CJK JP"), local("IPAexGothic"), local("Source Han Sans JP"), local("ＭＳ Ｐゴシック"), local("MS Pgothic"), local("sans-serif");
+}
+
+@font-face {
+    font-family: jpmincho;
+    src: local("Noto Serif CJK JP"), local("IPAexMincho"), local("Source Han Serif JP"), local("MS PMincho"), local("serif");
+}
+
 body {
     margin: 1em 44px 1em 1.5em;
     line-height: 1.5em;
-    font-family: serif;
+    font-family: jpmincho;
     font-size: 1.2em;
     color: black;
 }
@@ -20,7 +30,7 @@ span[data-name="見出部"].pri {
 }
 
 span[data-name="見出仮名"] {
-    font-family: sans-serif;
+    font-family: jpgothic;
     font-weight: bold;
 }
 
@@ -79,6 +89,7 @@ span[data-name="教育漢字"] {
 }
 
 span[data-name="ルビ"] {
+    font-family: jpgothic;
     font-size: 0.7em;
     vertical-align: 0.5em;
 }
@@ -221,7 +232,7 @@ span[data-name="EXCLAMATION"] {
 }
 
 span[data-name="歴史仮名"] {
-    font-family: serif;
+    font-family: jpmincho;
     font-size: 0.7em;
     font-weight: normal;
     vertical-align: 0.35em;
@@ -249,13 +260,13 @@ span[data-name="基本構文em"] {
 }
 
 span[data-name="ウ濁音参照"] {
-    font-family: sans-serif;
+    font-family: jpgothic;
     font-weight: bold;
 }
 
 span[data-name="rect"] {
     padding: 0.1em;
-    font-family: sans-serif;
+    font-family: jpgothic;
     font-size: 0.8em;
     border-width: 0.05em;
     border-style: solid;
@@ -289,7 +300,7 @@ span[data-name="大語義番号"],
 span[data-name="語義番号"],
 span[data-name="副義番号"] {
     margin-right: 0.25em;
-    font-family: sans-serif;
+    font-family: jpgothic;
 }
 
 span[data-name="ref"] span[data-name="大語義番号"],
@@ -326,7 +337,7 @@ span[data-name="文法解説M"],
 span[data-name="かぞえ方解説M"],
 span[data-name="派生M"] {
     margin-right: 0.25em;
-    font-family: sans-serif;
+    font-family: jpgothic;
 }
 
 span[data-name="派生ロゴ"] {
@@ -422,7 +433,7 @@ div[data-child-links] ul {
 
 div[data-child-links] span {
     padding: 0.1em;
-    font-family: sans-serif;
+    font-family: jpgothic;
     font-size: 0.8em;
     color: white;
     border-width: 0.05em;
