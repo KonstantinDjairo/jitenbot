@@ -51,7 +51,7 @@ compiling the scraped data into compact dictionary file formats.
 <details>
   <summary>Various (GoldenDict)</summary>
   
-  ![various](https://github.com/stephenmk/jitenbot/assets/8003332/b2519c2c-d4af-42a0-92aa-ef97ffef61ac)
+  ![goldendict](https://github.com/stephenmk/jitenbot/assets/8003332/76104cbf-845d-4e18-8b78-3ee3ebbf4da6)
 </details>
 
 # Usage
