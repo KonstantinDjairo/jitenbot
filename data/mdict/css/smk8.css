@@ -35,15 +35,15 @@ span[data-name="見出仮名"] {
 }
 
 rt[data-name="表音表記"] {
-    font-size: 0.65em;
+    font-size: 0.5em;
 }
 
 rt[data-name="表外音訓マーク"] {
-    font-size: 0.65em;
+    font-size: 1em;
 }
 
 rt[data-name="表外字マーク"] {
-    font-size: 0.65em;
+    font-size: 1em;
 }
 
 span[data-name="解説部"] {
@@ -308,15 +308,6 @@ span[data-name="ref"] span[data-name="語義番号"],
 span[data-name="ref"] span[data-name="副義番号"] {
     font-size: 0.8em;
     margin-right: 0;
-}
-
-span[data-name="表外字マーク"] {
-    vertical-align: 0.5em;
-}
-
-span[data-name="表外音訓マーク"] {
-    font-size: 0.5em;
-    vertical-align: 0.5em;
 }
 
 span[data-name="言換M"] {
