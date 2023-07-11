@@ -177,6 +177,11 @@ span[data-name="句仮名"] {
     vertical-align: 0.35em;
 }
 
+span[data-name="句表記"] {
+    font-family: jpgothic;
+    font-weight: bold;
+}
+
 span[data-name="句項目"] {
     margin-top: 0.5em;
     margin-left: 1em;

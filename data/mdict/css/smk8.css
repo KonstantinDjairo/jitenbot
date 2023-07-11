@@ -92,7 +92,6 @@ span[data-name="教育漢字"] {
 }
 
 span[data-name="ルビ"] {
-    font-family: jpgothic;
     font-size: 0.7em;
     vertical-align: 0.5em;
     -webkit-user-select: none;
