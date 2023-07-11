@@ -3,7 +3,7 @@ import re
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
 
-import bot.scraper as Scraper
+import bot.crawlers.scraper as Scraper
 from bot.entries.factory import new_entry
 from bot.yomichan.exporters.factory import new_yomi_exporter
 from bot.mdict.exporters.factory import new_mdict_exporter

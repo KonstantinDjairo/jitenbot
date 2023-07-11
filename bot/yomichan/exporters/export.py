@@ -42,6 +42,7 @@ class Exporter(ABC):
             return self._build_dir
         cache_dir = user_cache_dir("jitenbot")
         build_directory = os.path.join(cache_dir, "yomichan_build")
+        print(f"Initializing build directory `{build_directory}`")
         if Path(build_directory).is_dir():
             shutil.rmtree(build_directory)
         os.makedirs(build_directory)
