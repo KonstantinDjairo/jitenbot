@@ -11,10 +11,7 @@
 
 body {
     font-family: jpmincho;
-    margin: 0em 1em;
     line-height: 1.5em;
-    font-size: 1.2em;
-    color: black;
 }
 
 table, th, td {
@@ -43,8 +40,8 @@ a {
     font-weight: bold;
 }
 
-.意味 {
+.意味,
+.kanjirighttb {
     margin-left: 1.0em;
     margin-bottom: 0.5em;
 }
-
