@@ -407,7 +407,7 @@ span[data-name="付記"]:after {
 }
 
 div[data-child-links] {
-    padding-top: 1em;
+    padding-left: 1em;
 }
 
 div[data-child-links] ul {

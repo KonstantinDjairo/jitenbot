@@ -413,7 +413,7 @@ span[data-name="ルビ"]:after {
 }
 
 div[data-child-links] {
-    padding-top: 1em;
+    padding-left: 1em;
 }
 
 div[data-child-links] ul {
