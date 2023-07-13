@@ -1,3 +1,4 @@
+import re
 from abc import abstractmethod, ABC
 
 
@@ -12,35 +13,20 @@ class Terminator(ABC):
 
     def make_terms(self, entry):
         gid = entry.get_global_identifier()
-        glossary = self.__full_glossary(entry)
+        glossary = self.__get_full_glossary(entry)
         terms = [[gid, glossary]]
-        keys = set()
-        headwords = entry.get_headwords()
-        for reading, expressions in headwords.items():
-            if len(expressions) == 0:
-                keys.add(reading)
-            for expression in expressions:
-                if expression.strip() == "":
-                    keys.add(reading)
-                    continue
-                keys.add(expression)
-                if reading.strip() == "":
-                    continue
-                if reading != expression:
-                    keys.add(f"{reading}【{expression}】")
-                else:
-                    keys.add(reading)
+        keys = self.__get_keys(entry)
         link = f"@@@LINK={gid}"
         for key in keys:
             if key.strip() != "":
                 terms.append([key, link])
-        for subentries in self._subentry_lists(entry):
-            for subentry in subentries:
+        for subentry_list in self._subentry_lists(entry):
+            for subentry in subentry_list:
                 for term in self.make_terms(subentry):
                     terms.append(term)
         return terms
 
-    def __full_glossary(self, entry):
+    def __get_full_glossary(self, entry):
         glossary = []
         style_link = f"<link rel='stylesheet' href='{self._target.value}.css' type='text/css'>"
         glossary.append(style_link)
@@ -59,6 +45,30 @@ class Terminator(ABC):
             link_glossary = f"<div data-child-links='{list_title}'><span>{list_title}</span><ul>{''.join(items)}</ul></div>"
             glossary.append(link_glossary)
         return "\n".join(glossary)
+
+    def __get_keys(self, entry):
+        keys = set()
+        headwords = entry.get_headwords()
+        for reading, expressions in headwords.items():
+            stripped_reading = reading.strip()
+            keys.add(stripped_reading)
+            if re.match(r"^[ぁ-ヿ、]+$", stripped_reading):
+                kana_only_key = f"{stripped_reading}【∅】"
+            else:
+                kana_only_key = ""
+            if len(expressions) == 0:
+                keys.add(kana_only_key)
+            for expression in expressions:
+                stripped_expression = expression.strip()
+                keys.add(stripped_expression)
+                if stripped_expression == "":
+                    keys.add(kana_only_key)
+                elif stripped_expression == stripped_reading:
+                    keys.add(kana_only_key)
+                else:
+                    combo_key = f"{stripped_reading}【{stripped_expression}】"
+                    keys.add(combo_key)
+        return keys
 
     @abstractmethod
     def _glossary(self, entry):
