@@ -92,8 +92,8 @@ def __convert_gaiji(soup, image_dir):
         ratio = Icons.calculate_ratio(path)
         img = BeautifulSoup("<img/>", "xml").img
         img.attrs = {
-            "height": 1.0 if ratio > 1.0 else ratio,
-            "width": ratio if ratio > 1.0 else 1.0,
+            "height": 1.0,
+            "width": ratio,
             "sizeUnits": "em",
             "collapsible": False,
             "collapsed": False,
@@ -124,8 +124,8 @@ def __convert_rectangles(soup, image_dir):
         ratio = Icons.calculate_ratio(path)
         img = BeautifulSoup("<img/>", "xml").img
         img.attrs = {
-            "height": 1.0 if ratio > 1.0 else ratio,
-            "width": ratio if ratio > 1.0 else 1.0,
+            "height": 1.0,
+            "width": ratio,
             "sizeUnits": "em",
             "collapsible": False,
             "collapsed": False,
