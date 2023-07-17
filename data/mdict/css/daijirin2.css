@@ -1,18 +1,18 @@
 
 @font-face {
     font-family: jpgothic;
-    src: local("メイリオ"), local("ヒラギノ角ゴ Pro W3"), local("Hiragino Kaku Gothic Pro"), local("Meiryo"), local("Noto Sans CJK JP"), local("IPAexGothic"), local("Source Han Sans JP"), local("ＭＳ Ｐゴシック"), local("MS Pgothic"), local("sans-serif");
+    src: local("Noto Sans CJK JP"), local("IPAexGothic"), local("Source Han Sans JP");
 }
 
 @font-face {
     font-family: jpmincho;
-    src: local("Noto Serif CJK JP"), local("IPAexMincho"), local("Source Han Serif JP"), local("MS PMincho"), local("serif");
+    src: local("Noto Serif CJK JP"), local("IPAexMincho"), local("IPAmjMincho"), local("Source Han Serif JP"), local("HanaMinA"), local("HanaMinB");
 }
 
 body {
     margin: 0em 1em;
     line-height: 1.5em;
-    font-family: jpmincho;
+    font-family: jpmincho, serif;
     font-size: 1.2em;
     color: black;
 }
@@ -43,7 +43,7 @@ span[data-name="i"] {
 }
 
 span[data-name="h1"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-size: 1em;
     font-weight: bold;
 }
@@ -134,7 +134,7 @@ span[data-name="キャプション"] {
 }
 
 span[data-name="ルビG"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-size: 0.7em;
     font-weight: normal;
     vertical-align: 0.35em;
@@ -142,7 +142,7 @@ span[data-name="ルビG"] {
 }
 
 .warichu span[data-name="ルビG"] {
-    font-family: jpmincho;
+    font-family: jpmincho, serif;
     font-size: 0.5em;
     font-weight: normal;
     vertical-align: 0em;
@@ -178,7 +178,7 @@ span[data-name="句仮名"] {
 }
 
 span[data-name="句表記"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-weight: bold;
 }
 
@@ -189,7 +189,7 @@ span[data-name="句項目"] {
 }
 
 span[data-name="和字"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
 }
 
 span[data-name="品詞行"] {
@@ -209,7 +209,7 @@ span[data-name="大語義"] {
 span[data-name="大語義num"] {
     margin: 0.025em;
     padding: 0.1em;
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-size: 0.8em;
     color: white;
     background-color: black;
@@ -227,7 +227,7 @@ span[data-name="慣用G"] {
 }
 
 span[data-name="欧字"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
 }
 
 span[data-name="歴史仮名"] {
@@ -248,7 +248,7 @@ span[data-name="準大語義"] {
 span[data-name="準大語義num"] {
     margin: 0.025em;
     padding: 0.1em;
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-size: 0.8em;
     border: solid 1px black;
 }
@@ -256,7 +256,7 @@ span[data-name="準大語義num"] {
 span[data-name="漢字音logo"] {
     margin: 0.025em;
     padding: 0.1em;
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-size: 0.8em;
     border: solid 0.5px black;
     border-radius: 1em;
@@ -290,17 +290,17 @@ span[data-name="異字同訓"] {
 }
 
 span[data-name="異字同訓仮名"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-weight: bold;
 }
 
 span[data-name="異字同訓漢字"] {
-    font-family: jpmincho;
+    font-family: jpmincho, serif;
     font-weight: normal;
 }
 
 span[data-name="異字同訓表記"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-weight: bold;
 }
 
@@ -321,12 +321,12 @@ rt {
 }
 
 span[data-name="見出仮名"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-weight: bold;
 }
 
 span[data-name="見出相当部"] {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-weight: bold;
 }
 
@@ -371,7 +371,7 @@ span[data-name="logo"] {
 }
 
 .gothic {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-weight: bold;
 }
 
@@ -417,7 +417,7 @@ div[data-child-links] ul {
 
 div[data-child-links] span {
     padding: 0.1em;
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-size: 0.8em;
     color: white;
     border-width: 0.05em;

@@ -1,16 +1,16 @@
 
 @font-face {
     font-family: jpgothic;
-    src: local("メイリオ"), local("ヒラギノ角ゴ Pro W3"), local("Hiragino Kaku Gothic Pro"), local("Meiryo"), local("Noto Sans CJK JP"), local("IPAexGothic"), local("Source Han Sans JP"), local("ＭＳ Ｐゴシック"), local("MS Pgothic"), local("sans-serif");
+    src: local("Noto Sans CJK JP"), local("IPAexGothic"), local("Source Han Sans JP");
 }
 
 @font-face {
     font-family: jpmincho;
-    src: local("Noto Serif CJK JP"), local("IPAexMincho"), local("Source Han Serif JP"), local("MS PMincho"), local("serif");
+    src: local("Noto Serif CJK JP"), local("IPAexMincho"), local("IPAmjMincho"), local("Source Han Serif JP"), local("HanaMinA"), local("HanaMinB");
 }
 
 body {
-    font-family: jpmincho;
+    font-family: jpmincho, serif;
     line-height: 1.5em;
 }
 
@@ -21,7 +21,7 @@ table, th, td {
 }
 
 th {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     color: black;
     background-color: lightgray;
     font-weight: normal;
@@ -40,7 +40,7 @@ td ul {
 }
 
 .読み方 {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     font-weight: bold;
 }
 
@@ -51,7 +51,7 @@ td ul {
 }
 
 .num_icon {
-    font-family: jpgothic;
+    font-family: jpgothic, sans-serif;
     padding-left: 0.25em;
     margin-right: 0.5em;
     font-size: 0.8em;
