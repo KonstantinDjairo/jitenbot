@@ -4,12 +4,13 @@ compiling the scraped data into compact dictionary file formats.
 
 ### Supported Dictionaries
 * Web Dictionaries
-  * [国語辞典オンライン](https://kokugo.jitenon.jp/) (Jitenon Kokugo)
-  * [四字熟語辞典オンライン](https://yoji.jitenon.jp/) (Jitenon Yoji)
-  * [故事・ことわざ・慣用句オンライン](https://kotowaza.jitenon.jp/) (Jitenon Kotowaza)
-* Monokakido (["辞書 by 物書堂"](https://www.monokakido.jp/ja/dictionaries/app/))
-  * [新明解国語辞典 第八版](https://www.monokakido.jp/ja/dictionaries/smk8/index.html) (Shinmeikai 8e)
-  * [大辞林 第四版](https://www.monokakido.jp/ja/dictionaries/daijirin2/index.html) (Daijirin 4e)
+  * [国語辞典オンライン](https://kokugo.jitenon.jp/) (`jitenon-kokugo`)
+  * [四字熟語辞典オンライン](https://yoji.jitenon.jp/) (`jitenon-yoji`)
+  * [故事・ことわざ・慣用句オンライン](https://kotowaza.jitenon.jp/) (`jitenon-kotowaza`)
+* Monokakido
+  * [新明解国語辞典 第八版](https://www.monokakido.jp/ja/dictionaries/smk8/index.html) (`smk8`)
+  * [大辞林 第四版](https://www.monokakido.jp/ja/dictionaries/daijirin2/index.html) (`daijirin2`)
+  * [三省堂国語辞典 第八版](https://www.monokakido.jp/ja/dictionaries/sankoku8/index.html) (`sankoku8`)
 
 ### Supported Output Formats
 
@@ -49,6 +50,12 @@ compiling the scraped data into compact dictionary file formats.
 </details>
 
 <details>
+  <summary>Sanseidō 8e (print | yomichan)</summary>
+  
+  ![sankoku8](https://github.com/stephenmk/jitenbot/assets/8003332/0358b3fc-71fb-4557-977c-1976a12229ec)
+</details>
+
+<details>
   <summary>Various (GoldenDict)</summary>
   
   ![goldendict](https://github.com/stephenmk/jitenbot/assets/8003332/76104cbf-845d-4e18-8b78-3ee3ebbf4da6)
@@ -57,13 +64,14 @@ compiling the scraped data into compact dictionary file formats.
 # Usage
 ```
 usage: jitenbot [-h] [-p PAGE_DIR] [-m MEDIA_DIR] [-i MDICT_ICON]
-                [--no-yomichan-export] [--no-mdict-export]
-                {jitenon-kokugo,jitenon-yoji,jitenon-kotowaza,smk8,daijirin2}
+                [--no-mdict-export] [--no-yomichan-export]
+                [--validate-yomichan-terms]
+                {jitenon-kokugo,jitenon-yoji,jitenon-kotowaza,smk8,daijirin2,sankoku8}
 
 Convert Japanese dictionary files to new formats.
 
 positional arguments:
-  {jitenon-kokugo,jitenon-yoji,jitenon-kotowaza,smk8,daijirin2}
+  {jitenon-kokugo,jitenon-yoji,jitenon-kotowaza,smk8,daijirin2,sankoku8}
                         name of dictionary to convert
 
 options:
@@ -75,10 +83,14 @@ options:
                         graphics, audio, etc.)
   -i MDICT_ICON, --mdict-icon MDICT_ICON
                         path to icon file to be used with MDict
-  --no-yomichan-export  skip export of dictionary data to Yomichan format
   --no-mdict-export     skip export of dictionary data to MDict format
+  --no-yomichan-export  skip export of dictionary data to Yomichan format
+  --validate-yomichan-terms
+                        validate JSON structure of exported Yomichan
+                        dictionary terms
 
 See README.md for details regarding media directory structures
+
 ```
 ### Web Targets
 Jitenbot will scrape the target website and save the pages to the [user cache directory](https://pypi.org/project/platformdirs/).
@@ -89,55 +101,112 @@ HTTP request headers (user agent string, etc.) may be customized by editing the 
 [user config directory](https://pypi.org/project/platformdirs/).
 
 ### Monokakido Targets
-Page data and media data must be [procured by the user](https://github.com/golddranks/monokakido/)
-and passed to jitenbot via the appropriate command line flags.
+These digital dictionaries are available for purchase through the [Monokakido Dictionaries app](https://www.monokakido.jp/ja/dictionaries/app/) on MacOS/iOS. Under ideal circumstances, Jitenbot would be able to automatically fetch all the data it needs from this app's data directory[^1] on your system. In its current state of development, Jitenbot unfortunately requires you to find and assemble the necessary data yourself. The files must be organized into a particular folder structure (defined below) and then passed to Jitenbot via the corresponding command line arguments.
+
+Some of the files in the app's data directory[^1] are encoded and must be unencoded using [golddranks' monokakido tool](https://github.com/golddranks/monokakido/). Directories which contain these encoded files are indicated by a reference mark (※) in the notes below.
+
+[^1]: `/Library/Application Support/AppStoreContent/jp.monokakido.Dictionaries/Products/`
 
 <details>
-  <summary>smk8 media directory</summary>
+  <summary>smk8 files</summary>
 
-Since Yomichan does not support audio files from imported
-dictionaries, the `audio/` directory may be omitted to save filesize
-space in the output ZIP file if desired.
+Since Yomichan does not support audio files from imported dictionaries, the `audio/` directory may be omitted to save filesize space in the output ZIP file if desired.
 
 ```
-media
-├── Audio.png
-├── audio
-│   ├── 00001.aac
-│   ├── 00002.aac
-│   ├── 00003.aac
-│   │   ...
-│   └── 82682.aac
-└── gaiji
-    ├── 1d110.svg
-    ├── 1d15d.svg
-    ├── 1d15e.svg
-    │   ...
-    └── xbunnoa.svg
+.
+├── media
+│   ├── audio (※)
+│   │   ├── 00001.aac
+│   │   ├── 00002.aac
+│   │   ├── 00003.aac
+│   │   ├── ...
+│   │   └── 82682.aac
+│   ├── Audio.png
+│   └── gaiji
+│       ├── 1d110.svg
+│       ├── 1d15d.svg
+│       ├── 1d15e.svg
+│       ├── ...
+│       └── xbunnoa.svg
+└── pages (※)
+    ├── 0000000000.xml
+    ├── 0000000001.xml
+    ├── 0000000002.xml
+    ├── ...
+    └── 0000064581.xml
 ```
 </details>
 
 <details>
-  <summary>daijirin2 media directory</summary>
+  <summary>daijirin2 files</summary>
 
 The `graphics/` directory may be omitted to save space if desired.
 
 ```
-media
-├── gaiji
-│   ├── 1D10B.svg
-│   ├── 1D110.svg
-│   ├── 1D12A.svg
-│   │   ...
-│   └── vectorOB.svg
-└── graphics
-    ├── 3djr_0002.png
-    ├── 3djr_0004.png
-    ├── 3djr_0005.png
-    │   ...
-    └── 4djr_yahazu.png
+.
+├── media
+│   ├── gaiji
+│   │   ├── 1D10B.svg
+│   │   ├── 1D110.svg
+│   │   ├── 1D12A.svg
+│   │   ├── ...
+│   │   └── vectorOB.svg
+│   └── graphics (※)
+│       ├── 3djr_0002.png
+│       ├── 3djr_0004.png
+│       ├── 3djr_0005.png
+│       ├── ...
+│       └── 4djr_yahazu.png
+└── pages (※)
+    ├── 0000000001.xml
+    ├── 0000000002.xml
+    ├── 0000000003.xml
+    ├── ...
+    └── 0000182633.xml
+```
+</details>
+
+<details>
+  <summary>sankoku8 files</summary>
+
+```
+.
+├── media
+│   ├── graphics
+│   │   ├── 000chouchou.png
+│   │   ├── ...
+│   │   └── 888udatsu.png
+│   ├── svg-accent
+│   │   ├── アクセント.svg
+│   │   └── 平板.svg
+│   ├── svg-frac
+│   │   ├── frac-1-2.svg
+│   │   ├── ...
+│   │   └── frac-a-b.svg
+│   ├── svg-gaiji
+│   │   ├── aiaigasa.svg
+│   │   ├── ...
+│   │   └── 異体字_西.svg
+│   ├── svg-intonation
+│   │   ├── 上昇下降.svg
+│   │   ├── ...
+│   │   └── 長.svg
+│   ├── svg-logo
+│   │   ├── denshi.svg
+│   │   ├── ...
+│   │   └── 重要語.svg
+│   └── svg-special
+│       └── 区切り線.svg
+└── pages (※)
+    ├── 0000000001.xml
+    ├── ...
+    └── 0000065457.xml
 ```
 </details>
 
 # Attribution
 `Adobe-Japan1_sequences.txt` is provided by [The Adobe-Japan1-7 Character Collection](https://github.com/adobe-type-tools/Adobe-Japan1).
+
+The Yomichan term-bank schema definition `dictionary-term-bank-v3-schema.json` is provided by the [Yomichan](https://github.com/foosoft/yomichan) project.
+
+Many thanks to [epistularum](https://github.com/epistularum) for providing thoughtful feedback regarding the implementation of the MDict export functionality.
