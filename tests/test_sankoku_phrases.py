@@ -1,6 +1,5 @@
 import unittest
 from bot.entries.sankoku8 import parse_hyouki_pattern
-from bs4 import BeautifulSoup
 
 
 class TestSankokuPhrases(unittest.TestCase):
