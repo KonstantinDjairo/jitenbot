@@ -39,9 +39,9 @@ class Crawler(ABC):
             self._entries.append(entry)
         print()
 
-    def make_yomichan_dictionary(self, media_dir):
+    def make_yomichan_dictionary(self, media_dir, validate):
         exporter = new_yomi_exporter(self._target)
-        exporter.export(self._entries, media_dir)
+        exporter.export(self._entries, media_dir, validate)
 
     def make_mdict_dictionary(self, media_dir, icon_file):
         exporter = new_mdict_exporter(self._target)
@@ -151,4 +151,8 @@ class Smk8Crawler(_MonokakidoCrawler):
 
 
 class Daijirin2Crawler(_MonokakidoCrawler):
+    pass
+
+
+class Sankoku8Crawler(_MonokakidoCrawler):
     pass

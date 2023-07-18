@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 
 import bot.entries.expressions as Expressions
 import bot.soup as Soup
-from bot.data import load_daijirin2_phrase_readings
+from bot.data import load_phrase_readings
 from bot.data import load_daijirin2_kana_abbreviations
 from bot.entries.entry import Entry
 from bot.entries.daijirin2_preprocess import preprocess_page
@@ -221,7 +221,7 @@ class Daijirin2PhraseEntry(_BaseDaijirin2Entry):
         return expressions
 
     def _find_readings(self):
-        phrase_readings = load_daijirin2_phrase_readings()
+        phrase_readings = load_phrase_readings(self.target)
         text = phrase_readings[self.entry_id]
         alternatives = Expressions.expand_daijirin_alternatives(text)
         readings = []

@@ -5,6 +5,7 @@ from bot.mdict.terms.jitenon import JitenonYojiTerminator
 from bot.mdict.terms.jitenon import JitenonKotowazaTerminator
 from bot.mdict.terms.smk8 import Smk8Terminator
 from bot.mdict.terms.daijirin2 import Daijirin2Terminator
+from bot.mdict.terms.sankoku8 import Sankoku8Terminator
 
 
 def new_terminator(target):
@@ -14,5 +15,6 @@ def new_terminator(target):
         Targets.JITENON_KOTOWAZA: JitenonKotowazaTerminator,
         Targets.SMK8:             Smk8Terminator,
         Targets.DAIJIRIN2:        Daijirin2Terminator,
+        Targets.SANKOKU8:         Sankoku8Terminator,
     }
     return terminator_map[target](target)

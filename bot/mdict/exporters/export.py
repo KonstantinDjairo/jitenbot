@@ -218,3 +218,8 @@ class Smk8Exporter(_MonokakidoExporter):
 class Daijirin2Exporter(_MonokakidoExporter):
     def _get_attribution(self, entries):
         return "© Sanseido Co., LTD. 2019"
+
+
+class Sankoku8Exporter(_MonokakidoExporter):
+    def _get_attribution(self, entries):
+        return "© Sanseido Co., LTD. 2021"

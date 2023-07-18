@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 
 import bot.entries.expressions as Expressions
 import bot.soup as Soup
-from bot.data import load_smk8_phrase_readings
+from bot.data import load_phrase_readings
 from bot.entries.entry import Entry
 from bot.entries.smk8_preprocess import preprocess_page
 
@@ -163,7 +163,7 @@ class Smk8ChildEntry(_BaseSmk8Entry):
 class Smk8PhraseEntry(_BaseSmk8Entry):
     def __init__(self, target, entry_id):
         super().__init__(target, entry_id)
-        self.__phrase_readings = load_smk8_phrase_readings()
+        self.__phrase_readings = load_phrase_readings(self.target)
 
     def get_part_of_speech_tags(self):
         # phrases do not contain these tags

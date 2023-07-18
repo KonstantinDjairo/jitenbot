@@ -5,6 +5,7 @@ from bot.crawlers.crawlers import JitenonYojiCrawler
 from bot.crawlers.crawlers import JitenonKotowazaCrawler
 from bot.crawlers.crawlers import Smk8Crawler
 from bot.crawlers.crawlers import Daijirin2Crawler
+from bot.crawlers.crawlers import Sankoku8Crawler
 
 
 def new_crawler(target):
@@ -14,5 +15,6 @@ def new_crawler(target):
         Targets.JITENON_KOTOWAZA: JitenonKotowazaCrawler,
         Targets.SMK8:             Smk8Crawler,
         Targets.DAIJIRIN2:        Daijirin2Crawler,
+        Targets.SANKOKU8:         Sankoku8Crawler,
     }
     return crawler_map[target](target)

@@ -26,6 +26,27 @@ def make_monochrome_fill_rectangle(path, text):
         f.write(svg)
 
 
+@cache
+def make_accent(path):
+    svg = __svg_accent()
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(svg)
+
+
+@cache
+def make_heiban(path):
+    svg = __svg_heiban()
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(svg)
+
+
+@cache
+def make_red_char(path, char):
+    svg = __svg_red_character(char)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(svg)
+
+
 def __calculate_svg_ratio(path):
     with open(path, "r", encoding="utf-8") as f:
         xml = f.read()
@@ -80,5 +101,32 @@ def __svg_masked_rectangle(text):
     </mask>
     <rect width='{width}' height='{height}' ry='20'
           fill='black' mask='url(#a)'/>
+</svg>"""
+    return svg.strip()
+
+
+def __svg_heiban():
+    svg = f"""
+<svg viewBox='0 0 210 300' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+    <rect width='210' height='30' fill='red'/>
+</svg>"""
+    return svg.strip()
+
+
+def __svg_accent():
+    svg = f"""
+<svg viewBox='0 0 150 300' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+    <rect width='150' height='30' fill='red'/>
+    <rect width='30' height='150' x='120' fill='red'/>
+</svg>"""
+    return svg.strip()
+
+
+def __svg_red_character(char):
+    svg = f"""
+<svg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg' version='1.1'>
+    <text text-anchor='middle' x='50%' y='50%' dy='.37em'
+          font-family='sans-serif' font-size='300px'
+          fill='red'>{char}</text>
 </svg>"""
     return svg.strip()

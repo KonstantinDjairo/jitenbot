@@ -56,5 +56,16 @@
             ["子", "name", 0, "子項目", 0],
             ["句", "expression", 0, "句項目", 0]
         ]
+    },
+    "sankoku8": {
+        "index": {
+            "title": "三省堂国語辞典　第八版",
+            "sequenced": true,
+            "format": 3
+        },
+        "tags": [
+            ["子", "name", 0, "子項目", 0],
+            ["句", "expression", 0, "句項目", 0]
+        ]
     }
 }

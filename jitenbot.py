@@ -69,13 +69,18 @@ def parse_args(target_names):
         type=filename,
     )
     parser.add_argument(
+        "--no-mdict-export",
+        help="skip export of dictionary data to MDict format",
+        action='store_true',
+    )
+    parser.add_argument(
         "--no-yomichan-export",
         help="skip export of dictionary data to Yomichan format",
         action='store_true',
     )
     parser.add_argument(
-        "--no-mdict-export",
-        help="skip export of dictionary data to MDict format",
+        "--validate-yomichan-terms",
+        help="validate JSON structure of exported Yomichan dictionary terms",
         action='store_true',
     )
     args = parser.parse_args()
@@ -108,9 +113,11 @@ def main():
     crawler.collect_pages(args.page_dir)
     crawler.read_pages()
     if not args.no_yomichan_export:
-        crawler.make_yomichan_dictionary(args.media_dir)
+        crawler.make_yomichan_dictionary(
+            args.media_dir, args.validate_yomichan_terms)
     if not args.no_mdict_export:
-        crawler.make_mdict_dictionary(args.media_dir, args.mdict_icon)
+        crawler.make_mdict_dictionary(
+            args.media_dir, args.mdict_icon)
 
 
 if __name__ == "__main__":
