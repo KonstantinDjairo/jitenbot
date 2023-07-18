@@ -103,7 +103,7 @@ HTTP request headers (user agent string, etc.) may be customized by editing the 
 ### Monokakido Targets
 These digital dictionaries are available for purchase through the [Monokakido Dictionaries app](https://www.monokakido.jp/ja/dictionaries/app/) on MacOS/iOS. Under ideal circumstances, Jitenbot would be able to automatically fetch all the data it needs from this app's data directory[^1] on your system. In its current state of development, Jitenbot unfortunately requires you to find and assemble the necessary data yourself. The files must be organized into a particular folder structure (defined below) and then passed to Jitenbot via the corresponding command line arguments.
 
-Some of the files in the app's data directory[^1] are encoded and must be unencoded using [golddranks' monokakido tool](https://github.com/golddranks/monokakido/). Directories which contain these encoded files are indicated by a reference mark (※) in the notes below.
+Some of the folders in the app's data directory[^1] contain encoded files that must be unencoded using [golddranks' monokakido tool](https://github.com/golddranks/monokakido/). These folders are indicated by a reference mark (※) in the notes below.
 
 [^1]: `/Library/Application Support/AppStoreContent/jp.monokakido.Dictionaries/Products/`
 
