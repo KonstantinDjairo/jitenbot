@@ -76,6 +76,7 @@ def __get_attributes(attrs):
 
 
 def __get_style(inline_style_string):
+    # pylint: disable=no-member
     style = {}
     parsed_style = parseStyle(inline_style_string)
     if parsed_style.fontStyle != "":
@@ -100,7 +101,7 @@ def __get_style(inline_style_string):
         "marginLeft":   parsed_style.marginLeft,
     }
     for key, val in margins.items():
-        m = re.search(r"(\d+(\.\d*)?|\.\d+)em", val)
+        m = re.search(r"(-?\d+(\.\d*)?|-?\.\d+)em", val)
         if m:
             style[key] = float(m.group(1))
 

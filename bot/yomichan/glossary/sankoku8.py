@@ -248,7 +248,7 @@ def __replace_accent_symbols(soup, media_dir):
             elm.name = "span"
             elm.clear()
             elm.append(img)
-            elm.attrs["style"] = "vertical-align: text-bottom;"
+            elm.attrs["style"] = "vertical-align: text-bottom; margin-left: -0.3em;"
 
 
 def __convert_gaiji(soup, media_dir):
