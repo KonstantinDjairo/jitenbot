@@ -21,7 +21,7 @@ import sys
 import argparse
 import subprocess
 from bot.targets import Targets
-from bot.crawlers.factory import new_crawler
+from bot.factory import new_crawler
 
 
 def filename(f):

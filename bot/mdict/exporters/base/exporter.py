@@ -1,20 +1,18 @@
-# pylint: disable=too-few-public-methods
-
-import subprocess
 import os
 import shutil
+import subprocess
 from abc import ABC, abstractmethod
 from pathlib import Path
-from datetime import datetime
+
 from platformdirs import user_documents_dir, user_cache_dir
 
-from bot.mdict.terms.factory import new_terminator
+from bot.factory import new_mdict_terminator
 
 
-class Exporter(ABC):
+class BaseExporter(ABC):
     def __init__(self, target):
         self._target = target
-        self._terminator = new_terminator(target)
+        self._terminator = new_mdict_terminator(target)
         self._build_dir = None
         self._build_media_dir = None
         self._description_file = None
@@ -168,58 +166,8 @@ class Exporter(ABC):
 
     @abstractmethod
     def _get_revision(self, entries):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _get_attribution(self, entries):
-        pass
-
-
-class _JitenonExporter(Exporter):
-    def _get_revision(self, entries):
-        modified_date = None
-        for entry in entries:
-            if modified_date is None or entry.modified_date > modified_date:
-                modified_date = entry.modified_date
-        revision = modified_date.strftime("%Y年%m月%d日閲覧")
-        return revision
-
-    def _get_attribution(self, entries):
-        modified_date = None
-        for entry in entries:
-            if modified_date is None or entry.modified_date > modified_date:
-                attribution = entry.attribution
-        return attribution
-
-
-class JitenonKokugoExporter(_JitenonExporter):
-    pass
-
-
-class JitenonYojiExporter(_JitenonExporter):
-    pass
-
-
-class JitenonKotowazaExporter(_JitenonExporter):
-    pass
-
-
-class _MonokakidoExporter(Exporter):
-    def _get_revision(self, entries):
-        timestamp = datetime.now().strftime("%Y年%m月%d日作成")
-        return timestamp
-
-
-class Smk8Exporter(_MonokakidoExporter):
-    def _get_attribution(self, entries):
-        return "© Sanseido Co., LTD. 2020"
-
-
-class Daijirin2Exporter(_MonokakidoExporter):
-    def _get_attribution(self, entries):
-        return "© Sanseido Co., LTD. 2019"
-
-
-class Sankoku8Exporter(_MonokakidoExporter):
-    def _get_attribution(self, entries):
-        return "© Sanseido Co., LTD. 2021"
+        raise NotImplementedError

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export PYTHONPYCACHEPREFIX=/tmp/pycache
+
 python -m unittest discover -s tests
 
 python jitenbot.py jitenon-kokugo

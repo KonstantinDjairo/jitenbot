@@ -1,24 +1,24 @@
 import time
-import requests
 import re
 import os
 import hashlib
 from datetime import datetime
-from pathlib import Path
-
-from platformdirs import user_cache_dir
 from urllib.parse import urlparse
+from pathlib import Path
+from abc import ABC, abstractmethod
+
+import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+from platformdirs import user_cache_dir
 
 from bot.data import load_config
 
 
-class Scraper():
+class BaseScraper(ABC):
     def __init__(self):
         self._config = load_config()
-        pattern = r"^(?:([A-Za-z0-9.\-]+)\.)?" + self.domain + r"$"
-        self.netloc_re = re.compile(pattern)
+        self.netloc_re = self._get_netloc_re()
         self.__set_session()
 
     def scrape(self, urlstring):
@@ -33,6 +33,10 @@ class Scraper():
         else:
             print("Discovering cached files...", end='\r', flush=True)
         return html, cache_path
+
+    @abstractmethod
+    def _get_netloc_re(self):
+        raise NotImplementedError
 
     def __set_session(self):
         retry_strategy = Retry(
@@ -99,9 +103,3 @@ class Scraper():
             self.__set_session()
             response = self.session.get(urlstring, timeout=10)
             return response.text
-
-
-class Jitenon(Scraper):
-    def __init__(self):
-        self.domain = r"jitenon\.jp"
-        super().__init__()

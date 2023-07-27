@@ -18,15 +18,15 @@ class Entry(ABC):
 
     @abstractmethod
     def get_global_identifier(self):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def set_page(self, page):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_page_soup(self):
-        pass
+        raise NotImplementedError
 
     def get_headwords(self):
         if self._headwords is not None:
@@ -38,15 +38,15 @@ class Entry(ABC):
 
     @abstractmethod
     def _get_headwords(self):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _add_variant_expressions(self, headwords):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_part_of_speech_tags(self):
-        pass
+        raise NotImplementedError
 
     def get_parent(self):
         if self.entry_id in self.SUBENTRY_ID_TO_ENTRY_ID:

@@ -1,11 +1,10 @@
 from bot.entries.daijirin2.phrase_entry import PhraseEntry
-
-from bot.yomichan.terms.terminator import Terminator
+from bot.yomichan.terms.base.terminator import BaseTerminator
 from bot.yomichan.glossary.daijirin2 import make_glossary
 from bot.yomichan.grammar import sudachi_rules, tags_to_rules
 
 
-class Daijirin2Terminator(Terminator):
+class Terminator(BaseTerminator):
     def _definition_tags(self, entry):
         return ""
 

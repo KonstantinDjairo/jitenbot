@@ -1,11 +1,10 @@
 from bot.entries.sankoku8.phrase_entry import PhraseEntry
-
-from bot.yomichan.terms.terminator import Terminator
+from bot.yomichan.terms.base.terminator import BaseTerminator
 from bot.yomichan.glossary.sankoku8 import make_glossary
 from bot.yomichan.grammar import sudachi_rules, tags_to_rules
 
 
-class Sankoku8Terminator(Terminator):
+class Terminator(BaseTerminator):
     def _definition_tags(self, entry):
         return ""
 

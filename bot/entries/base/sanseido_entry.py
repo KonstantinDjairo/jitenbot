@@ -39,7 +39,7 @@ class SanseidoEntry(Entry):
 
     @abstractmethod
     def _get_subentry_parameters(self):
-        pass
+        raise NotImplementedError
 
     def _add_variant_expressions(self, headwords):
         for expressions in headwords.values():

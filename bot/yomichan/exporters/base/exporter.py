@@ -1,24 +1,22 @@
-# pylint: disable=too-few-public-methods
-
 import json
 import os
 import shutil
 import copy
 from pathlib import Path
-from datetime import datetime
 from abc import ABC, abstractmethod
-from platformdirs import user_documents_dir, user_cache_dir
 
 import fastjsonschema
+from platformdirs import user_documents_dir, user_cache_dir
+
 from bot.data import load_yomichan_metadata
-from bot.yomichan.terms.factory import new_terminator
 from bot.data import load_yomichan_term_schema
+from bot.factory import new_yomichan_terminator
 
 
-class Exporter(ABC):
+class BaseExporter(ABC):
     def __init__(self, target):
         self._target = target
-        self._terminator = new_terminator(target)
+        self._terminator = new_yomichan_terminator(target)
         self._build_dir = None
         self._terms_per_file = 2000
 
@@ -36,11 +34,11 @@ class Exporter(ABC):
 
     @abstractmethod
     def _get_revision(self, entries):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _get_attribution(self, entries):
-        pass
+        raise NotImplementedError
 
     def _get_build_dir(self):
         if self._build_dir is not None:
@@ -118,10 +116,10 @@ class Exporter(ABC):
         build_dir = self._get_build_dir()
         max_i = int(len(terms) / self._terms_per_file) + 1
         for i in range(max_i):
+            update = f"Writing terms to term bank {i+1}/{max_i}"
+            print(update, end='\r', flush=True)
             start = self._terms_per_file * i
             end = self._terms_per_file * (i + 1)
-            update = f"Writing terms to term banks {start} - {end}"
-            print(update, end='\r', flush=True)
             term_file = os.path.join(build_dir, f"term_bank_{i+1}.json")
             with open(term_file, "w", encoding='utf8') as f:
                 json.dump(terms[start:end], f, indent=4, ensure_ascii=False)
@@ -142,8 +140,8 @@ class Exporter(ABC):
             json.dump(tags, f, indent=4, ensure_ascii=False)
 
     def __write_archive(self, filename):
-        print("Archiving data to ZIP file...")
         archive_format = "zip"
+        print(f"Archiving data to {archive_format.upper()} file...")
         out_dir = os.path.join(user_documents_dir(), "jitenbot", "yomichan")
         if not Path(out_dir).is_dir():
             os.makedirs(out_dir)
@@ -154,58 +152,8 @@ class Exporter(ABC):
         base_filename = os.path.join(out_dir, filename)
         build_dir = self._get_build_dir()
         shutil.make_archive(base_filename, archive_format, build_dir)
-        print(f"Dictionary file saved to {out_filepath}")
+        print(f"Dictionary file saved to `{out_filepath}`")
 
     def __rm_build_dir(self):
         build_dir = self._get_build_dir()
         shutil.rmtree(build_dir)
-
-
-class _JitenonExporter(Exporter):
-    def _get_revision(self, entries):
-        modified_date = None
-        for entry in entries:
-            if modified_date is None or entry.modified_date > modified_date:
-                modified_date = entry.modified_date
-        revision = f"{self._target.value};{modified_date}"
-        return revision
-
-    def _get_attribution(self, entries):
-        modified_date = None
-        for entry in entries:
-            if modified_date is None or entry.modified_date > modified_date:
-                attribution = entry.attribution
-        return attribution
-
-
-class JitenonKokugoExporter(_JitenonExporter):
-    pass
-
-
-class JitenonYojiExporter(_JitenonExporter):
-    pass
-
-
-class JitenonKotowazaExporter(_JitenonExporter):
-    pass
-
-
-class _MonokakidoExporter(Exporter):
-    def _get_revision(self, entries):
-        timestamp = datetime.now().strftime("%Y-%m-%d")
-        return f"{self._target.value};{timestamp}"
-
-
-class Smk8Exporter(_MonokakidoExporter):
-    def _get_attribution(self, entries):
-        return "© Sanseido Co., LTD. 2020"
-
-
-class Daijirin2Exporter(_MonokakidoExporter):
-    def _get_attribution(self, entries):
-        return "© Sanseido Co., LTD. 2019"
-
-
-class Sankoku8Exporter(_MonokakidoExporter):
-    def _get_attribution(self, entries):
-        return "© Sanseido Co., LTD. 2021"

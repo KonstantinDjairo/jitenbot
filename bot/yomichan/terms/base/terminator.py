@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 from bot.data import load_yomichan_inflection_categories
 
 
-class Terminator(ABC):
+class BaseTerminator(ABC):
     def __init__(self, target):
         self._target = target
         self._glossary_cache = {}
@@ -66,28 +66,28 @@ class Terminator(ABC):
 
     @abstractmethod
     def _definition_tags(self, entry):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _inflection_rules(self, entry, expression):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _glossary(self, entry):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _sequence(self, entry):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _term_tags(self, entry):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _link_glossary_parameters(self, entry):
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def _subentry_lists(self, entry):
-        pass
+        raise NotImplementedError

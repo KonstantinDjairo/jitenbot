@@ -58,7 +58,7 @@ class JitenonEntry(Entry):
 
     @abstractmethod
     def _get_column_map(self):
-        pass
+        raise NotImplementedError
 
     def __set_modified_date(self, page):
         m = re.search(r"\"dateModified\": \"(\d{4}-\d{2}-\d{2})", page)
