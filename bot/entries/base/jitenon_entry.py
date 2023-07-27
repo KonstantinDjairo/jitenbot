@@ -3,11 +3,11 @@ from abc import abstractmethod
 from datetime import datetime, date
 from bs4 import BeautifulSoup
 
-from bot.entries.entry import Entry
-import bot.entries.expressions as Expressions
+from bot.entries.base.entry import Entry
+import bot.entries.base.expressions as Expressions
 
 
-class _JitenonEntry(Entry):
+class JitenonEntry(Entry):
     def __init__(self, target, entry_id):
         super().__init__(target, entry_id)
         self.expression = ""
@@ -140,104 +140,3 @@ class _JitenonEntry(Entry):
             elif isinstance(attr_val, list):
                 colvals.append("；".join(attr_val))
         return ",".join(colvals)
-
-
-class JitenonYojiEntry(_JitenonEntry):
-    def __init__(self, target, entry_id):
-        super().__init__(target, entry_id)
-        self.origin = ""
-        self.kanken_level = ""
-        self.category = ""
-        self.related_expressions = []
-
-    def _get_column_map(self):
-        return {
-            "四字熟語": "expression",
-            "読み方":   "yomikata",
-            "意味":     "definition",
-            "異形":     "other_forms",
-            "出典":     "origin",
-            "漢検級":   "kanken_level",
-            "場面用途": "category",
-            "類義語":   "related_expressions",
-        }
-
-    def _add_variant_expressions(self, headwords):
-        for expressions in headwords.values():
-            Expressions.add_variant_kanji(expressions)
-
-
-class JitenonKotowazaEntry(_JitenonEntry):
-    def __init__(self, target, entry_id):
-        super().__init__(target, entry_id)
-        self.origin = ""
-        self.example = ""
-        self.related_expressions = []
-
-    def _get_column_map(self):
-        return {
-            "言葉":   "expression",
-            "読み方": "yomikata",
-            "意味":   "definition",
-            "異形":   "other_forms",
-            "出典":   "origin",
-            "例文":   "example",
-            "類句":   "related_expressions",
-        }
-
-    def _get_headwords(self):
-        if self.expression == "金棒引き・鉄棒引き":
-            headwords = {
-                "かなぼうひき": ["金棒引き", "鉄棒引き"]
-            }
-        else:
-            headwords = super()._get_headwords()
-        return headwords
-
-    def _add_variant_expressions(self, headwords):
-        for expressions in headwords.values():
-            Expressions.add_variant_kanji(expressions)
-            Expressions.add_fullwidth(expressions)
-
-
-class JitenonKokugoEntry(_JitenonEntry):
-    def __init__(self, target, entry_id):
-        super().__init__(target, entry_id)
-        self.example = ""
-        self.alt_expression = ""
-        self.antonym = ""
-        self.attachments = ""
-        self.compounds = ""
-        self.related_words = ""
-
-    def _get_column_map(self):
-        return {
-            "言葉":   "expression",
-            "読み方": "yomikata",
-            "意味":   "definition",
-            "例文":   "example",
-            "別表記": "alt_expression",
-            "対義語": "antonym",
-            "活用":   "attachments",
-            "用例":   "compounds",
-            "類語":   "related_words",
-        }
-
-    def _get_headwords(self):
-        headwords = {}
-        for reading in self.yomikata.split("・"):
-            if reading not in headwords:
-                headwords[reading] = []
-            for expression in self.expression.split("・"):
-                headwords[reading].append(expression)
-            if self.alt_expression.strip() != "":
-                for expression in self.alt_expression.split("・"):
-                    headwords[reading].append(expression)
-        return headwords
-
-    def _add_variant_expressions(self, headwords):
-        for expressions in headwords.values():
-            Expressions.add_variant_kanji(expressions)
-            Expressions.add_fullwidth(expressions)
-            Expressions.remove_iteration_mark(expressions)
-            Expressions.add_iteration_mark(expressions)
