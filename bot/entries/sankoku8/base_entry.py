@@ -67,6 +67,7 @@ class BaseEntry(SanseidoEntry):
     def _find_expressions(self, soup):
         expressions = []
         for hyouki in soup.find_all(self._hyouki_name):
+            self._fill_alts(hyouki)
             for expression in parse_hyouki_soup(hyouki, [""]):
                 expressions.append(expression)
         return expressions
@@ -95,3 +96,9 @@ class BaseEntry(SanseidoEntry):
         ]
         for name in unused_nodes:
             Soup.delete_soup_nodes(soup, name)
+
+    @staticmethod
+    def _fill_alts(soup):
+        for img in soup.find_all("img"):
+            if img.has_attr("alt"):
+                img.string = img.attrs["alt"]
