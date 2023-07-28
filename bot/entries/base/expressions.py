@@ -31,11 +31,14 @@ def add_fullwidth(expressions):
 
 def add_variant_kanji(expressions):
     variant_kanji = load_variant_kanji()
-    for old_kanji, new_kanji in variant_kanji.items():
+    for kyuuji, shinji in variant_kanji.items():
         new_exps = []
         for expression in expressions:
-            if old_kanji in expression:
-                new_exp = expression.replace(old_kanji, new_kanji)
+            if kyuuji in expression:
+                new_exp = expression.replace(kyuuji, shinji)
+                new_exps.append(new_exp)
+            if shinji in expression:
+                new_exp = expression.replace(shinji, kyuuji)
                 new_exps.append(new_exp)
         for new_exp in new_exps:
             if new_exp not in expressions:

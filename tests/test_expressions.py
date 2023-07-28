@@ -34,8 +34,8 @@ class TestExpressions(unittest.TestCase):
         self.assertIn("凶々しい", exps)
         self.assertIn("凶凶しい", exps)
 
-    def test_add_variant_kanji(self):
-        exps = ["剝く", "掴む", "摑む"]
+    def test_add_variant_kanji1(self):
+        exps = ["剥く", "摑む"]
         Expressions.add_variant_kanji(exps)
         self.assertEqual(len(exps), 4)
         self.assertIn("剥く", exps)
@@ -44,7 +44,25 @@ class TestExpressions(unittest.TestCase):
         self.assertIn("摑む", exps)
 
     def test_add_variant_kanji2(self):
+        exps = ["剝く", "掴む", "摑む"]
+        Expressions.add_variant_kanji(exps)
+        self.assertEqual(len(exps), 4)
+        self.assertIn("剥く", exps)
+        self.assertIn("剝く", exps)
+        self.assertIn("掴む", exps)
+        self.assertIn("摑む", exps)
+
+    def test_add_variant_kanji3(self):
         exps = ["剝摑"]
+        Expressions.add_variant_kanji(exps)
+        self.assertEqual(len(exps), 4)
+        self.assertIn("剝摑", exps)
+        self.assertIn("剝掴", exps)
+        self.assertIn("剥掴", exps)
+        self.assertIn("剥摑", exps)
+
+    def test_add_variant_kanji4(self):
+        exps = ["剥掴"]
         Expressions.add_variant_kanji(exps)
         self.assertEqual(len(exps), 4)
         self.assertIn("剝摑", exps)
