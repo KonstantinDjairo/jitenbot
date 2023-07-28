@@ -6,7 +6,7 @@ from bot.data import get_adobe_glyph
 
 __GAIJI = {
     "svg-gaiji/byan.svg": "𰻞",
-    "svg-gaiji/G16EF.svg": "簒",
+    "svg-gaiji/G16EF.svg": "篡",
 }
 
 
