@@ -1,7 +1,7 @@
 ### Todo
 
 - [x] Add factory classes to reduce the amount of class import statements
-- [ ] Add dynamic import functionality to factory classes to reduce boilerplate
+- [x] Add dynamic import functionality to factory classes to reduce boilerplate
 - [x] Support exporting to MDict (.MDX) dictionary format
 - [x] Validate JSON schema of Yomichan terms during export
 - [ ] Add support for monokakido search keys from index files
