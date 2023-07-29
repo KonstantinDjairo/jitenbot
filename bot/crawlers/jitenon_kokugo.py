@@ -1,6 +1,7 @@
 import re
 from bs4 import BeautifulSoup
 
+from bot.time import timestamp
 from bot.crawlers.base.crawler import BaseCrawler
 from bot.crawlers.scrapers.jitenon import Jitenon as JitenonScraper
 
@@ -12,6 +13,7 @@ class Crawler(BaseCrawler):
         self._page_id_pattern = r"word/p([0-9]+)$"
 
     def collect_pages(self, page_dir):
+        print(f"{timestamp()} Scraping {self._gojuon_url}")
         jitenon = JitenonScraper()
         gojuon_doc, _ = jitenon.scrape(self._gojuon_url)
         gojuon_soup = BeautifulSoup(gojuon_doc, features="html.parser")
@@ -35,4 +37,4 @@ class Crawler(BaseCrawler):
                     _, page_path = jitenon.scrape(page_link)
                     self._page_map[page_id] = page_path
         pages_len = len(self._page_map)
-        print(f"Finished scraping {pages_len} pages")
+        print(f"\n{timestamp()} Found {pages_len} entry pages")

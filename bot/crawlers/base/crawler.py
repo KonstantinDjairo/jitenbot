@@ -21,7 +21,7 @@ class BaseCrawler(ABC):
         pages_len = len(self._page_map)
         items = self._page_map.items()
         for idx, (page_id, page_path) in enumerate(items):
-            update = f"Reading page {idx+1}/{pages_len}"
+            update = f"\tReading page {idx+1}/{pages_len}"
             print(update, end='\r', flush=True)
             entry = new_entry(self._target, page_id)
             with open(page_path, "r", encoding="utf-8") as f:

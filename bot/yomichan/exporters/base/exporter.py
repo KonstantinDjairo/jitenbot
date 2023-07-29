@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod
 import fastjsonschema
 from platformdirs import user_documents_dir, user_cache_dir
 
+from bot.time import timestamp
 from bot.data import load_yomichan_metadata
 from bot.data import load_yomichan_term_schema
 from bot.factory import new_yomichan_terminator
@@ -45,7 +46,7 @@ class BaseExporter(ABC):
             return self._build_dir
         cache_dir = user_cache_dir("jitenbot")
         build_directory = os.path.join(cache_dir, "yomichan_build")
-        print(f"Initializing build directory `{build_directory}`")
+        print(f"{timestamp()} Initializing build directory `{build_directory}`")
         if Path(build_directory).is_dir():
             shutil.rmtree(build_directory)
         os.makedirs(build_directory)
@@ -64,8 +65,9 @@ class BaseExporter(ABC):
         build_dir = self._get_build_dir()
         build_img_dir = os.path.join(build_dir, self._target.value)
         if image_dir is not None:
-            print("Copying media files to build directory...")
+            print(f"{timestamp()} Copying media files to build directory...")
             shutil.copytree(image_dir, build_img_dir)
+            print(f"{timestamp()} Finished copying files")
         else:
             os.makedirs(build_img_dir)
         self._terminator.set_image_dir(build_img_dir)
@@ -74,7 +76,7 @@ class BaseExporter(ABC):
         terms = []
         entries_len = len(entries)
         for idx, entry in enumerate(entries):
-            update = f"Creating Yomichan terms for entry {idx+1}/{entries_len}"
+            update = f"\tCreating Yomichan terms for entry {idx+1}/{entries_len}"
             print(update, end='\r', flush=True)
             new_terms = self._terminator.make_terms(entry)
             for term in new_terms:
@@ -83,7 +85,7 @@ class BaseExporter(ABC):
         return terms
 
     def __validate_terms(self, terms):
-        print("Making a copy of term data for validation...")
+        print(f"{timestamp()} Making a copy of term data for validation...")
         terms_copy = copy.deepcopy(terms)  # because validator will alter data!
         term_count = len(terms_copy)
         log_dir = self.__get_invalid_term_dir()
@@ -91,7 +93,7 @@ class BaseExporter(ABC):
         validator = fastjsonschema.compile(schema)
         failure_count = 0
         for idx, term in enumerate(terms_copy):
-            update = f"Validating term {idx+1}/{term_count}"
+            update = f"\tValidating term {idx+1}/{term_count}"
             print(update, end='\r', flush=True)
             try:
                 validator([term])
@@ -100,9 +102,9 @@ class BaseExporter(ABC):
                 term_file = os.path.join(log_dir, f"{idx}.json")
                 with open(term_file, "w", encoding='utf8') as f:
                     json.dump([term], f, indent=4, ensure_ascii=False)
-        print(f"\nFinished validating with {failure_count} error{'' if failure_count == 1 else 's'}")
+        print(f"\n{timestamp()} Finished validating with {failure_count} error{'' if failure_count == 1 else 's'}")
         if failure_count > 0:
-            print(f"Invalid terms saved to `{log_dir}` for debugging")
+            print(f"{timestamp()} Invalid terms saved to `{log_dir}` for debugging")
 
     def __make_dictionary(self, terms, index, tags):
         self.__write_term_banks(terms)
@@ -112,11 +114,11 @@ class BaseExporter(ABC):
         self.__rm_build_dir()
 
     def __write_term_banks(self, terms):
-        print(f"Exporting {len(terms)} JSON terms")
+        print(f"{timestamp()} Exporting {len(terms)} JSON terms")
         build_dir = self._get_build_dir()
         max_i = int(len(terms) / self._terms_per_file) + 1
         for i in range(max_i):
-            update = f"Writing terms to term bank {i+1}/{max_i}"
+            update = f"\tWriting terms to term bank {i+1}/{max_i}"
             print(update, end='\r', flush=True)
             start = self._terms_per_file * i
             end = self._terms_per_file * (i + 1)
@@ -141,7 +143,7 @@ class BaseExporter(ABC):
 
     def __write_archive(self, filename):
         archive_format = "zip"
-        print(f"Archiving data to {archive_format.upper()} file...")
+        print(f"{timestamp()} Archiving data to {archive_format.upper()} file...")
         out_dir = os.path.join(user_documents_dir(), "jitenbot", "yomichan")
         if not Path(out_dir).is_dir():
             os.makedirs(out_dir)
@@ -152,7 +154,7 @@ class BaseExporter(ABC):
         base_filename = os.path.join(out_dir, filename)
         build_dir = self._get_build_dir()
         shutil.make_archive(base_filename, archive_format, build_dir)
-        print(f"Dictionary file saved to `{out_filepath}`")
+        print(f"{timestamp()} Dictionary file saved to `{out_filepath}`")
 
     def __rm_build_dir(self):
         build_dir = self._get_build_dir()

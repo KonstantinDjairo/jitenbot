@@ -6,6 +6,7 @@ from pathlib import Path
 
 from platformdirs import user_documents_dir, user_cache_dir
 
+from bot.time import timestamp
 from bot.factory import new_mdict_terminator
 
 
@@ -32,7 +33,7 @@ class BaseExporter(ABC):
             return self._build_dir
         cache_dir = user_cache_dir("jitenbot")
         build_directory = os.path.join(cache_dir, "mdict_build")
-        print(f"Initializing build directory `{build_directory}`")
+        print(f"{timestamp()} Initializing build directory `{build_directory}`")
         if Path(build_directory).is_dir():
             shutil.rmtree(build_directory)
         os.makedirs(build_directory)
@@ -43,7 +44,7 @@ class BaseExporter(ABC):
         build_dir = self._get_build_dir()
         build_media_dir = os.path.join(build_dir, self._target.value)
         if media_dir is not None:
-            print("Copying media files to build directory...")
+            print(f"{timestamp()} Copying media files to build directory...")
             shutil.copytree(media_dir, build_media_dir)
         else:
             os.makedirs(build_media_dir)
@@ -69,7 +70,7 @@ class BaseExporter(ABC):
 
     def _write_mdx_file(self, entries):
         terms = self._get_terms(entries)
-        print(f"Exporting {len(terms)} Mdict keys...")
+        print(f"{timestamp()} Exporting {len(terms)} Mdict keys...")
         out_dir = self._get_out_dir()
         out_file = os.path.join(out_dir, f"{self._target.value}.mdx")
         params = [
@@ -85,7 +86,7 @@ class BaseExporter(ABC):
         terms = []
         entries_len = len(entries)
         for idx, entry in enumerate(entries):
-            update = f"Creating Mdict terms for entry {idx+1}/{entries_len}"
+            update = f"\tCreating MDict terms for entry {idx+1}/{entries_len}"
             print(update, end='\r', flush=True)
             new_terms = self._terminator.make_terms(entry)
             for term in new_terms:
@@ -124,7 +125,7 @@ class BaseExporter(ABC):
             return self._out_dir
         out_dir = os.path.join(
             user_documents_dir(), "jitenbot", "mdict", self._target.value)
-        print(f"Initializing output directory `{out_dir}`")
+        print(f"{timestamp()} Initializing output directory `{out_dir}`")
         if Path(out_dir).is_dir():
             shutil.rmtree(out_dir)
         os.makedirs(out_dir)
