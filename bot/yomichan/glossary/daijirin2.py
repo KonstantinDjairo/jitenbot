@@ -1,8 +1,9 @@
 import re
 import os
-from bs4 import BeautifulSoup
 from functools import cache
 from pathlib import Path
+
+from bs4 import BeautifulSoup
 
 import bot.yomichan.glossary.icons as Icons
 from bot.soup import delete_soup_nodes

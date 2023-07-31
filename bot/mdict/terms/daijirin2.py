@@ -1,8 +1,8 @@
-from bot.mdict.terms.terminator import Terminator
+from bot.mdict.terms.base.terminator import BaseTerminator
 from bot.mdict.glossary.daijirin2 import make_glossary
 
 
-class Daijirin2Terminator(Terminator):
+class Terminator(BaseTerminator):
     def _glossary(self, entry):
         if entry.entry_id in self._glossary_cache:
             return self._glossary_cache[entry.entry_id]
