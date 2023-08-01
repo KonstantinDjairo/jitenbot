@@ -10,10 +10,10 @@
 }
 
 body {
-    margin: 0em 1em;
+    /*margin: 0em 1em;*/
     line-height: 1.5em;
     font-family: jpmincho, serif;
-    font-size: 1.2em;
+    /*font-size: 1.2em;*/
     color: black;
 }
 
@@ -26,7 +26,7 @@ span[data-name="見出部"] {
 }
 
 span[data-name="見出部"].pri {
-    margin-left: -0.4em;
+    /*margin-left: -0.4em;*/
 }
 
 span[data-name="見出仮名"] {
