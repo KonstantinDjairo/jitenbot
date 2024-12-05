@@ -37,14 +37,16 @@ def load_config():
 
 @cache
 def load_yomichan_inflection_categories():
-    file_name = "yomichan_inflection_categories.json"
+    file_name = os.path.join(
+        "yomichan", "inflection_categories.json")
     data = __load_json(file_name)
     return data
 
 
 @cache
 def load_yomichan_metadata():
-    file_name = "yomichan_metadata.json"
+    file_name = os.path.join(
+        "yomichan", "index.json")
     data = __load_json(file_name)
     return data
 
@@ -53,31 +55,21 @@ def load_yomichan_metadata():
 def load_variant_kanji():
     def loader(data, row):
         data[row[0]] = row[1]
-    file_name = "variant_kanji.csv"
+    file_name = os.path.join(
+        "entries", "variant_kanji.csv")
     data = {}
     __load_csv(file_name, loader, data)
     return data
 
 
 @cache
-def load_smk8_phrase_readings():
+def load_phrase_readings(target):
     def loader(data, row):
         entry_id = (int(row[0]), int(row[1]))
         reading = row[2]
         data[entry_id] = reading
-    file_name = os.path.join("smk8", "phrase_readings.csv")
-    data = {}
-    __load_csv(file_name, loader, data)
-    return data
-
-
-@cache
-def load_daijirin2_phrase_readings():
-    def loader(data, row):
-        entry_id = (int(row[0]), int(row[1]))
-        reading = row[2]
-        data[entry_id] = reading
-    file_name = os.path.join("daijirin2", "phrase_readings.csv")
+    file_name = os.path.join(
+        "entries", target.value, "phrase_readings.csv")
     data = {}
     __load_csv(file_name, loader, data)
     return data
@@ -92,22 +84,33 @@ def load_daijirin2_kana_abbreviations():
             if abbr.strip() != "":
                 abbreviations.append(abbr)
         data[entry_id] = abbreviations
-    file_name = os.path.join("daijirin2", "kana_abbreviations.csv")
+    file_name = os.path.join(
+        "entries", "daijirin2", "kana_abbreviations.csv")
     data = {}
     __load_csv(file_name, loader, data)
     return data
 
 
 @cache
-def load_smk8_yomichan_name_conversion():
-    file_name = os.path.join("smk8", "yomichan_name_conversion.json")
+def load_yomichan_name_conversion(target):
+    file_name = os.path.join(
+        "yomichan", "name_conversion", f"{target.value}.json")
     data = __load_json(file_name)
     return data
 
 
 @cache
-def load_daijirin2_yomichan_name_conversion():
-    file_name = os.path.join("daijirin2", "yomichan_name_conversion.json")
+def load_yomichan_term_schema():
+    file_name = os.path.join(
+        "yomichan", "dictionary-term-bank-v3-schema.json")
+    schema = __load_json(file_name)
+    return schema
+
+
+@cache
+def load_mdict_name_conversion(target):
+    file_name = os.path.join(
+        "mdict", "name_conversion", f"{target.value}.json")
     data = __load_json(file_name)
     return data
 
@@ -131,7 +134,8 @@ def __load_adobe_glyphs():
                 data[code].append(character)
         else:
             data[code] = [character]
-    file_name = os.path.join("adobe", "Adobe-Japan1_sequences.txt")
+    file_name = os.path.join(
+        "entries", "adobe", "Adobe-Japan1_sequences.txt")
     data = {}
     __load_csv(file_name, loader, data, delim=';')
     return data
@@ -139,7 +143,8 @@ def __load_adobe_glyphs():
 
 @cache
 def __load_override_adobe_glyphs():
-    file_name = os.path.join("adobe", "override_glyphs.json")
+    file_name = os.path.join(
+        "entries", "adobe", "override_glyphs.json")
     json_data = __load_json(file_name)
     data = {}
     for key, val in json_data.items():

@@ -1,0 +1,47 @@
+
+@font-face {
+    font-family: jpgothic;
+    src: local("Noto Sans CJK JP"), local("IPAexGothic"), local("Source Han Sans JP");
+}
+
+@font-face {
+    font-family: jpmincho;
+    src: local("Noto Serif CJK JP"), local("IPAexMincho"), local("IPAmjMincho"), local("Source Han Serif JP"), local("HanaMinA"), local("HanaMinB");
+}
+
+body {
+    font-family: jpmincho, serif;
+    line-height: 1.5em;
+}
+
+table, th, td {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 0.5em;
+}
+
+th {
+    font-family: jpgothic, sans-serif;
+    color: black;
+    background-color: lightgray;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+a {
+    text-decoration: none;
+}
+
+.見出し {
+}
+
+.読み方 {
+    font-family: jpgothic, sans-serif;
+    font-weight: bold;
+}
+
+.意味,
+.kanjirighttb {
+    margin-left: 1.0em;
+    margin-bottom: 0.5em;
+}

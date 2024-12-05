@@ -1,14 +1,15 @@
 import re
 import os
-from bs4 import BeautifulSoup
 from functools import cache
 from pathlib import Path
 
-import bot.icons as Icons
+from bs4 import BeautifulSoup
+
+import bot.yomichan.glossary.icons as Icons
 from bot.soup import delete_soup_nodes
-from bot.data import load_daijirin2_yomichan_name_conversion
+from bot.data import load_yomichan_name_conversion
 from bot.yomichan.glossary.gloss import make_gloss
-from bot.yomichan.glossary.name_conversion import convert_names
+from bot.name_conversion import convert_names
 
 
 def make_glossary(entry, image_dir):
@@ -26,7 +27,7 @@ def make_glossary(entry, image_dir):
     __convert_daigoginum(soup, image_dir)
     __convert_jundaigoginum(soup, image_dir)
 
-    name_conversion = load_daijirin2_yomichan_name_conversion()
+    name_conversion = load_yomichan_name_conversion(entry.target)
     convert_names(soup, name_conversion)
 
     gloss = make_gloss(soup.span)
@@ -111,8 +112,8 @@ def __convert_gaiji(soup, image_dir):
         ratio = Icons.calculate_ratio(path)
         img = BeautifulSoup("<img/>", "xml").img
         img.attrs = {
-            "height": 1.0 if ratio > 1.0 else ratio,
-            "width": ratio if ratio > 1.0 else 1.0,
+            "height": 1.0,
+            "width": ratio,
             "sizeUnits": "em",
             "collapsible": False,
             "collapsed": False,
@@ -150,8 +151,8 @@ def __convert_logos(soup, image_dir):
         ratio = Icons.calculate_ratio(path)
         img = BeautifulSoup("<img/>", "xml").img
         img.attrs = {
-            "height": 1.0 if ratio > 1.0 else ratio,
-            "width": ratio if ratio > 1.0 else 1.0,
+            "height": 1.0,
+            "width": ratio,
             "sizeUnits": "em",
             "collapsible": False,
             "collapsed": False,
@@ -174,8 +175,8 @@ def __convert_kanjion_logos(soup, image_dir):
         ratio = Icons.calculate_ratio(path)
         img = BeautifulSoup("<img/>", "xml").img
         img.attrs = {
-            "height": 1.0 if ratio > 1.0 else ratio,
-            "width": ratio if ratio > 1.0 else 1.0,
+            "height": 1.0,
+            "width": ratio,
             "sizeUnits": "em",
             "collapsible": False,
             "collapsed": False,
@@ -198,8 +199,8 @@ def __convert_daigoginum(soup, image_dir):
         ratio = Icons.calculate_ratio(path)
         img = BeautifulSoup("<img/>", "xml").img
         img.attrs = {
-            "height": 1.0 if ratio > 1.0 else ratio,
-            "width": ratio if ratio > 1.0 else 1.0,
+            "height": 1.0,
+            "width": ratio,
             "sizeUnits": "em",
             "collapsible": False,
             "collapsed": False,
@@ -222,8 +223,8 @@ def __convert_jundaigoginum(soup, image_dir):
         ratio = Icons.calculate_ratio(path)
         img = BeautifulSoup("<img/>", "xml").img
         img.attrs = {
-            "height": 1.0 if ratio > 1.0 else ratio,
-            "width": ratio if ratio > 1.0 else 1.0,
+            "height": 1.0,
+            "width": ratio,
             "sizeUnits": "em",
             "collapsible": False,
             "collapsed": False,

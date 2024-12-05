@@ -1,5 +1,5 @@
 import unittest
-import bot.entries.expressions as Expressions
+import bot.entries.base.expressions as Expressions
 
 
 class TestExpressions(unittest.TestCase):
@@ -34,8 +34,8 @@ class TestExpressions(unittest.TestCase):
         self.assertIn("凶々しい", exps)
         self.assertIn("凶凶しい", exps)
 
-    def test_add_variant_kanji(self):
-        exps = ["剝く", "掴む", "摑む"]
+    def test_add_variant_kanji1(self):
+        exps = ["剥く", "摑む"]
         Expressions.add_variant_kanji(exps)
         self.assertEqual(len(exps), 4)
         self.assertIn("剥く", exps)
@@ -44,7 +44,25 @@ class TestExpressions(unittest.TestCase):
         self.assertIn("摑む", exps)
 
     def test_add_variant_kanji2(self):
+        exps = ["剝く", "掴む", "摑む"]
+        Expressions.add_variant_kanji(exps)
+        self.assertEqual(len(exps), 4)
+        self.assertIn("剥く", exps)
+        self.assertIn("剝く", exps)
+        self.assertIn("掴む", exps)
+        self.assertIn("摑む", exps)
+
+    def test_add_variant_kanji3(self):
         exps = ["剝摑"]
+        Expressions.add_variant_kanji(exps)
+        self.assertEqual(len(exps), 4)
+        self.assertIn("剝摑", exps)
+        self.assertIn("剝掴", exps)
+        self.assertIn("剥掴", exps)
+        self.assertIn("剥摑", exps)
+
+    def test_add_variant_kanji4(self):
+        exps = ["剥掴"]
         Expressions.add_variant_kanji(exps)
         self.assertEqual(len(exps), 4)
         self.assertIn("剝摑", exps)
@@ -69,28 +87,3 @@ class TestExpressions(unittest.TestCase):
         self.assertIn("有合わせ", abbrs)
         self.assertIn("有り合せ", abbrs)
         self.assertIn("有合せ", abbrs)
-
-    def test_smk_expand_alternatives(self):
-        text = "△金（時間・暇）に飽かして"
-        exps = Expressions.expand_smk_alternatives(text)
-        self.assertEqual(len(exps), 3)
-        self.assertIn("金に飽かして", exps)
-        self.assertIn("時間に飽かして", exps)
-        self.assertIn("暇に飽かして", exps)
-
-    def test_daijirin_expand_alternatives(self):
-        text = "同じ穴の＝狢（＝狐・狸）"
-        exps = Expressions.expand_daijirin_alternatives(text)
-        self.assertEqual(len(exps), 3)
-        self.assertIn("同じ穴の狢", exps)
-        self.assertIn("同じ穴の狐", exps)
-        self.assertIn("同じ穴の狸", exps)
-
-    def test_daijirin_expand_alternatives2(self):
-        text = "聞くは＝一時（＝一旦）の恥、聞かぬは＝末代（＝一生）の恥"
-        exps = Expressions.expand_daijirin_alternatives(text)
-        self.assertEqual(len(exps), 4)
-        self.assertIn("聞くは一時の恥、聞かぬは末代の恥", exps)
-        self.assertIn("聞くは一時の恥、聞かぬは一生の恥", exps)
-        self.assertIn("聞くは一旦の恥、聞かぬは末代の恥", exps)
-        self.assertIn("聞くは一旦の恥、聞かぬは一生の恥", exps)

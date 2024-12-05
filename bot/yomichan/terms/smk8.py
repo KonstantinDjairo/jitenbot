@@ -1,12 +1,11 @@
-from bot.entries.smk8 import Smk8KanjiEntry as KanjiEntry
-from bot.entries.smk8 import Smk8PhraseEntry as PhraseEntry
-
-from bot.yomichan.terms.terminator import Terminator
+from bot.entries.smk8.kanji_entry import KanjiEntry
+from bot.entries.smk8.phrase_entry import PhraseEntry
+from bot.yomichan.terms.base.terminator import BaseTerminator
 from bot.yomichan.glossary.smk8 import make_glossary
 from bot.yomichan.grammar import sudachi_rules, tags_to_rules
 
 
-class Smk8Terminator(Terminator):
+class Terminator(BaseTerminator):
     def __init__(self, target):
         super().__init__(target)
 

@@ -7,3 +7,4 @@ class Targets(Enum):
     JITENON_KOTOWAZA = "jitenon-kotowaza"
     SMK8 = "smk8"
     DAIJIRIN2 = "daijirin2"
+    SANKOKU8 = "sankoku8"

@@ -1,0 +1,495 @@
+{
+    "a": {},
+    "br": {},
+    "img": {},
+    "div": {},
+    "span": {},
+    "ruby": {},
+    "rt": {},
+    "small": {
+        "name": "span",
+        "style": "vertical-align: super; font-size: 0.65em; font-weight: normal; margin-right: 0.25em;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    },
+    "sup": {
+        "name": "span",
+        "style": "vertical-align: super; font-size: 0.65em;"
+    },
+    "sub": {
+        "name": "span",
+        "style": "vertical-align: sub; font-size: 0.65em;"
+    },
+    "表外字": {
+        "name": "ruby"
+    },
+    "表外字マーク": {
+        "name": "rt"
+    },
+    "表外音訓": {
+        "name": "ruby"
+    },
+    "表外音訓マーク": {
+        "name": "rt"
+    },
+    "語構成": {
+        "name": "span",
+        "style": "margin-right: 0.5em;"
+    },
+    "分書": {
+        "name": "span",
+        "style": "margin-right: 0.5em;"
+    },
+    "見出仮名": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "解説部": {
+        "name": "div"
+    },
+    "子解説部": {
+        "name": "div"
+    },
+    "句解説部": {
+        "name": "div"
+    },
+    "大語義": {
+        "name": "div"
+    },
+    "語義": {
+        "name": "div"
+    },
+    "副義": {
+        "name": "div",
+        "style": "margin-left: 1.0em;"
+    },
+    "注記語義": {
+        "name": "span",
+        "style": "margin-left: 0.5em;"
+    },
+    "用例G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "百科",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "注記",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "名詞形G",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "動詞形G",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "自動詞形G",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "他動詞形G",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "可能形G",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "人G",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "見出相当部": {
+        "name": "span",
+        "style": "margin-left: 0.125em; margin-right: 0.125em;"
+    },
+    "ルビG": {
+        "name": "span",
+        "style": "vertical-align: super; font-size: 0.65em; font-weight: normal;"
+    },
+    "名詞人形G": {
+        "name": "div"
+    },
+    "名詞形G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "語義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "副義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "注記",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "共通",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "動詞形G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "語義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "副義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "注記",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "共通",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "自動詞形G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "語義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "副義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "注記",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "共通",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "他動詞形G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "語義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "副義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "注記",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "共通",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "可能形G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "語義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "副義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "注記",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "共通",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "人G": {
+        "name": "div",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "語義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "副義",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "注記",
+                    "key": "name",
+                    "value": "span"
+                }
+            },
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "共通",
+                    "key": "name",
+                    "value": "span"
+                }
+            }
+        ]
+    },
+    "参照矢印": {
+        "name": "span",
+        "style": "margin-right: 0.25em;"
+    },
+    "子見出仮名": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "句表記": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "派生語G": {
+        "name": "div"
+    },
+    "謙譲形G": {
+        "name": "div"
+    },
+    "共通": {
+        "name": "div"
+    },
+    "イタリック": {
+        "name": "span",
+        "style": "font-style: italic;"
+    },
+    "ボールド": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "アクセント表記": {
+        "name": "span",
+        "style": "font-weight: bold; font-size: 0.85em;"
+    },
+    "i": {
+        "name": "span",
+        "style": "font-style: italic;"
+    },
+    "sub": {
+        "name": "span",
+        "style": "font-size: 0.7em; vertical-align: sub;",
+        "procedures": [
+            {
+                "procedure_name": "has_parent",
+                "parameters": {
+                    "parent_name": "横",
+                    "key": "style",
+                    "value": "font-size: 0.7em; vertical-align: super;"
+                }
+            }
+        ]
+    },
+    "kanbun": {
+        "name": "span",
+        "style": "font-size: 0.5em; vertical-align: sub;"
+    },
+    "ロゴ": {
+        "name": "span",
+        "style": "margin-right: 0.25em"
+    },
+    "尊敬形G": {
+        "name": "div"
+    },
+    "謙譲形G": {
+        "name": "div"
+    },
+    "丁寧形G": {
+        "name": "div"
+    },
+    "百科": {
+        "name": "div"
+    },
+    "由来": {
+        "name": "div"
+    },
+    "区別": {
+        "name": "div"
+    },
+    "アクセント注記": {
+        "name": "div"
+    },
+    "表記情報": {
+        "name": "div"
+    },
+    "別見出": {
+        "name": "span",
+        "style": "font-weight: bold;"
+    },
+    "読み": {
+        "name": "span",
+        "style": "font-size: 0.7em;"
+    },
+    "歴史仮名": {
+        "name": "span",
+        "style": "vertical-align: super; font-size: 0.65em; font-weight: normal;",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    },
+    "ルビ": {
+        "name": "span",
+        "procedures": [
+            {
+                "procedure_name": "wrap",
+                "parameters": {
+                    "l_wrap": "(",
+                    "r_wrap": ")"
+                }
+            }
+        ]
+    }
+}
